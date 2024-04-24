@@ -1,3 +1,16 @@
 {
-	"name": "_TERMINAL_"
+    "name": "_TERMINAL_",
+    "rootNamespace": "",
+    "references": [
+        "GUID:ec96f6dc48fee4244bcebc247464e471"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
 }
