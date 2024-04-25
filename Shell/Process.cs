@@ -32,18 +32,16 @@ namespace _TERMINAL_
             BoaColor = "#73B2D9";
 
         public string userName, cmdName, prefixe;
-        public Flags flags;
+        public Flags flags = Flags.Stdout1 | Flags.Stdout2 | Flags.Stdin | Flags.Closable;
 
         //----------------------------------------------------------------------------------------------------------
 
-        public Process(in Flags flags, in string name = default)
+        public Process(in string name = default)
         {
             if (string.IsNullOrWhiteSpace(name))
                 cmdName = GetType().ToString();
             else
                 cmdName = name;
-
-            this.flags = flags;
             RefreshPrefixe();
         }
 
