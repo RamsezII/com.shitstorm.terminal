@@ -41,6 +41,8 @@ namespace _TERMINAL_
         [SerializeField] string stdinOld;
         [SerializeField] Rect dims_r = new(.1f, .05f, .8f, .85f);
 
+        bool fullscreen = false;
+
         //----------------------------------------------------------------------------------------------------------
 
         void InitGUI()
@@ -54,13 +56,6 @@ namespace _TERMINAL_
 
         protected virtual void OnGUI()
         {
-            window_r = new Rect(
-                dims_r.x * Screen.width,
-                dims_r.y * Screen.height,
-                dims_r.width * Screen.width,
-                dims_r.height * Screen.height
-                );
-
             Event e = Event.current;
             Process process = processes[^1];
 
@@ -77,9 +72,24 @@ namespace _TERMINAL_
             line_height = style_body.lineHeight;
             header_height = 25;
 
+            window_r = new Rect(
+                dims_r.x * Screen.width,
+                dims_r.y * Screen.height,
+                dims_r.width * Screen.width,
+                dims_r.height * Screen.height
+                );
+
             Rect header_r = new(window_r.x, window_r.y, window_r.width, header_height);
             Rect body_r = new(window_r.x, window_r.y + header_height, window_r.width, window_r.height - header_height);
             Rect text_r = new(margin, 0, body_r.width - scrollCollumnWidth - 2 * margin, body_r.height);
+
+            if (fullscreen)
+            {
+                window_r = new Rect(0, 0, Screen.width, Screen.height);
+                header_r = new Rect(0, 0, Screen.width, 0);
+                body_r = new Rect(0, 0, Screen.width, Screen.height);
+                text_r = new Rect(margin, 0, body_r.width - scrollCollumnWidth - 2 * margin, body_r.height);
+            }
 
             GUI.DrawTexture(window_r, Texture2D.whiteTexture, ScaleMode.StretchToFill, true, 0, theme.backgroundColor, 0, border_radius);
 
@@ -92,9 +102,12 @@ namespace _TERMINAL_
                     tryFocus1 = true;
             }
 
-            GUI.DrawTexture(header_r, Texture2D.whiteTexture, ScaleMode.StretchToFill, false, 0, theme.color_header_bottom, default, border_radius * new Vector4(1, 1, 0, 0));
-            GUI.DrawTexture(header_r, header_image, ScaleMode.StretchToFill, true, 0, theme.color_header_top, default, border_radius * new Vector4(1, 1, 0, 0));
-            GUI.DrawTexture(window_r, Texture2D.whiteTexture, ScaleMode.StretchToFill, false, 0, Color.black, 2, border_radius);
+            if (!fullscreen)
+            {
+                GUI.DrawTexture(header_r, Texture2D.whiteTexture, ScaleMode.StretchToFill, false, 0, theme.color_header_bottom, default, border_radius * new Vector4(1, 1, 0, 0));
+                GUI.DrawTexture(header_r, header_image, ScaleMode.StretchToFill, true, 0, theme.color_header_top, default, border_radius * new Vector4(1, 1, 0, 0));
+                GUI.DrawTexture(window_r, Texture2D.whiteTexture, ScaleMode.StretchToFill, false, 0, Color.black, 2, border_radius);
+            }
 
             if (showFilesButton)
             {
@@ -102,8 +115,11 @@ namespace _TERMINAL_
                 GUI.Label(new(header_r.x + 5, header_r.y, header_r.width, header_r.height), "Files", style_header);
             }
 
-            style_header.alignment = TextAnchor.MiddleCenter;
-            GUI.Label(header_r, process.ToString(), style_header);
+            if (!fullscreen)
+            {
+                style_header.alignment = TextAnchor.MiddleCenter;
+                GUI.Label(header_r, process.cmdName, style_header);
+            }
 
             stdout1.height = stdout2.height = stdin.height = 0;
 
