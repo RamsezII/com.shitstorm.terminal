@@ -5,6 +5,7 @@ namespace _TERMINAL_
     public partial class Terminal : MonoBehaviour
     {
         public static Terminal terminal;
+        public Shell shell;
 
         float nextCplCheck;
         bool cplFlag, bottomFlag;
@@ -19,6 +20,9 @@ namespace _TERMINAL_
             ToggleWindow(false);
 
             font_size = Mathf.Max(15, .02f * Screen.height);
+
+            _ARK_.NUCLEOR.onLateUpdate -= UpdateInputs;
+            _ARK_.NUCLEOR.onLateUpdate += UpdateInputs;
         }
 
         //----------------------------------------------------------------------------------------------------------
@@ -54,6 +58,8 @@ namespace _TERMINAL_
                 tryFocus1 = true;
         }
 
+        //----------------------------------------------------------------------------------------------------------
+
         protected virtual void OnLateUpdate()
         {
             if (cplFlag)
@@ -68,12 +74,9 @@ namespace _TERMINAL_
 
         protected virtual void OnDestroy()
         {
+            _ARK_.NUCLEOR.onLateUpdate -= UpdateInputs;
             if (this == terminal)
                 terminal = null;
-
-            while (boas.Count > 0)
-                boas[^1].Dispose();
-            boas.Clear();
         }
     }
 }

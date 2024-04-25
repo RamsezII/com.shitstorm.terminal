@@ -62,7 +62,7 @@ namespace _TERMINAL_
                 );
 
             Event e = Event.current;
-            Boa boa = boas[^1];
+            Process process = shell.processes[^1];
 
             CheckCursorMoveRequest();
 
@@ -103,21 +103,18 @@ namespace _TERMINAL_
             }
 
             style_header.alignment = TextAnchor.MiddleCenter;
-            GUI.Label(header_r, boa.title, style_header);
+            GUI.Label(header_r, process.ToString(), style_header);
 
             stdout1.height = stdout2.height = stdin.height = 0;
 
-            if (stdout1.enabled = boas[^1].HasFlags(Boa.FlagsF.Stdout))
+            if (stdout1.enabled = process.flags.HasFlag(Process.Flags.Stdout1))
                 GetSize(ref stdout1);
 
             stdout2.enabled = !string.IsNullOrWhiteSpace(stdout2.text);
             if (stdout2.enabled)
                 GetSize(ref stdout2);
 
-            if (!boa.HasFlags(Boa.FlagsF.Running))
-                boa.Init();
-
-            if (boa.HasFlags(Boa.FlagsF.Stdin))
+            if (process.flags.HasFlag(Process.Flags.Stdin))
             {
                 GetSize(ref stdin);
                 stdin.height = Mathf.Max(stdin.height, line_height);
@@ -159,39 +156,23 @@ namespace _TERMINAL_
                 gui_yscroll = Mathf.Max(gui_yscroll, text_h - body_r.height + stdin.height + .5f * line_height);
             }
 
-            if (boa.HasFlags(Boa.FlagsF.Stdin))
+            if (process.flags.HasFlag(Process.Flags.Stdin))
             {
-                Vector2 prefixe_size = style_body.CalcSize(new(boa.prefixe));
-                GUI.Label(new Rect(text_r.x, text_r.y + text_h, text_r.width, prefixe_size.y), boa.prefixe, style_body);
+                Vector2 prefixe_size = style_body.CalcSize(new(shell.prefixe));
+                GUI.Label(new Rect(text_r.x, text_r.y + text_h, text_r.width, prefixe_size.y), shell.prefixe, style_body);
                 text_r.x += prefixe_size.x;
                 text_r.width -= .5f * prefixe_size.x;
             }
 
             if (e.control && e.type == EventType.KeyDown && e.keyCode == KeyCode.C)
-                if (!Util.IsTeInSelectionState())
-                {
-                    if (boa != boas[0])
-                        terminal.OnStdout2(boa, null, true);
+                shell.SigKill();
 
-                    if (boa.HasFlags(Boa.FlagsF.Stdin))
-                        print(boa.prefixe);
-                    print("^C");
+            process.OnGui();
 
-                    if (boa.HasFlags(Boa.FlagsF.Killable))
-                    {
-                        boa.Kill();
-                        e.Use();
-                    }
-                    else
-                        Debug.LogWarning($"can not abort \"{boa.title}\"");
-                }
-
-            boa.OnGui();
-
-            if (boa.HasFlags(Boa.FlagsF.Stdin))
+            if (process.flags.HasFlag(Process.Flags.Stdin))
                 UpdateStdin(ctab, csubmit);
 
-            if (boa.HasFlags(Boa.FlagsF.Stdin))
+            if (process.flags.HasFlag(Process.Flags.Stdin))
             {
                 stdin.text = ModifyText(ref stdin, ref text_h);
                 if (GUI.changed)

@@ -5,14 +5,9 @@ namespace _TERMINAL_
 {
     public partial class Terminal
     {
-        public static string UserPrefixe = Prefixe("user");
-
-        //----------------------------------------------------------------------------------------------------------
-
         void UpdateStdin(in bool ctab, in bool csubmit)
         {
             Event e = Event.current;
-            Boa boa = boas[^1];
             bool uparrow = e.type == EventType.KeyDown && e.keyCode == KeyCode.UpArrow;
             bool downarrow = e.type == EventType.KeyDown && e.keyCode == KeyCode.DownArrow;
 
@@ -26,10 +21,12 @@ namespace _TERMINAL_
                 e.Use();
             }
             else if (csubmit || ctab)
+            {
+                Process process = shell.processes[^1];
                 if (csubmit && string.IsNullOrWhiteSpace(stdin.text))
                 {
                     stdin.text = string.Empty;
-                    if (boa.HasFlags(Boa.FlagsF.Closable))
+                    if (process.flags.HasFlag(Process.Flags.Closable))
                         ToggleWindow(false);
                 }
                 else
@@ -57,7 +54,7 @@ namespace _TERMINAL_
                         string temp = stdin.text;
                         if (csubmit)
                         {
-                            string log = boa.prefixe + stdin.text;
+                            string log = shell.prefixe + stdin.text;
                             if (this == terminal)
                                 print(log);
                             else
@@ -65,9 +62,9 @@ namespace _TERMINAL_
                             stdin.text = string.Empty;
                         }
 
-                        boa.OnCmdLine(line);
+                        process.OnCmdLine(line);
 
-                        if (csubmit && boa == boas[0])
+                        if (csubmit && process == shell.processes[0])
                             AddToHistory(temp);
 
                         if (ctab || line.isCpl)
@@ -85,6 +82,7 @@ namespace _TERMINAL_
                         Debug.LogException(ex);
                     }
                 }
+            }
         }
     }
 }

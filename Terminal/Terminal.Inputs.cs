@@ -4,6 +4,12 @@ namespace _TERMINAL_
 {
     public partial class Terminal
     {
+        void UpdateInputs()
+        {
+            if (Input.GetKeyDown(KeyCode.T))
+                ToggleWindow(true);
+        }
+
         static (bool ctab, bool csubmit) CatchTabAndEnter(bool focus)
         {
             Event e = Event.current;
