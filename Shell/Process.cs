@@ -27,26 +27,51 @@ namespace _TERMINAL_
             _all_ = (1 << Bools._last_) - 1,
         }
 
-        public string name;
+        public const string
+            UserColor = "#73CC26",
+            BoaColor = "#73B2D9";
+
+        public string userName, cmdName, prefixe;
         public Flags flags;
 
         //----------------------------------------------------------------------------------------------------------
 
         public Process(in Flags flags, in string name = default)
         {
-            this.name = string.IsNullOrWhiteSpace(name) ? GetType().ToString() : name;
+            if (string.IsNullOrWhiteSpace(name))
+                cmdName = GetType().ToString();
+            else
+                cmdName = name;
+
             this.flags = flags;
+            RefreshPrefixe();
         }
 
         //----------------------------------------------------------------------------------------------------------
 
+        public void SetUserName(string value)
+        {
+            userName = value;
+            RefreshPrefixe();
+        }
+
+        public void SetName(string value)
+        {
+            cmdName = value;
+            RefreshPrefixe();
+        }
+
+        public void RefreshPrefixe() => prefixe = $"{userName.SetColor(UserColor)}:{cmdName.SetColor(BoaColor)}$ ";
+
+        //----------------------------------------------------------------------------------------------------------
+
         public void OnCmdLine(in LineParser line) => OnCmdLine(line.Read(), line);
-        public virtual void OnCmdLine(in string arg0, in LineParser line) => Debug.LogWarning($"{name} does not implement \"{arg0}\"");
+        public virtual void OnCmdLine(in string arg0, in LineParser line) => Debug.LogWarning($"{cmdName} does not implement \"{arg0}\"");
         public virtual void OnGui()
         {
         }
 
-        public virtual void Kill() => Dispose();
+        public virtual void OnKill() => Dispose();
         public abstract void Dispose();
     }
 }

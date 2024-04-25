@@ -62,7 +62,7 @@ namespace _TERMINAL_
                 );
 
             Event e = Event.current;
-            Process process = shell.processes[^1];
+            Process process = processes[^1];
 
             CheckCursorMoveRequest();
 
@@ -158,14 +158,27 @@ namespace _TERMINAL_
 
             if (process.flags.HasFlag(Process.Flags.Stdin))
             {
-                Vector2 prefixe_size = style_body.CalcSize(new(shell.prefixe));
-                GUI.Label(new Rect(text_r.x, text_r.y + text_h, text_r.width, prefixe_size.y), shell.prefixe, style_body);
+                Vector2 prefixe_size = style_body.CalcSize(new(process.prefixe));
+                GUI.Label(new Rect(text_r.x, text_r.y + text_h, text_r.width, prefixe_size.y), process.prefixe, style_body);
                 text_r.x += prefixe_size.x;
                 text_r.width -= .5f * prefixe_size.x;
             }
 
             if (e.control && e.type == EventType.KeyDown && e.keyCode == KeyCode.C)
-                shell.SigKill();
+            {
+                if (process.flags.HasFlag(Process.Flags.Stdin))
+                    Debug.Log(process.prefixe);
+
+                Debug.Log("^C");
+
+                if (process.flags.HasFlag(Process.Flags.Killable))
+                {
+                    process.OnKill();
+                    Event.current.Use();
+                }
+                else
+                    Debug.LogWarning($"can not abort \"{process.GetType()}\"");
+            }
 
             process.OnGui();
 

@@ -22,7 +22,7 @@ namespace _TERMINAL_
             }
             else if (csubmit || ctab)
             {
-                Process process = shell.processes[^1];
+                Process process = processes[^1];
                 if (csubmit && string.IsNullOrWhiteSpace(stdin.text))
                 {
                     stdin.text = string.Empty;
@@ -54,7 +54,7 @@ namespace _TERMINAL_
                         string temp = stdin.text;
                         if (csubmit)
                         {
-                            string log = shell.prefixe + stdin.text;
+                            string log = process.prefixe + stdin.text;
                             if (this == terminal)
                                 print(log);
                             else
@@ -64,7 +64,7 @@ namespace _TERMINAL_
 
                         process.OnCmdLine(line);
 
-                        if (csubmit && process == shell.processes[0])
+                        if (csubmit && process == processes[0])
                             AddToHistory(temp);
 
                         if (ctab || line.isCpl)

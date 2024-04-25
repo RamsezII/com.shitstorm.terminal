@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace _TERMINAL_
@@ -5,7 +6,7 @@ namespace _TERMINAL_
     public partial class Terminal : MonoBehaviour
     {
         public static Terminal terminal;
-        public Shell shell;
+        public readonly List<Process> processes = new();
 
         float nextCplCheck;
         bool cplFlag, bottomFlag;
@@ -23,6 +24,11 @@ namespace _TERMINAL_
 
             _ARK_.NUCLEOR.onLateUpdate -= UpdateInputs;
             _ARK_.NUCLEOR.onLateUpdate += UpdateInputs;
+        }
+
+        private void Start()
+        {
+            ToggleWindow(false);
         }
 
         //----------------------------------------------------------------------------------------------------------
@@ -74,9 +80,17 @@ namespace _TERMINAL_
 
         protected virtual void OnDestroy()
         {
-            _ARK_.NUCLEOR.onLateUpdate -= UpdateInputs;
             if (this == terminal)
                 terminal = null;
+
+            _ARK_.NUCLEOR.onLateUpdate -= UpdateInputs;
+
+            lock (processes)
+            {
+                for (int i = processes.Count - 1; i >= 0; i--)
+                    processes[i].Dispose();
+                processes.Clear();
+            }
         }
     }
 }
