@@ -4,18 +4,6 @@ namespace _TERMINAL_
 {
     public partial class Terminal
     {
-        void UpdateInputs()
-        {
-            if (Input.GetKeyDown(KeyCode.T))
-                if (!enabled)
-                    if (Application.isEditor
-                        || Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl)
-                        || Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)
-                        || Input.GetKey(KeyCode.LeftAlt) || Input.GetKey(KeyCode.RightAlt)
-                        || Input.GetKey(KeyCode.LeftCommand) || Input.GetKey(KeyCode.RightCommand))
-                        ToggleWindow(true);
-        }
-
         static (bool ctab, bool csubmit) CatchTabAndEnter(bool focus)
         {
             Event e = Event.current;

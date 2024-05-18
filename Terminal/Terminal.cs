@@ -6,6 +6,7 @@ namespace _TERMINAL_
     public partial class Terminal : MonoBehaviour
     {
         public static Terminal terminal;
+        public static Process mainProcess;
         public readonly List<Process> processes = new();
 
         float nextCplCheck;
@@ -13,21 +14,35 @@ namespace _TERMINAL_
 
         //----------------------------------------------------------------------------------------------------------
 
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
+        static void AutoSpawn()
+        {
+            if (FindObjectOfType<Terminal>() == null)
+                Instantiate(Resources.Load<Terminal>(nameof(_TERMINAL_)));
+        }
+
+        //----------------------------------------------------------------------------------------------------------
+
         protected virtual void Awake()
         {
             name = nameof(Terminal);
+            terminal = this;
+
+#if UNITY_EDITOR
+            Application.logMessageReceivedThreaded -= OnLogMessageReceived;
+#endif
+            Application.logMessageReceivedThreaded += OnLogMessageReceived;
 
             InitGUI();
             ToggleWindow(false);
 
             font_size = Mathf.Max(15, .02f * Screen.height);
-
-            _ARK_.NUCLEOR.onLateUpdate -= UpdateInputs;
-            _ARK_.NUCLEOR.onLateUpdate += UpdateInputs;
         }
 
         private void Start()
         {
+            if (mainProcess != null)
+                processes.Add(mainProcess);
             ToggleWindow(false);
         }
 
@@ -67,7 +82,7 @@ namespace _TERMINAL_
 
         //----------------------------------------------------------------------------------------------------------
 
-        protected virtual void OnLateUpdate()
+        private void LateUpdate()
         {
             if (cplFlag)
                 if (Time.unscaledTime > nextCplCheck)
@@ -81,10 +96,10 @@ namespace _TERMINAL_
 
         protected virtual void OnDestroy()
         {
+            Application.logMessageReceivedThreaded -= OnLogMessageReceived;
+
             if (this == terminal)
                 terminal = null;
-
-            _ARK_.NUCLEOR.onLateUpdate -= UpdateInputs;
 
             lock (processes)
             {

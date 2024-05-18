@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-namespace _TERMINAL_
+﻿namespace _TERMINAL_
 {
     public abstract partial class Shell : Process
     {

@@ -70,6 +70,8 @@ namespace _TERMINAL_
         }
 
         public virtual void OnKill() => Dispose();
-        public abstract void Dispose();
+        public virtual void Dispose()
+        {
+        }
     }
 }

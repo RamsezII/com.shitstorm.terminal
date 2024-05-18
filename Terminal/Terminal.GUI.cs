@@ -1,5 +1,4 @@
-﻿using _UTIL_;
-using System;
+﻿using System;
 using UnityEngine;
 
 namespace _TERMINAL_
@@ -41,7 +40,7 @@ namespace _TERMINAL_
         [SerializeField] string stdinOld;
         [SerializeField] Rect dims_r = new(.1f, .05f, .8f, .85f);
 
-        bool fullscreen = false;
+        [SerializeField] bool fullscreen;
 
         //----------------------------------------------------------------------------------------------------------
 

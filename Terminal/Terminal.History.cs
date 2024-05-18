@@ -7,8 +7,8 @@ namespace _TERMINAL_
 {
     public partial class Terminal
     {
-        const string history_extension = "." + nameof(Terminal) + ".history" + JSon.txt;
-        static string HistoryPath(in string name) => Path.Combine(Util.HOME_PATH, name + history_extension);
+        const string history_extension = "." + nameof(Terminal) + ".history.json.txt";
+        static string HistoryPath(in string name) => Path.Combine(Application.streamingAssetsPath, name + history_extension);
 
         [SerializeField] List<string> history;
         int history_index;
@@ -56,11 +56,16 @@ namespace _TERMINAL_
                 }
 
                 history_index += increment;
-                history_index = Util.Repeat(history_index, history.Count + 1);
+                if (history_index < 0)
+                    history_index = history.Count - 1;
+                else if (history_index > history.Count)
+                    history_index = 0;
+
                 if (history_index == history.Count)
                     line = string.Empty;
                 else
                     line = history[history_index];
+
                 return true;
             }
         }
