@@ -35,6 +35,7 @@ namespace _TERMINAL_
 
             InitGUI();
             ToggleWindow(false);
+            DontDestroyOnLoad(gameObject);
 
             font_size = Mathf.Max(15, .02f * Screen.height);
         }
