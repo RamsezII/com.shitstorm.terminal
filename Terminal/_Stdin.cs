@@ -73,10 +73,6 @@ namespace _TERMINAL_
                             RequestCursorMove(line.sel_move, false);
                         }
                     }
-                    catch (WrongCommandException ex)
-                    {
-                        Debug.LogWarning($"{GetType()} -> unknown command: \"{ex.Message.Bold()}\"");
-                    }
                     catch (Exception ex)
                     {
                         Debug.LogException(ex);

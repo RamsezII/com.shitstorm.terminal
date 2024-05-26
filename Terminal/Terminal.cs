@@ -6,7 +6,6 @@ namespace _TERMINAL_
     public partial class Terminal : MonoBehaviour
     {
         public static Terminal terminal;
-        public static Process mainProcess;
         public readonly List<Process> processes = new();
 
         float nextCplCheck;
@@ -42,8 +41,7 @@ namespace _TERMINAL_
 
         private void Start()
         {
-            if (mainProcess != null)
-                processes.Add(mainProcess);
+            processes.Add(Shell.instance);
             ToggleWindow(false);
         }
 
