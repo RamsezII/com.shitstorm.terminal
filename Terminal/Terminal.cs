@@ -83,6 +83,9 @@ namespace _TERMINAL_
 
         private void LateUpdate()
         {
+            if (commands[^1].disposed.Value)
+                commands.RemoveAt(commands.Count - 1);
+
             if (cplFlag)
                 if (Time.unscaledTime > nextCplCheck)
                 {

@@ -117,7 +117,7 @@ namespace _TERMINAL_
             if (!fullscreen)
             {
                 style_header.alignment = TextAnchor.MiddleCenter;
-                GUI.Label(header_r, command.rightPrefixe, style_header);
+                GUI.Label(header_r, command.cmdName, style_header);
             }
 
             stdout1.height = stdout2.height = stdin.height = 0;
@@ -174,8 +174,8 @@ namespace _TERMINAL_
 
             if (command.flags.HasFlag(Command.Flags.Stdin))
             {
-                Vector2 prefixe_size = style_body.CalcSize(new(command.prefixe));
-                GUI.Label(new Rect(text_r.x, text_r.y + text_h, text_r.width, prefixe_size.y), command.prefixe, style_body);
+                Vector2 prefixe_size = style_body.CalcSize(new(command.cmdPrefixe));
+                GUI.Label(new Rect(text_r.x, text_r.y + text_h, text_r.width, prefixe_size.y), command.cmdPrefixe, style_body);
                 text_r.x += prefixe_size.x;
                 text_r.width -= .5f * prefixe_size.x;
             }
@@ -183,7 +183,7 @@ namespace _TERMINAL_
             if (e.control && e.type == EventType.KeyDown && e.keyCode == KeyCode.C)
             {
                 if (command.flags.HasFlag(Command.Flags.Stdin))
-                    Debug.Log(command.prefixe);
+                    Debug.Log(command.cmdPrefixe);
 
                 Debug.Log("^C");
 

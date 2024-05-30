@@ -1,5 +1,6 @@
 ﻿using _UTIL_;
 using System;
+using System.IO;
 using UnityEngine;
 
 namespace _TERMINAL_
@@ -28,10 +29,10 @@ namespace _TERMINAL_
             _all_ = (1 << Bools._last_) - 1,
         }
 
-        public string
-            leftPrefixe, rightPrefixe,
-            prefixe = Terminal.ColoredPrompt(".", "~"),
-            status, output;
+        static readonly string leftPrefixe = Directory.GetCurrentDirectory();
+        public readonly string cmdName, cmdPrefixe;
+
+        public string status, output;
 
         public Flags flags = Flags.Stdout1 | Flags.Stdout2 | Flags.Stdin | Flags.Closable;
 
@@ -42,20 +43,19 @@ namespace _TERMINAL_
 
         public Command()
         {
-            rightPrefixe = GetType().ToString();
-        }
-
-        //----------------------------------------------------------------------------------------------------------
-
-        public virtual void Init()
-        {
-            prefixe = Terminal.ColoredPrompt(leftPrefixe, rightPrefixe);
+            cmdName = this is Shell ? "~" : GetType().ToString();
+            cmdPrefixe = Terminal.ColoredPrompt(leftPrefixe, cmdName);
         }
 
         //----------------------------------------------------------------------------------------------------------
 
         public void OnCmdLine(in LineParser line) => OnCmdLine(line.Read(), line);
-        public virtual void OnCmdLine(in string arg0, in LineParser line) => Debug.LogWarning($"{rightPrefixe} ({this}) does not implement \"{arg0}\"");
+        public virtual void OnCmdLine(in string arg0, in LineParser line)
+        {
+            if (line.isExec)
+                Debug.LogWarning($"{cmdName} ({this}) does not implement \"{arg0}\"");
+        }
+
         public virtual void OnGui()
         {
         }
@@ -100,7 +100,7 @@ namespace _TERMINAL_
             }
 
             if (!string.IsNullOrWhiteSpace(output))
-                Debug.Log($"{rightPrefixe} output{{ {output} }}");
+                Debug.Log($"{cmdName} output{{ {output} }}");
 
             OnDispose();
             onDispose?.Invoke();

@@ -54,7 +54,7 @@ namespace _TERMINAL_
                         string temp = stdin.text;
                         if (csubmit)
                         {
-                            string log = command.prefixe + stdin.text;
+                            string log = command.cmdPrefixe + stdin.text;
                             if (this == terminal)
                                 print(log);
                             else

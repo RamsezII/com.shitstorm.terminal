@@ -1,6 +1,6 @@
 {
     "name": "_TERMINAL_",
-    "rootNamespace": "",
+    "rootNamespace": "_TERMINAL_",
     "references": [
         "GUID:ec96f6dc48fee4244bcebc247464e471",
         "GUID:75469ad4d38634e559750d17036d5f7c"

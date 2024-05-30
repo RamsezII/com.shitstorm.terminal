@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 
 namespace _TERMINAL_
@@ -23,7 +22,6 @@ namespace _TERMINAL_
         public Shell() : base()
         {
             instance = this;
-            leftPrefixe = Directory.GetCurrentDirectory();
         }
 
         //----------------------------------------------------------------------------------------------------------
