@@ -46,6 +46,7 @@ namespace _TERMINAL_
 
         void InitGUI()
         {
+            font_size = Mathf.Max(15, .02f * Screen.height);
             stdout1.controlName = nameof(stdout1);
             stdout2.controlName = nameof(stdout2);
             stdin.controlName = nameof(stdin);
@@ -56,7 +57,16 @@ namespace _TERMINAL_
         protected virtual void OnGUI()
         {
             Event e = Event.current;
-            Command command = commands[^1];
+            Command command;
+
+            try
+            {
+                command = commands[^1];
+            }
+            catch
+            {
+                return;
+            }
 
             CheckCursorMoveRequest();
 

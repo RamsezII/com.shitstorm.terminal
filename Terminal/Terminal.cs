@@ -14,8 +14,9 @@ namespace _TERMINAL_
         //----------------------------------------------------------------------------------------------------------
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
-        static void AutoSpawn()
+        static void Init()
         {
+            Debug.Log(nameof(Terminal) + " Init");
             if (FindObjectOfType<Terminal>() == null)
                 Instantiate(Resources.Load<Terminal>(nameof(_TERMINAL_)));
         }
@@ -24,7 +25,7 @@ namespace _TERMINAL_
 
         protected virtual void Awake()
         {
-            name = nameof(Terminal);
+            name = typeof(Terminal).Name;
             terminal = this;
 
 #if UNITY_EDITOR
@@ -32,16 +33,15 @@ namespace _TERMINAL_
 #endif
             Application.logMessageReceivedThreaded += OnLogMessageReceived;
 
-            InitGUI();
-            ToggleWindow(false);
             DontDestroyOnLoad(gameObject);
 
-            font_size = Mathf.Max(15, .02f * Screen.height);
+            InitGUI();
+            commands.Add(Shell.instance);
+            ReadHistory();
         }
 
         private void Start()
         {
-            commands.Add(Shell.instance);
             ToggleWindow(false);
         }
 
@@ -50,15 +50,12 @@ namespace _TERMINAL_
         protected virtual void OnApplicationFocus(bool focus)
         {
             if (focus)
-                ReadHistory("COBRA");
+                ReadHistory();
             else
-                SaveHistory("COBRA");
+                SaveHistory();
         }
 
-        private void OnApplicationQuit()
-        {
-            SaveHistory("COBRA");
-        }
+        private void OnApplicationQuit() => SaveHistory();
 
 #if UNITY_EDITOR
         [ContextMenu(nameof(_ToggleWindow))]
@@ -84,7 +81,11 @@ namespace _TERMINAL_
         private void LateUpdate()
         {
             if (commands[^1].disposed.Value)
+            {
+                if (commands.Count == 1)
+                    Debug.LogError("Main command disposed ???");
                 commands.RemoveAt(commands.Count - 1);
+            }
 
             if (cplFlag)
                 if (Time.unscaledTime > nextCplCheck)
@@ -105,7 +106,7 @@ namespace _TERMINAL_
 
             lock (commands)
             {
-                for (int i = commands.Count - 1; i >= 0; i--)
+                for (int i = commands.Count - 1; i > 0; i--)
                     commands[i].Dispose();
                 commands.Clear();
             }

@@ -12,17 +12,10 @@ namespace _TERMINAL_
             public void OnCmdLine(in string arg0, in LineParser line);
         }
 
-        public static Shell instance = new();
+        public static readonly Shell instance = new();
         static readonly HashSet<IUser> users = new();
         static readonly Dictionary<string, IUser> commandOwners = new(StringComparer.OrdinalIgnoreCase);
         static string[] commands;
-
-        //----------------------------------------------------------------------------------------------------------
-
-        public Shell() : base()
-        {
-            instance = this;
-        }
 
         //----------------------------------------------------------------------------------------------------------
 

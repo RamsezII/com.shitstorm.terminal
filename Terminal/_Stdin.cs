@@ -13,11 +13,12 @@ namespace _TERMINAL_
 
             if (uparrow || downarrow)
             {
-                if (GetHistory(uparrow ? -1 : 1, out string line))
-                {
-                    stdin.text = line;
-                    RequestCursorMove(line.Length, true);
-                }
+                if (commands.Count == 1)
+                    if (GetHistory(uparrow ? -1 : 1, out string line))
+                    {
+                        stdin.text = line;
+                        RequestCursorMove(line.Length, true);
+                    }
                 e.Use();
             }
             else if (csubmit || ctab)

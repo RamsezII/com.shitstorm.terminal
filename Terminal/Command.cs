@@ -65,6 +65,7 @@ namespace _TERMINAL_
             lock (disposed)
                 if (!disposed._value)
                 {
+                    Debug.Log($"----- {cmdName} Success -----");
                     OnSuccess();
                     onSuccess?.Invoke();
                     Dispose();
@@ -80,6 +81,7 @@ namespace _TERMINAL_
             lock (disposed)
                 if (!disposed._value)
                 {
+                    Debug.LogWarning($"----- {cmdName} Failure -----");
                     OnFailure();
                     onFailure?.Invoke();
                     Dispose();
@@ -96,6 +98,7 @@ namespace _TERMINAL_
             {
                 if (disposed._value)
                     return;
+                Debug.Log($"----- {cmdName} Disposed -----".ToSubLog());
                 disposed._value = true;
             }
 

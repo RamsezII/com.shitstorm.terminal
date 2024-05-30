@@ -7,24 +7,26 @@ namespace _TERMINAL_
 {
     public partial class Terminal
     {
-        const string history_extension = "." + nameof(Terminal) + ".history.json.txt";
-        static string HistoryPath(in string name) => Path.Combine(Application.streamingAssetsPath, name + history_extension);
+        static readonly string
+            history_file = typeof(Terminal).Name + ".history.json.txt";
+
+        private static string GetHistoryPath() => Path.Combine(Util.HOME_DIR.FullName, history_file);
 
         [SerializeField] List<string> history;
         int history_index;
 
         //----------------------------------------------------------------------------------------------------------
 
-        public void SaveHistory(in string name)
+        public void SaveHistory()
         {
-            string path = HistoryPath(name);
+            string path = GetHistoryPath();
             lock (history)
                 File.WriteAllLines(path, history);
         }
 
-        public void ReadHistory(in string name)
+        public void ReadHistory()
         {
-            string path = HistoryPath(name);
+            string path = GetHistoryPath();
             lock (history)
                 if (File.Exists(path))
                 {
