@@ -14,9 +14,9 @@ namespace _TERMINAL_
         }
 
         public static Shell instance = new();
-        readonly HashSet<IUser> users = new();
-        readonly Dictionary<string, IUser> commandOwners = new(StringComparer.OrdinalIgnoreCase);
-        string[] commands;
+        static readonly HashSet<IUser> users = new();
+        static readonly Dictionary<string, IUser> commandOwners = new(StringComparer.OrdinalIgnoreCase);
+        static string[] commands;
 
         //----------------------------------------------------------------------------------------------------------
 
@@ -29,7 +29,7 @@ namespace _TERMINAL_
 
         //----------------------------------------------------------------------------------------------------------
 
-        void RefreshCommands()
+        static void RefreshCommands()
         {
             commands = (
                 from cmd in commandOwners.Keys
@@ -38,7 +38,7 @@ namespace _TERMINAL_
                 ).ToArray();
         }
 
-        public void AddUser(in IUser user)
+        public static void AddUser(in IUser user)
         {
             users.Add(user);
             foreach (string cmd in user.Commands)
@@ -46,7 +46,7 @@ namespace _TERMINAL_
             RefreshCommands();
         }
 
-        public void RemoveUser(in IUser user)
+        public static void RemoveUser(in IUser user)
         {
             users.Remove(user);
             foreach (string cmd in user.Commands)
