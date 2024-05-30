@@ -20,11 +20,10 @@ namespace _TERMINAL_
 
         //----------------------------------------------------------------------------------------------------------
 
-        public Shell() : base("~")
+        public Shell() : base()
         {
             instance = this;
-            userName = Directory.GetCurrentDirectory();
-            RefreshPrefixe();
+            leftPrefixe = Directory.GetCurrentDirectory();
         }
 
         //----------------------------------------------------------------------------------------------------------

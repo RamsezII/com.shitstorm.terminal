@@ -117,7 +117,7 @@ namespace _TERMINAL_
             if (!fullscreen)
             {
                 style_header.alignment = TextAnchor.MiddleCenter;
-                GUI.Label(header_r, command.cmdName, style_header);
+                GUI.Label(header_r, command.rightPrefixe, style_header);
             }
 
             stdout1.height = stdout2.height = stdin.height = 0;

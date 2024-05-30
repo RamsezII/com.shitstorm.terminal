@@ -28,7 +28,11 @@ namespace _TERMINAL_
             _all_ = (1 << Bools._last_) - 1,
         }
 
-        public string userName, cmdName, prefixe, status, output;
+        public string
+            leftPrefixe, rightPrefixe,
+            prefixe = Terminal.ColoredPrompt(".", "~"),
+            status, output;
+
         public Flags flags = Flags.Stdout1 | Flags.Stdout2 | Flags.Stdin | Flags.Closable;
 
         public Action onSuccess, onFailure, onDispose;
@@ -36,40 +40,22 @@ namespace _TERMINAL_
 
         //----------------------------------------------------------------------------------------------------------
 
-        public Command(in string name = default)
+        public Command()
         {
-            if (string.IsNullOrWhiteSpace(name))
-                cmdName = GetType().ToString();
-            else
-                cmdName = name;
-            RefreshPrefixe();
-        }
-
-        public virtual void Init()
-        {
-
+            rightPrefixe = GetType().ToString();
         }
 
         //----------------------------------------------------------------------------------------------------------
 
-        protected void RefreshPrefixe() => prefixe = Terminal.ColoredPrompt(userName, cmdName);
-
-        public void SetUserName(string value)
+        public virtual void Init()
         {
-            userName = value;
-            RefreshPrefixe();
-        }
-
-        public void SetName(string value)
-        {
-            cmdName = value;
-            RefreshPrefixe();
+            prefixe = Terminal.ColoredPrompt(leftPrefixe, rightPrefixe);
         }
 
         //----------------------------------------------------------------------------------------------------------
 
         public void OnCmdLine(in LineParser line) => OnCmdLine(line.Read(), line);
-        public virtual void OnCmdLine(in string arg0, in LineParser line) => Debug.LogWarning($"{cmdName} ({this}) does not implement \"{arg0}\"");
+        public virtual void OnCmdLine(in string arg0, in LineParser line) => Debug.LogWarning($"{rightPrefixe} ({this}) does not implement \"{arg0}\"");
         public virtual void OnGui()
         {
         }
@@ -114,7 +100,7 @@ namespace _TERMINAL_
             }
 
             if (!string.IsNullOrWhiteSpace(output))
-                Debug.Log($"{cmdName} output{{ {output} }}");
+                Debug.Log($"{rightPrefixe} output{{ {output} }}");
 
             OnDispose();
             onDispose?.Invoke();
