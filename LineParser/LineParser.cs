@@ -41,7 +41,6 @@ namespace _TERMINAL_
     [Serializable]
     public sealed partial class LineParser
     {
-        public Terminal terminal;
         public CmdF cmdM;
         public int ichar, ichar_a, ichar_b, sel_move;
         int sel_char;
@@ -69,9 +68,8 @@ namespace _TERMINAL_
 
         //----------------------------------------------------------------------------------------------------------
 
-        public LineParser(in Terminal terminal, in string rawtext, in CmdF cmdM, in int sel_char = 0)
+        public LineParser(in string rawtext, in CmdF cmdM, in int sel_char = 0)
         {
-            this.terminal = terminal;
             this.rawtext = rawtext;
             this.cmdM = cmdM;
             ichar = ichar_a = ichar_b = sel_move = 0;

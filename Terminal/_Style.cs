@@ -17,8 +17,12 @@ namespace _TERMINAL_
         [SerializeField] TerminalTheme theme;
         [SerializeField] GUIStyle style_header, style_body;
 
+        const string
+            PrefixeLeftColor = "#73CC26",
+            PrefixeRightColor = "#73B2D9";
+
         //----------------------------------------------------------------------------------------------------------
 
-
+        public static string ColoredPrompt(in string left, in string right) => $"{left.SetColor(PrefixeLeftColor)}:{right.SetColor(PrefixeRightColor)}$ ";
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using _UTIL_;
+using System;
 using UnityEngine;
 
 namespace _TERMINAL_
@@ -27,12 +28,11 @@ namespace _TERMINAL_
             _all_ = (1 << Bools._last_) - 1,
         }
 
-        public const string
-            UserColor = "#73CC26",
-            BoaColor = "#73B2D9";
-
-        public string userName, cmdName, prefixe;
+        public string userName, cmdName, prefixe, status, output;
         public Flags flags = Flags.Stdout1 | Flags.Stdout2 | Flags.Stdin | Flags.Closable;
+
+        public Action onSuccess, onFailure, onDispose;
+        public readonly ThreadSafe<bool> disposed = new();
 
         //----------------------------------------------------------------------------------------------------------
 
@@ -45,7 +45,14 @@ namespace _TERMINAL_
             RefreshPrefixe();
         }
 
+        public virtual void Init()
+        {
+
+        }
+
         //----------------------------------------------------------------------------------------------------------
+
+        protected void RefreshPrefixe() => prefixe = Terminal.ColoredPrompt(userName, cmdName);
 
         public void SetUserName(string value)
         {
@@ -59,8 +66,6 @@ namespace _TERMINAL_
             RefreshPrefixe();
         }
 
-        public void RefreshPrefixe() => prefixe = $"{userName.SetColor(UserColor)}:{cmdName.SetColor(BoaColor)}$ ";
-
         //----------------------------------------------------------------------------------------------------------
 
         public void OnCmdLine(in LineParser line) => OnCmdLine(line.Read(), line);
@@ -69,8 +74,53 @@ namespace _TERMINAL_
         {
         }
 
-        public virtual void OnKill() => Dispose();
-        public virtual void Dispose()
+        public void Succeed()
+        {
+            lock (disposed)
+                if (!disposed._value)
+                {
+                    OnSuccess();
+                    onSuccess?.Invoke();
+                    Dispose();
+                }
+        }
+
+        protected virtual void OnSuccess()
+        {
+        }
+
+        public void Fail()
+        {
+            lock (disposed)
+                if (!disposed._value)
+                {
+                    OnFailure();
+                    onFailure?.Invoke();
+                    Dispose();
+                }
+        }
+
+        protected virtual void OnFailure()
+        {
+        }
+
+        public void Dispose()
+        {
+            lock (disposed)
+            {
+                if (disposed._value)
+                    return;
+                disposed._value = true;
+            }
+
+            if (!string.IsNullOrWhiteSpace(output))
+                Debug.Log($"{cmdName} output{{ {output} }}");
+
+            OnDispose();
+            onDispose?.Invoke();
+        }
+
+        protected virtual void OnDispose()
         {
         }
     }

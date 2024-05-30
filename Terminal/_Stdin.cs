@@ -47,7 +47,7 @@ namespace _TERMINAL_
                     if (e.keyCode == KeyCode.RightArrow)
                         cmdM |= CmdF.altE;
 
-                    LineParser line = new(this, csubmit ? stdin.text : stdinOld, cmdM, stdinOld.Length);
+                    LineParser line = new(csubmit ? stdin.text : stdinOld, cmdM, stdinOld.Length);
 
                     try
                     {

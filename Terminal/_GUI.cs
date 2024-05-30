@@ -125,6 +125,7 @@ namespace _TERMINAL_
             if (stdout1.enabled = process.flags.HasFlag(Process.Flags.Stdout1))
                 GetSize(ref stdout1);
 
+            stdout2.text = process.status;
             stdout2.enabled = !string.IsNullOrWhiteSpace(stdout2.text);
             if (stdout2.enabled)
                 GetSize(ref stdout2);
@@ -188,7 +189,7 @@ namespace _TERMINAL_
 
                 if (process.flags.HasFlag(Process.Flags.Killable))
                 {
-                    process.OnKill();
+                    process.Fail();
                     Event.current.Use();
                 }
                 else
