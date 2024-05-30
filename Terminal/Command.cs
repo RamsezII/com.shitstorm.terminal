@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace _TERMINAL_
 {
-    public abstract class Process : IDisposable
+    public abstract class Command : IDisposable
     {
         enum Bools : byte
         {
@@ -36,7 +36,7 @@ namespace _TERMINAL_
 
         //----------------------------------------------------------------------------------------------------------
 
-        public Process(in string name = default)
+        public Command(in string name = default)
         {
             if (string.IsNullOrWhiteSpace(name))
                 cmdName = GetType().ToString();

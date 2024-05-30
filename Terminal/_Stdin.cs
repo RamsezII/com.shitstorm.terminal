@@ -22,11 +22,11 @@ namespace _TERMINAL_
             }
             else if (csubmit || ctab)
             {
-                Process process = processes[^1];
+                Command command = commands[^1];
                 if (csubmit && string.IsNullOrWhiteSpace(stdin.text))
                 {
                     stdin.text = string.Empty;
-                    if (process.flags.HasFlag(Process.Flags.Closable))
+                    if (command.flags.HasFlag(Command.Flags.Closable))
                         ToggleWindow(false);
                 }
                 else
@@ -54,7 +54,7 @@ namespace _TERMINAL_
                         string temp = stdin.text;
                         if (csubmit)
                         {
-                            string log = process.prefixe + stdin.text;
+                            string log = command.prefixe + stdin.text;
                             if (this == terminal)
                                 print(log);
                             else
@@ -62,9 +62,9 @@ namespace _TERMINAL_
                             stdin.text = string.Empty;
                         }
 
-                        process.OnCmdLine(line);
+                        command.OnCmdLine(line);
 
-                        if (csubmit && process == processes[0])
+                        if (csubmit && command == commands[0])
                             AddToHistory(temp);
 
                         if (ctab || line.isCpl)

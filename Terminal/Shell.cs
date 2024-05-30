@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace _TERMINAL_
 {
-    public sealed class Shell : Process
+    public sealed class Shell : Command
     {
         public interface IUser
         {

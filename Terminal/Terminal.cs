@@ -6,7 +6,7 @@ namespace _TERMINAL_
     public partial class Terminal : MonoBehaviour
     {
         public static Terminal terminal;
-        public readonly List<Process> processes = new();
+        public readonly List<Command> commands = new();
 
         float nextCplCheck;
         bool cplFlag, bottomFlag;
@@ -41,7 +41,7 @@ namespace _TERMINAL_
 
         private void Start()
         {
-            processes.Add(Shell.instance);
+            commands.Add(Shell.instance);
             ToggleWindow(false);
         }
 
@@ -100,11 +100,11 @@ namespace _TERMINAL_
             if (this == terminal)
                 terminal = null;
 
-            lock (processes)
+            lock (commands)
             {
-                for (int i = processes.Count - 1; i >= 0; i--)
-                    processes[i].Dispose();
-                processes.Clear();
+                for (int i = commands.Count - 1; i >= 0; i--)
+                    commands[i].Dispose();
+                commands.Clear();
             }
         }
     }

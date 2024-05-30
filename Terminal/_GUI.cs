@@ -56,7 +56,7 @@ namespace _TERMINAL_
         protected virtual void OnGUI()
         {
             Event e = Event.current;
-            Process process = processes[^1];
+            Command command = commands[^1];
 
             CheckCursorMoveRequest();
 
@@ -117,20 +117,20 @@ namespace _TERMINAL_
             if (!fullscreen)
             {
                 style_header.alignment = TextAnchor.MiddleCenter;
-                GUI.Label(header_r, process.cmdName, style_header);
+                GUI.Label(header_r, command.cmdName, style_header);
             }
 
             stdout1.height = stdout2.height = stdin.height = 0;
 
-            if (stdout1.enabled = process.flags.HasFlag(Process.Flags.Stdout1))
+            if (stdout1.enabled = command.flags.HasFlag(Command.Flags.Stdout1))
                 GetSize(ref stdout1);
 
-            stdout2.text = process.status;
+            stdout2.text = command.status;
             stdout2.enabled = !string.IsNullOrWhiteSpace(stdout2.text);
             if (stdout2.enabled)
                 GetSize(ref stdout2);
 
-            if (process.flags.HasFlag(Process.Flags.Stdin))
+            if (command.flags.HasFlag(Command.Flags.Stdin))
             {
                 GetSize(ref stdin);
                 stdin.height = Mathf.Max(stdin.height, line_height);
@@ -172,36 +172,36 @@ namespace _TERMINAL_
                 gui_yscroll = Mathf.Max(gui_yscroll, text_h - body_r.height + stdin.height + .5f * line_height);
             }
 
-            if (process.flags.HasFlag(Process.Flags.Stdin))
+            if (command.flags.HasFlag(Command.Flags.Stdin))
             {
-                Vector2 prefixe_size = style_body.CalcSize(new(process.prefixe));
-                GUI.Label(new Rect(text_r.x, text_r.y + text_h, text_r.width, prefixe_size.y), process.prefixe, style_body);
+                Vector2 prefixe_size = style_body.CalcSize(new(command.prefixe));
+                GUI.Label(new Rect(text_r.x, text_r.y + text_h, text_r.width, prefixe_size.y), command.prefixe, style_body);
                 text_r.x += prefixe_size.x;
                 text_r.width -= .5f * prefixe_size.x;
             }
 
             if (e.control && e.type == EventType.KeyDown && e.keyCode == KeyCode.C)
             {
-                if (process.flags.HasFlag(Process.Flags.Stdin))
-                    Debug.Log(process.prefixe);
+                if (command.flags.HasFlag(Command.Flags.Stdin))
+                    Debug.Log(command.prefixe);
 
                 Debug.Log("^C");
 
-                if (process.flags.HasFlag(Process.Flags.Killable))
+                if (command.flags.HasFlag(Command.Flags.Killable))
                 {
-                    process.Fail();
+                    command.Fail();
                     Event.current.Use();
                 }
                 else
-                    Debug.LogWarning($"can not abort \"{process.GetType()}\"");
+                    Debug.LogWarning($"can not abort \"{command.GetType()}\"");
             }
 
-            process.OnGui();
+            command.OnGui();
 
-            if (process.flags.HasFlag(Process.Flags.Stdin))
+            if (command.flags.HasFlag(Command.Flags.Stdin))
                 UpdateStdin(ctab, csubmit);
 
-            if (process.flags.HasFlag(Process.Flags.Stdin))
+            if (command.flags.HasFlag(Command.Flags.Stdin))
             {
                 stdin.text = ModifyText(ref stdin, ref text_h);
                 if (GUI.changed)
