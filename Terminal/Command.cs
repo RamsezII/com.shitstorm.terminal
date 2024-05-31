@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace _TERMINAL_
 {
-    public abstract class Command : IDisposable
+    public abstract class Command : Disposable
     {
         enum Bools : byte
         {
@@ -36,8 +36,7 @@ namespace _TERMINAL_
 
         public Flags flags = Flags.Stdout1 | Flags.Stdout2 | Flags.Stdin | Flags.Closable;
 
-        public Action onSuccess, onFailure, onDispose;
-        public readonly ThreadSafe<bool> disposed = new();
+        public Action onSuccess, onFailure;
 
         //----------------------------------------------------------------------------------------------------------
 
@@ -45,6 +44,7 @@ namespace _TERMINAL_
         {
             cmdName = this is Shell ? "~" : GetType().ToString();
             cmdPrefixe = Terminal.ColoredPrompt(leftPrefixe, cmdName);
+            status = $"{cmdName}...";
         }
 
         //----------------------------------------------------------------------------------------------------------
@@ -92,25 +92,15 @@ namespace _TERMINAL_
         {
         }
 
-        public void Dispose()
+        protected override void OnDispose()
         {
-            lock (disposed)
-            {
-                if (disposed._value)
-                    return;
-                Debug.Log($"----- {cmdName} Disposed -----".ToSubLog());
-                disposed._value = true;
-            }
+            base.OnDispose();
 
             if (!string.IsNullOrWhiteSpace(output))
                 Debug.Log($"{cmdName} output{{ {output} }}");
 
-            OnDispose();
+            Debug.Log($"----- {cmdName} Disposed -----".ToSubLog());
             onDispose?.Invoke();
-        }
-
-        protected virtual void OnDispose()
-        {
         }
     }
 }

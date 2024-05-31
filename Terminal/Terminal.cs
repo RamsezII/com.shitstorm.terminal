@@ -16,7 +16,6 @@ namespace _TERMINAL_
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         static void Init()
         {
-            Debug.Log(nameof(Terminal) + " Init");
             if (FindObjectOfType<Terminal>() == null)
                 Instantiate(Resources.Load<Terminal>(nameof(_TERMINAL_)));
         }

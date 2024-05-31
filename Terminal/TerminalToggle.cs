@@ -9,12 +9,7 @@ namespace _TERMINAL_
         {
             if (Keyboard.current.pKey.wasPressedThisFrame)
                 if (!Terminal.terminal.enabled)
-                    if (Application.isEditor
-                        || Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl)
-                        || Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)
-                        || Input.GetKey(KeyCode.LeftAlt) || Input.GetKey(KeyCode.RightAlt)
-                        || Input.GetKey(KeyCode.LeftCommand) || Input.GetKey(KeyCode.RightCommand))
-                        Terminal.terminal.ToggleWindow(true);
+                    Terminal.terminal.ToggleWindow(true);
         }
     }
 }

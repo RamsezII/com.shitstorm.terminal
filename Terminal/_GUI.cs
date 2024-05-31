@@ -135,10 +135,13 @@ namespace _TERMINAL_
             if (stdout1.enabled = command.flags.HasFlag(Command.Flags.Stdout1))
                 GetSize(ref stdout1);
 
-            stdout2.text = command.status;
-            stdout2.enabled = !string.IsNullOrWhiteSpace(stdout2.text);
-            if (stdout2.enabled)
-                GetSize(ref stdout2);
+            if (!string.IsNullOrWhiteSpace(command.status))
+            {
+                stdout2.text = $"{Util_terminal.GetRotator()} {command.status}";
+                stdout2.enabled = !string.IsNullOrWhiteSpace(stdout2.text);
+                if (stdout2.enabled)
+                    GetSize(ref stdout2);
+            }
 
             if (command.flags.HasFlag(Command.Flags.Stdin))
             {
