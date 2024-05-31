@@ -137,7 +137,7 @@ namespace _TERMINAL_
 
             if (!string.IsNullOrWhiteSpace(command.status))
             {
-                stdout2.text = $"{Util_terminal.GetRotator()} {command.status}";
+                stdout2.text = $"---- {command.status} ---- {Util_terminal.GetRotator()}";
                 stdout2.enabled = !string.IsNullOrWhiteSpace(stdout2.text);
                 if (stdout2.enabled)
                     GetSize(ref stdout2);
