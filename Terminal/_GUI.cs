@@ -195,8 +195,8 @@ namespace _TERMINAL_
 
             if (e.control && e.type == EventType.KeyDown && e.keyCode == KeyCode.C)
             {
-                if (command.flags.HasFlag(Command.Flags.Stdin))
-                    Debug.Log(command.cmdPrefixe);
+                if (!string.IsNullOrWhiteSpace(command.status))
+                    Debug.Log($"---- {command.status} ----");
 
                 Debug.Log("^C");
 
