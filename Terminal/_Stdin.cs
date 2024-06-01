@@ -65,10 +65,10 @@ namespace _TERMINAL_
 
                         command.OnCmdLine(line);
 
-                        if (csubmit && command == commands[0])
+                        if (csubmit && commands.Count == 1)
                             AddToHistory(temp);
 
-                        if (ctab || line.isCpl)
+                        if (ctab || line.IsCpl)
                         {
                             stdin.text = line.rawtext;
                             RequestCursorMove(line.sel_move, false);

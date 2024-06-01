@@ -47,9 +47,9 @@ namespace _TERMINAL_
         public string rawtext = string.Empty;
         public string lastRead;
 
-        public bool isExec => cmdM.HasFlag(CmdF.exec);
-        public bool isCpl => cmdM.HasFlag(CmdF.cpl);
-        public bool isCplThis => string.IsNullOrWhiteSpace(rawtext) || cmdM.HasFlag(CmdF._cplThis);
+        public bool IsExec => cmdM.HasFlag(CmdF.exec);
+        public bool IsCpl => cmdM.HasFlag(CmdF.cpl);
+        public bool IsCplThis => string.IsNullOrWhiteSpace(rawtext) || cmdM.HasFlag(CmdF._cplThis);
 
         const char
             char_chainCmds = '&',

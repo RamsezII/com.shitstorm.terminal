@@ -17,7 +17,7 @@ namespace _TERMINAL_
         public bool TryReadAsPath(out string result)
         {
             bool notempty = TryRead(out result);
-            if (isCplThis && CplPath(this, result, out result))
+            if (IsCplThis && CplPath(this, result, out result))
                 ReplaceSplit(result);
             return notempty;
         }

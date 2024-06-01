@@ -52,7 +52,7 @@ namespace _TERMINAL_
         public void OnCmdLine(in LineParser line) => OnCmdLine(line.Read(), line);
         public virtual void OnCmdLine(in string arg0, in LineParser line)
         {
-            if (line.isExec)
+            if (line.IsExec)
                 Debug.LogWarning($"{cmdName} ({this}) does not implement \"{arg0}\"");
         }
 

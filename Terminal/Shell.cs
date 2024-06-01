@@ -53,7 +53,7 @@ namespace _TERMINAL_
 
         public override void OnCmdLine(in string arg0, in LineParser line)
         {
-            if (line.isCpl)
+            if (line.IsCpl)
                 line.OnCpls(arg0, commands);
             else if (commandOwners.TryGetValue(arg0, out IUser user))
                 user.OnCmdLine(arg0, line);

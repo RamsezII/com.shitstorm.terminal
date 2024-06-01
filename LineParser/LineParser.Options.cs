@@ -29,7 +29,7 @@ namespace _TERMINAL_
         public static void OnCmdOpts(in LineParser line)
         {
             if (line.TryParseOptions(OptsF._all_, out OptsF optsM, out var optsD))
-                if (line.isExec)
+                if (line.IsExec)
                 {
                     StringBuilder log = new();
 
@@ -78,7 +78,7 @@ namespace _TERMINAL_
                     optsM |= optF;
                     if (opts_readM.HasFlag(optF))
                     {
-                        if (isCplThis)
+                        if (IsCplThis)
                         {
                             string read = Read();
                             switch (optF)
@@ -118,7 +118,7 @@ namespace _TERMINAL_
                     break;
                 }
                 // option
-                else if (split.StartsWith("--") || split.Length == 1 && isCplThis)
+                else if (split.StartsWith("--") || split.Length == 1 && IsCplThis)
                 {
                     // string
                     string opt = split.TrimStart('-');
@@ -130,7 +130,7 @@ namespace _TERMINAL_
                         where filter.HasFlag(optF) && !optsM2.HasFlag(optF)
                         select "--" + optF;
 
-                    if (isCplThis)
+                    if (IsCplThis)
                     {
                         OnCpls(opt, query);
                         return false;
