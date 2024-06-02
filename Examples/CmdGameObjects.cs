@@ -9,12 +9,20 @@ namespace _TERMINAL_
     {
         enum Codes : byte
         {
-            Enable,
-            Disable,
+            FindRootGameObject,
+            ListAllRootObjects,
             _last_,
         }
 
-        IEnumerable<string> Shell.IUser.ECommands { get { yield return nameof(GameObject); } }
+        enum SubCodes : byte
+        {
+            Enable,
+            Disable,
+            IsEnabled,
+            _last_,
+        }
+
+        IEnumerable<string> Shell.IUser.ECommands => Enumerable.Range(0, (int)Codes._last_).Select(i => ((Codes)i).ToString());
 
         //----------------------------------------------------------------------------------------------------------
 
@@ -47,47 +55,59 @@ namespace _TERMINAL_
 
         void Shell.IUser.OnCmdLine(in string arg0, in LineParser line)
         {
-            if (arg0.Equals(nameof(GameObject), StringComparison.OrdinalIgnoreCase))
-            {
-                string goPath = line.Read();
-                if (line.IsCplThis)
-                    line.OnCpls(goPath, ERootGameObjects_quotes());
-                else if (TryFindRootGameObjectByName(goPath, out GameObject go))
+            if (Enum.TryParse(arg0, true, out Codes code) && code < Codes._last_)
+                switch (code)
                 {
-                    string arg1 = line.Read();
-                    if (line.IsCplThis)
-                        line.OnCpls(arg1, Enumerable.Range(0, (int)Codes._last_).Select(i => ((Codes)i).ToString()));
-                    else if (Enum.TryParse(arg1, true, out Codes code) && code < Codes._last_)
-                    {
-                        if (line.IsExec)
-                            switch (code)
+                    case Codes.FindRootGameObject:
+                        {
+                            string goPath = line.Read();
+                            if (line.IsCplThis)
+                                line.OnCpls(goPath, ERootGameObjects_quotes());
+                            else if (TryFindRootGameObjectByName(goPath, out GameObject go))
                             {
-                                case Codes.Enable:
-                                    go.SetActive(true);
-                                    break;
+                                string arg1 = line.Read();
+                                if (line.IsCplThis)
+                                    line.OnCpls(arg1, Enumerable.Range(0, (int)SubCodes._last_).Select(i => ((SubCodes)i).ToString()));
+                                else if (Enum.TryParse(arg1, true, out SubCodes subcode) && subcode < SubCodes._last_)
+                                {
+                                    if (line.IsExec)
+                                        switch (subcode)
+                                        {
+                                            case SubCodes.Enable:
+                                                go.SetActive(true);
+                                                break;
 
-                                case Codes.Disable:
-                                    go.SetActive(false);
-                                    break;
+                                            case SubCodes.Disable:
+                                                go.SetActive(false);
+                                                break;
 
-                                default:
-                                    Debug.LogWarning($"Unimplemented command: \"{code}\" ({this})");
-                                    break;
+                                            case SubCodes.IsEnabled:
+                                                Debug.Log(go.activeSelf);
+                                                break;
+
+                                            default:
+                                                Debug.LogWarning($"Unimplemented command: \"{subcode}\" ({this})");
+                                                break;
+                                        }
+                                }
                             }
-                    }
+                            else
+                                Debug.LogWarning($"Could not find gameobject: \"{goPath}\" ({this})");
+                        }
+                        break;
+
+                    case Codes.ListAllRootObjects:
+                        if (line.IsExec)
+                            foreach (var go in ERootGameObjects())
+                                Debug.Log(go.name);
+                        break;
+
+                    default:
+                        Debug.LogWarning($"Unimplemented command: \"{code}\" ({this})");
+                        break;
                 }
-                else
-                {
-                    Debug.LogWarning($"Could not find gameobject: \"{goPath}\" ({this})");
-                }
-            }
-        }
-
-        //----------------------------------------------------------------------------------------------------------
-
-        public CmdGameObjects()
-        {
-
+            else
+                base.OnCmdLine(arg0, line);
         }
     }
 }
