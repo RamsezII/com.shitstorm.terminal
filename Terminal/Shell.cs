@@ -8,7 +8,7 @@ namespace _TERMINAL_
     {
         public interface IUser
         {
-            public IEnumerable<string> Commands { get; }
+            public IEnumerable<string> ECommands { get; }
             public void OnCmdLine(in string arg0, in LineParser line);
         }
 
@@ -38,7 +38,7 @@ namespace _TERMINAL_
         public static void AddUser(in IUser user)
         {
             users.Add(user);
-            foreach (string cmd in user.Commands)
+            foreach (string cmd in user.ECommands)
                 commandOwners[cmd] = user;
             RefreshCommands();
         }
@@ -46,14 +46,14 @@ namespace _TERMINAL_
         public static void RemoveUser(in IUser user)
         {
             users.Remove(user);
-            foreach (string cmd in user.Commands)
+            foreach (string cmd in user.ECommands)
                 commandOwners.Remove(cmd);
             RefreshCommands();
         }
 
         public override void OnCmdLine(in string arg0, in LineParser line)
         {
-            if (line.IsCpl)
+            if (line.IsCplThis)
                 line.OnCpls(arg0, commands);
             else if (commandOwners.TryGetValue(arg0, out IUser user))
                 user.OnCmdLine(arg0, line);
