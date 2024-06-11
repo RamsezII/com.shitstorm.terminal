@@ -4,7 +4,7 @@ namespace _TERMINAL_
 {
     public partial class Terminal
     {
-        void OnLogMessageReceived(string message, string stackTrace, LogType type)
+        static void OnLogMessageReceived(string message, string stackTrace, LogType type)
         {
             message = message.TrimEnd('\n', '\r');
             switch (type)

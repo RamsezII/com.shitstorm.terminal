@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using _UTIL_;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace _TERMINAL_
@@ -15,17 +16,26 @@ namespace _TERMINAL_
 
     public partial class Terminal
     {
-        readonly Queue<string> lines = new();
+        static readonly Queue<string> lines = new();
+        static bool lines_flag;
 
         //----------------------------------------------------------------------------------------------------------
 
-        public void AddLine(in string line)
+        public static void AddLine(in string line)
         {
-            lock (this)
+            lock (lines)
             {
+                lines_flag = true;
                 lines.Enqueue(line);
                 while (lines.Count > 50)
                     lines.Dequeue();
+            }
+        }
+
+        void OnAddLine()
+        {
+            lock (this)
+            {
                 stdout1.text = string.Join("\n", lines);
                 bottomFlag = true;
             }

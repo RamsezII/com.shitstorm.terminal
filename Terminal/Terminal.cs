@@ -13,8 +13,15 @@ namespace _TERMINAL_
 
         //----------------------------------------------------------------------------------------------------------
 
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+        static void Init1()
+        {
+            Application.logMessageReceivedThreaded -= OnLogMessageReceived;
+            Application.logMessageReceivedThreaded += OnLogMessageReceived;
+        }
+
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
-        static void Init()
+        static void Init2()
         {
             if (FindObjectOfType<Terminal>() == null)
                 Instantiate(Resources.Load<Terminal>(nameof(_TERMINAL_)));
@@ -26,11 +33,6 @@ namespace _TERMINAL_
         {
             name = typeof(Terminal).Name;
             terminal = this;
-
-#if UNITY_EDITOR
-            Application.logMessageReceivedThreaded -= OnLogMessageReceived;
-#endif
-            Application.logMessageReceivedThreaded += OnLogMessageReceived;
 
             DontDestroyOnLoad(gameObject);
 
@@ -79,6 +81,13 @@ namespace _TERMINAL_
 
         private void LateUpdate()
         {
+            lock (lines)
+                if (lines_flag)
+                {
+                    lines_flag = false;
+                    OnAddLine();
+                }
+
             if (commands[^1].disposed.Value)
             {
                 if (commands.Count == 1)
@@ -98,8 +107,6 @@ namespace _TERMINAL_
 
         protected virtual void OnDestroy()
         {
-            Application.logMessageReceivedThreaded -= OnLogMessageReceived;
-
             if (this == terminal)
                 terminal = null;
 
