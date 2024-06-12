@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace _TERMINAL_
 {
-    internal class CmdGameObjects : Command, Shell.IUser
+    internal partial class CmdGameObjects : Command, Shell.IUser
     {
         enum Codes : byte
         {
@@ -18,7 +18,6 @@ namespace _TERMINAL_
         {
             Enable,
             Disable,
-            IsEnabled,
             _last_,
         }
 
@@ -59,41 +58,7 @@ namespace _TERMINAL_
                 switch (code)
                 {
                     case Codes.FindRootGameObject:
-                        {
-                            string goPath = line.Read();
-                            if (line.IsCplThis)
-                                line.OnCpls(goPath, ERootGameObjects_quotes());
-                            else if (TryFindRootGameObjectByName(goPath, out GameObject go))
-                            {
-                                string arg1 = line.Read();
-                                if (line.IsCplThis)
-                                    line.OnCpls(arg1, Enumerable.Range(0, (int)SubCodes._last_).Select(i => ((SubCodes)i).ToString()));
-                                else if (Enum.TryParse(arg1, true, out SubCodes subcode) && subcode < SubCodes._last_)
-                                {
-                                    if (line.IsExec)
-                                        switch (subcode)
-                                        {
-                                            case SubCodes.Enable:
-                                                go.SetActive(true);
-                                                break;
-
-                                            case SubCodes.Disable:
-                                                go.SetActive(false);
-                                                break;
-
-                                            case SubCodes.IsEnabled:
-                                                Debug.Log(go.activeSelf);
-                                                break;
-
-                                            default:
-                                                Debug.LogWarning($"Unimplemented command: \"{subcode}\" ({this})");
-                                                break;
-                                        }
-                                }
-                            }
-                            else
-                                Debug.LogWarning($"Could not find gameobject: \"{goPath}\" ({this})");
-                        }
+                        CmdFindRoot(line);
                         break;
 
                     case Codes.ListAllRootObjects:

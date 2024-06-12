@@ -6,7 +6,7 @@ namespace _TERMINAL_
     {
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.P))
+            if (Input.GetKeyDown(KeyCode.P) || Input.GetKeyUp(KeyCode.P))
                 if (!Terminal.terminal.enabled)
                     Terminal.terminal.ToggleWindow(true);
         }
