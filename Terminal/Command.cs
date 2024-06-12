@@ -1,6 +1,7 @@
 ﻿using _ARK_;
 using _UTIL_;
 using System;
+using System.Collections;
 using System.IO;
 using UnityEngine;
 
@@ -38,6 +39,7 @@ namespace _TERMINAL_
         public Flags flags = Flags.Stdout1 | Flags.Stdout2 | Flags.Stdin | Flags.Closable;
 
         public Action onSuccess, onFailure;
+        public IEnumerator routine;
 
         public bool Scheduled { get; set; }
         public bool Disposed => disposed.Value;
@@ -59,6 +61,12 @@ namespace _TERMINAL_
 
         public virtual void OnTick()
         {
+            if (routine != null && !routine.MoveNext())
+                if (!routine.MoveNext())
+                {
+                    routine = null;
+                    Dispose();
+                }
         }
 
         public void OnCmdLine(in LineParser line) => OnCmdLine(line.Read(), line);
