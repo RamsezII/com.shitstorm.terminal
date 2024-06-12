@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace _TERMINAL_
 {
@@ -7,7 +6,7 @@ namespace _TERMINAL_
     {
         private void Update()
         {
-            if (Keyboard.current.pKey.wasPressedThisFrame)
+            if (Input.GetKeyDown(KeyCode.P))
                 if (!Terminal.terminal.enabled)
                     Terminal.terminal.ToggleWindow(true);
         }
