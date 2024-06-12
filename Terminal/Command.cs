@@ -1,11 +1,12 @@
-﻿using _UTIL_;
+﻿using _ARK_;
+using _UTIL_;
 using System;
 using System.IO;
 using UnityEngine;
 
 namespace _TERMINAL_
 {
-    public abstract class Command : Disposable
+    public abstract class Command : Disposable, ISchedulable
     {
         enum Bools : byte
         {
@@ -38,6 +39,9 @@ namespace _TERMINAL_
 
         public Action onSuccess, onFailure;
 
+        public bool Scheduled { get; set; }
+        public bool Disposed => disposed.Value;
+
         //----------------------------------------------------------------------------------------------------------
 
         public Command()
@@ -48,6 +52,14 @@ namespace _TERMINAL_
         }
 
         //----------------------------------------------------------------------------------------------------------
+
+        public virtual void Schedule()
+        {
+        }
+
+        public virtual void OnTick()
+        {
+        }
 
         public void OnCmdLine(in LineParser line) => OnCmdLine(line.Read(), line);
         public virtual void OnCmdLine(in string arg0, in LineParser line)

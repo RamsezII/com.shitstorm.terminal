@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 namespace _TERMINAL_
 {
@@ -18,6 +19,12 @@ namespace _TERMINAL_
         static string[] commands;
 
         //----------------------------------------------------------------------------------------------------------
+
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)]
+        static void Init()
+        {
+            users.Clear();
+        }
 
         public Shell()
         {

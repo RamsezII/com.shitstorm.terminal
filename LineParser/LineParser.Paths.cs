@@ -40,7 +40,7 @@ namespace _TERMINAL_
 
             if (empty)
             {
-                dir = Util.APP_PATH.GetDir(false);
+                dir = Util.app_path.GetDir(false);
                 endSlash = true;
             }
             else
@@ -49,7 +49,7 @@ namespace _TERMINAL_
                 if (rooted)
                     dir = new(currentPath);
                 else
-                    dir = new(Path.Combine(Util.APP_PATH, currentPath));
+                    dir = new(Path.Combine(Util.app_path, currentPath));
             }
 
             result = dir.FullName;
@@ -115,7 +115,7 @@ namespace _TERMINAL_
             if (rooted)
                 result = dir.FullName;
             else
-                result = Path.GetRelativePath(Util.APP_PATH, dir.FullName);
+                result = Path.GetRelativePath(Util.app_path, dir.FullName);
 
             end:
             if (apply)
