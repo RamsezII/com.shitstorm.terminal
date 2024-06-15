@@ -46,14 +46,14 @@ namespace _TERMINAL_
             if (line.IsCplThis)
                 line.OnCpls(arg0, Enumerable.Range(0, 3).Select(i => ((CursorLockMode)i).ToString()));
             else if (line.IsExec)
-            {
                 if (empty)
-                    //Debug.Log(Cursor.lockState);
-                    ;
+                    Debug.Log(Cursor.lockState);
                 else if (Enum.TryParse(arg0, true, out CursorLockMode mode))
+                {
                     Cursor.lockState = mode;
-                Debug.Log(Cursor.lockState);
-            }
+                    Debug.Log($"{nameof(Cursor)}.{nameof(Cursor.lockState)}: \"{Cursor.lockState}\"");
+                }
+
         }
     }
 }
