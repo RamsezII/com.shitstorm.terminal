@@ -37,6 +37,7 @@ namespace _TERMINAL_
         public Flags flags = Flags.Stdout1 | Flags.Stdout2 | Flags.Stdin | Flags.Closable;
 
         public Action onSuccess, onFailure;
+        public bool Disposed => disposed.Value;
 
         //----------------------------------------------------------------------------------------------------------
 
