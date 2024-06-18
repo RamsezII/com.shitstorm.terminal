@@ -56,7 +56,7 @@ namespace _TERMINAL_
                         if (csubmit)
                         {
                             string log = command.cmdPrefixe + stdin.text;
-                            if (this == terminal)
+                            if (this == instance)
                                 print(log);
                             else
                                 AddLine(log);

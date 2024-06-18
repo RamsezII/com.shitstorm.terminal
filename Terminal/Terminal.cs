@@ -5,7 +5,7 @@ namespace _TERMINAL_
 {
     public partial class Terminal : MonoBehaviour
     {
-        public static Terminal terminal;
+        public static Terminal instance;
         public readonly List<Command> commands = new();
 
         float nextCplCheck;
@@ -33,7 +33,7 @@ namespace _TERMINAL_
         protected virtual void Awake()
         {
             name = typeof(Terminal).Name;
-            terminal = this;
+            instance = this;
 
             DontDestroyOnLoad(gameObject);
 
@@ -108,8 +108,8 @@ namespace _TERMINAL_
 
         protected virtual void OnDestroy()
         {
-            if (this == terminal)
-                terminal = null;
+            if (this == instance)
+                instance = null;
 
             lock (commands)
             {
