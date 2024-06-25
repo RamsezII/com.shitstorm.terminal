@@ -27,8 +27,9 @@ namespace _TERMINAL_
 
         //--------------------------------------------------------------------------------------------------------------
 
-        public void DrawTextSquare(in string text, in bool autoWeight = true)
+        public void DrawTextSquare(string text, in bool autoWeight = true)
         {
+            text = text.TrimEnd('\n');
             Rect rect = new(0, 0, Screen.width, Screen.height);
             if (autoWeight)
                 rect.height = style.CalcHeight(new GUIContent(text), rect.width);
