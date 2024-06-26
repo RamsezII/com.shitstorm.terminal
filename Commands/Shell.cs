@@ -5,6 +5,14 @@ using UnityEngine;
 
 namespace _TERMINAL_
 {
+    public static class Util_shell
+    {
+        public static void OnCmdLine(this Shell.IUser user, in LineParser line)
+        {
+            user.OnCmdLine(line.Read(), line);
+        }
+    }
+
     public sealed class Shell : Command
     {
         public interface IUser
