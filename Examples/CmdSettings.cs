@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace _TERMINAL_
 {
-    internal class CmdSettings : Shell.IUser
+    internal class CmdSettings : IShell
     {
         enum Codes
         {
@@ -13,7 +13,7 @@ namespace _TERMINAL_
             _last_,
         }
 
-        IEnumerable<string> Shell.IUser.ECommands => Enumerable.Range(0, (int)Codes._last_).Select(i => ((Codes)i).ToString());
+        IEnumerable<string> IShell.ECommands => Enumerable.Range(0, (int)Codes._last_).Select(i => ((Codes)i).ToString());
 
         //--------------------------------------------------------------------------------------------------------------
 
@@ -25,7 +25,7 @@ namespace _TERMINAL_
 
         //--------------------------------------------------------------------------------------------------------------
 
-        void Shell.IUser.OnCmdLine(in string arg0, in LineParser line)
+        void IShell.OnCmdLine(in string arg0, in LineParser line)
         {
             if (Enum.TryParse(arg0, true, out Codes code) && code < Codes._last_)
                 switch (code)

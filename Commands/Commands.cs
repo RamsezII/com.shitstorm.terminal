@@ -4,12 +4,12 @@ using UnityEngine;
 
 namespace _TERMINAL_
 {
-    public class Commands : Shell.IUser
+    public class Commands : IShell
     {
         public delegate void OnCommand(in string arg0, in LineParser line);
         public static Commands instance;
         readonly Dictionary<string, OnCommand> commands = new(StringComparer.OrdinalIgnoreCase);
-        IEnumerable<string> Shell.IUser.ECommands => commands.Keys;
+        IEnumerable<string> IShell.ECommands => commands.Keys;
 
         //----------------------------------------------------------------------------------------------------------
 
@@ -34,7 +34,7 @@ namespace _TERMINAL_
 
         //----------------------------------------------------------------------------------------------------------
 
-        void Shell.IUser.OnCmdLine(in string arg0, in LineParser line)
+        void IShell.OnCmdLine(in string arg0, in LineParser line)
         {
             if (commands.TryGetValue(arg0, out var onCommand))
                 onCommand(arg0, line);
