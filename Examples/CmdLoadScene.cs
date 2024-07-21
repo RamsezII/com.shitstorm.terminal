@@ -23,12 +23,17 @@ namespace _TERMINAL_
 
         //--------------------------------------------------------------------------------------------------------------
 
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
-        static void Init()
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+        static void Init1()
         {
             scenes = new string[SceneManager.sceneCountInBuildSettings];
             for (int i = 0; i < scenes.Length; i++)
                 scenes[i] = Path.GetFileNameWithoutExtension(SceneUtility.GetScenePathByBuildIndex(i));
+        }
+
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
+        static void Init2()
+        {
             Shell.AddUser(new CmdScenes());
         }
 
