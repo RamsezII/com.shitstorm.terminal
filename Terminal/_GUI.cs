@@ -40,7 +40,7 @@ namespace _TERMINAL_
         [SerializeField] string stdinOld;
         [SerializeField] Rect dims_r = new(.1f, .05f, .8f, .85f);
 
-        [SerializeField] bool fullscreen;
+        public bool fullscreen;
 
         //----------------------------------------------------------------------------------------------------------
 
@@ -127,7 +127,7 @@ namespace _TERMINAL_
             if (!fullscreen)
             {
                 style_header.alignment = TextAnchor.MiddleCenter;
-                GUI.Label(header_r, command.cmdName, style_header);
+                GUI.Label(header_r, "TERMINAL", style_header);
             }
 
             stdout1.height = stdout2.height = stdin.height = 0;

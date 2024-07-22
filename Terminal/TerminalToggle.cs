@@ -6,9 +6,13 @@ namespace _TERMINAL_
     {
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.P) || Input.GetKeyUp(KeyCode.P))
-                if (!Terminal.instance.enabled)
-                    Terminal.instance.ToggleWindow(true);
+            if (Terminal.instance.enabled)
+            {
+                if (Input.GetKeyDown(KeyCode.F11) || Input.GetKeyUp(KeyCode.F11))
+                    Terminal.instance.fullscreen = !Terminal.instance.fullscreen;
+            }
+            else if (Input.GetKeyDown(KeyCode.P) || Input.GetKeyUp(KeyCode.P))
+                Terminal.instance.ToggleWindow(true);
         }
     }
 }

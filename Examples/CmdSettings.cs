@@ -10,6 +10,7 @@ namespace _TERMINAL_
         enum Codes
         {
             CursorLock,
+            ToggleTerminalFullScreen,
             _last_,
         }
 
@@ -32,6 +33,14 @@ namespace _TERMINAL_
                 {
                     case Codes.CursorLock:
                         CmdCursorLock(line);
+                        break;
+
+                    case Codes.ToggleTerminalFullScreen:
+                        if (line.IsExec)
+                        {
+                            Terminal.instance.fullscreen = !Terminal.instance.fullscreen;
+                            Debug.Log($"{typeof(Terminal).FullName}.{nameof(Terminal.instance.fullscreen)}: {Terminal.instance.fullscreen}");
+                        }
                         break;
 
                     default:
