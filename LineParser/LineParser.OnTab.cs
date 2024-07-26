@@ -25,7 +25,7 @@ namespace _TERMINAL_
         {
             if (!string.IsNullOrWhiteSpace(prefixe))
                 cpls = Util.EMatchChars(prefixe, cpls);
-            string[] arr = (from cpl in cpls select cpl.ToString()).ToArray();
+            string[] arr = (from cpl in cpls select cpl.ToString().Quotes(false)).ToArray();
 
             if (arr.Length == 0)
             {
