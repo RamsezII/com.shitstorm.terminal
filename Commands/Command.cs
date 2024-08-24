@@ -9,8 +9,8 @@ namespace _TERMINAL_
     {
         enum Bools : byte
         {
-            stdout1,
-            stdout2,
+            stdout,
+            status,
             stdin,
             closable,
             killable,
@@ -21,8 +21,8 @@ namespace _TERMINAL_
         public enum Flags : byte
         {
             _none_ = 0,
-            Stdout1 = 1 << Bools.stdout1,
-            Stdout2 = 1 << Bools.stdout2,
+            Stdout = 1 << Bools.stdout,
+            Status = 1 << Bools.status,
             Stdin = 1 << Bools.stdin,
             Closable = 1 << Bools.closable,
             Killable = 1 << Bools.killable,
@@ -34,7 +34,7 @@ namespace _TERMINAL_
 
         public string status, output;
 
-        public Flags flags = Flags.Stdout1 | Flags.Stdout2 | Flags.Stdin | Flags.Closable;
+        public Flags flags = Flags.Stdout | Flags.Status | Flags.Stdin | Flags.Closable;
 
         public Action onSuccess, onFailure;
 
@@ -42,14 +42,14 @@ namespace _TERMINAL_
 
         public Command()
         {
-            cmdName = this is Shell ? "~" : GetType().ToString();
+            cmdName = this is Shell ? "~" : GetType().FullName;
             cmdPrefixe = Terminal.ColoredPrompt(leftPrefixe, cmdName);
             status = $"{cmdName}...";
         }
 
         //----------------------------------------------------------------------------------------------------------
 
-        public void OnCmdLine(in LineParser line) => OnCmdLine(line.Read(), line);
+        public virtual void OnCmdLine(in LineParser line) => OnCmdLine(line.Read(), line);
         public virtual void OnCmdLine(in string arg0, in LineParser line)
         {
             if (line.IsExec)
@@ -76,12 +76,12 @@ namespace _TERMINAL_
         {
         }
 
-        public void Fail()
+        public void Kill()
         {
             lock (disposed)
                 if (!disposed._value)
                 {
-                    Debug.LogWarning($"----- {cmdName} Failure -----");
+                    Debug.LogWarning($"----- {cmdName} Killed -----");
                     OnFailure();
                     onFailure?.Invoke();
                     Dispose();

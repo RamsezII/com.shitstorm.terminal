@@ -37,6 +37,7 @@ namespace _TERMINAL_
         public Shell()
         {
             status = string.Empty;
+            Util.SetFlags(ref flags, Flags.Status, false);
         }
 
         //----------------------------------------------------------------------------------------------------------

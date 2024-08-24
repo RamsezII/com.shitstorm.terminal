@@ -6,6 +6,7 @@ namespace _TERMINAL_
     public partial class Terminal : MonoBehaviour
     {
         public static Terminal instance;
+
         public readonly List<Command> commands = new();
 
         float nextCplCheck;
@@ -14,7 +15,7 @@ namespace _TERMINAL_
         //----------------------------------------------------------------------------------------------------------
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-        static void Init1()
+        static void OnBeforeSceneLoad()
         {
             lines.Clear();
             Application.logMessageReceivedThreaded -= OnLogMessageReceived;
@@ -22,17 +23,15 @@ namespace _TERMINAL_
         }
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
-        static void Init2()
+        static void OnAfterLoad()
         {
-            if (FindObjectOfType<Terminal>() == null)
-                Instantiate(Resources.Load<Terminal>(nameof(_TERMINAL_)));
+            Util.InstantiateOrCreate<Terminal>();
         }
 
         //----------------------------------------------------------------------------------------------------------
 
         protected virtual void Awake()
         {
-            name = typeof(Terminal).Name;
             instance = this;
 
             DontDestroyOnLoad(gameObject);

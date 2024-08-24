@@ -132,10 +132,10 @@ namespace _TERMINAL_
 
             stdout1.height = stdout2.height = stdin.height = 0;
 
-            if (stdout1.enabled = command.flags.HasFlag(Command.Flags.Stdout1))
+            if (stdout1.enabled = command.flags.HasFlag(Command.Flags.Stdout))
                 GetSize(ref stdout1);
 
-            if (!string.IsNullOrWhiteSpace(command.status))
+            if (command.flags.HasFlag(Command.Flags.Status))
             {
                 stdout2.text = $"---- {command.status} ---- {Util_terminal.GetRotator()}";
                 stdout2.enabled = !string.IsNullOrWhiteSpace(stdout2.text);
@@ -195,14 +195,14 @@ namespace _TERMINAL_
 
             if (e.control && e.type == EventType.KeyDown && e.keyCode == KeyCode.C)
             {
-                if (!string.IsNullOrWhiteSpace(command.status))
+                if (command.flags.HasFlag(Command.Flags.Status))
                     Debug.Log($"---- {command.status} ----");
 
                 Debug.Log("^C");
 
                 if (command.flags.HasFlag(Command.Flags.Killable))
                 {
-                    command.Fail();
+                    command.Kill();
                     Event.current.Use();
                 }
                 else

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 283104577698166362}
   - component: {fileID: -1453837088582369601}
   m_Layer: 0
-  m_Name: _TERMINAL_
+  m_Name: _TERMINAL_.Terminal
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
