@@ -9,7 +9,6 @@ namespace _TERMINAL_
     {
         enum Codes
         {
-            CursorLock,
             ToggleTerminalFullScreen,
             _last_,
         }
@@ -31,10 +30,6 @@ namespace _TERMINAL_
             if (Enum.TryParse(arg0, true, out Codes code) && code < Codes._last_)
                 switch (code)
                 {
-                    case Codes.CursorLock:
-                        CmdCursorLock(line);
-                        break;
-
                     case Codes.ToggleTerminalFullScreen:
                         if (line.IsExec)
                         {
@@ -47,22 +42,6 @@ namespace _TERMINAL_
                         Debug.LogError($"Unknown command: \"{code}\"");
                         break;
                 }
-        }
-
-        static void CmdCursorLock(in LineParser line)
-        {
-            bool empty = !line.TryRead(out string arg0);
-            if (line.IsCplThis)
-                line.OnCpls(arg0, Enumerable.Range(0, 3).Select(i => ((CursorLockMode)i).ToString()));
-            else if (line.IsExec)
-                if (empty)
-                    Debug.Log(Cursor.lockState);
-                else if (Enum.TryParse(arg0, true, out CursorLockMode mode))
-                {
-                    Cursor.lockState = mode;
-                    Debug.Log($"{nameof(Cursor)}.{nameof(Cursor.lockState)}: \"{Cursor.lockState}\"");
-                }
-
         }
     }
 }

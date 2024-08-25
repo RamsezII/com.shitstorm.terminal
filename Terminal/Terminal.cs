@@ -1,9 +1,10 @@
+using _UTIL_;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace _TERMINAL_
 {
-    public partial class Terminal : MonoBehaviour
+    public partial class Terminal : MonoBehaviour, CursorManager.IUser
     {
         public static Terminal instance;
 
@@ -75,6 +76,7 @@ namespace _TERMINAL_
             if (value)
                 tryFocus1 = true;
             enabled = value;
+            CursorManager.ToggleUser(this, value);
         }
 
         //----------------------------------------------------------------------------------------------------------
