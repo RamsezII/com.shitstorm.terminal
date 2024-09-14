@@ -1,21 +1,10 @@
-﻿using _UTIL_;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using System.Collections.Generic;
 
 namespace _TERMINAL_
 {
-    public enum LogTypes : byte
-    {
-        Error = LogType.Error,
-        Assert = LogType.Assert,
-        Warning = LogType.Warning,
-        Log = LogType.Log,
-        Exception = LogType.Exception,
-        SubLog,
-    }
-
     public partial class Terminal
     {
+        public const int MAX_LINES = 150;
         static readonly Queue<string> lines = new();
         static bool lines_flag;
 
@@ -27,7 +16,7 @@ namespace _TERMINAL_
             {
                 lines_flag = true;
                 lines.Enqueue(line);
-                while (lines.Count > 50)
+                while (lines.Count > MAX_LINES)
                     lines.Dequeue();
             }
         }
