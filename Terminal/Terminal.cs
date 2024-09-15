@@ -26,7 +26,7 @@ namespace _TERMINAL_
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         static void OnAfterLoad()
         {
-            Util.InstantiateOrCreate<Terminal>();
+            Util.InstantiateOrCreateIfAbsent<Terminal>();
         }
 
         //----------------------------------------------------------------------------------------------------------
