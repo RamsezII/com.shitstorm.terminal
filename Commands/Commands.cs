@@ -14,22 +14,39 @@ namespace _TERMINAL_
         //----------------------------------------------------------------------------------------------------------
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-        static void Init1()
+        static void OnBeforeSceneLoad()
         {
             instance = new Commands();
         }
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
-        static void Init2()
+        static void OnAfterSceneLoad()
         {
             Shell.AddUser(instance);
         }
 
-        public static void AddCommand(in string name, in OnCommand onCommand) => instance.commands.Add(name, onCommand);
-        public static void AddCommands(in OnCommand onCommand, params string[] names)
+        public static void AddCommandKeys(in OnCommand onCommand, params string[] keys)
         {
-            for (int i = 0; i < names.Length; i++)
-                instance.commands.Add(names[i], onCommand);
+            for (int i = 0; i < keys.Length; i++)
+                instance.commands.Add(keys[i], onCommand);
+        }
+
+        public static void RemoveKeys(params string[] names)
+        {
+            foreach (string name in names)
+                instance.commands.Remove(name);
+        }
+
+        public static void RemoveCommand(in OnCommand onCommand)
+        {
+            HashSet<string> keys = new();
+
+            foreach (var pair in instance.commands)
+                if (pair.Value == onCommand)
+                    keys.Add(pair.Key);
+
+            foreach (string key in keys)
+                instance.commands.Remove(key);
         }
 
         //----------------------------------------------------------------------------------------------------------
