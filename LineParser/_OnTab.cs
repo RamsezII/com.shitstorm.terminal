@@ -34,12 +34,12 @@ namespace _TERMINAL_
             }
             else
             {
-                if (cmdM.HasFlag(CmdM.AltN))
+                if (cmdM.HasFlag(CmdM.AltNorth))
                     if (tab_last > 0)
                         tab_last = (tab_last - 1) % arr.Length;
                     else
                         tab_last = arr.Length - 1;
-                else if (cmdM.HasFlag(CmdM.Tab) || cmdM.HasFlag(CmdM.AltS))
+                else if (cmdM.HasFlag(CmdM.Tab) || cmdM.HasFlag(CmdM.AltSouth))
                     tab_last = (tab_last + 1) % arr.Length;
 
                 ReplaceSplit(arr[tab_last].ToString());

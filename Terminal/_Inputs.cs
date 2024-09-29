@@ -4,17 +4,6 @@ namespace _TERMINAL_
 {
     public partial class Terminal
     {
-        bool hold_alt;
-
-        //--------------------------------------------------------------------------------------------------------------
-        
-        void UpdateInputs()
-        {
-            hold_alt = Input.GetKey(KeyCode.LeftAlt) || Input.GetKey(KeyCode.RightAlt);
-        }
-
-        //--------------------------------------------------------------------------------------------------------------
-
         static void CatchTabAndEnter(in bool focus, out bool downTab, out bool downSubmit)
         {
             downTab = false;
@@ -36,10 +25,6 @@ namespace _TERMINAL_
 
                             if (ktab || ksubmit || downTab || downSubmit)
                                 e.Use();
-
-#if PLATFORM_STANDALONE_LINUX
-                    ctab |= ktab;
-#endif
                         }
                     }
                     break;

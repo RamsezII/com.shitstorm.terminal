@@ -11,10 +11,7 @@ namespace _TERMINAL_
             bool upArrow = e.type == EventType.KeyDown && e.keyCode == KeyCode.UpArrow;
             bool downArrow = e.type == EventType.KeyDown && e.keyCode == KeyCode.DownArrow;
 
-            if (hold_alt)
-                Debug.Log($"{nameof(hold_alt)}: {hold_alt}");
-
-            if (!hold_alt && (upArrow || downArrow))
+            if (!e.alt && (upArrow || downArrow))
             {
                 if (commands.Count == 1)
                     if (GetHistory(upArrow ? -1 : 1, out string line))
@@ -24,7 +21,7 @@ namespace _TERMINAL_
                     }
                 e.Use();
             }
-            else if (csubmit || ctab)
+            else if (e.alt || csubmit || ctab)
             {
                 Command command = commands[^1];
                 if (csubmit && string.IsNullOrWhiteSpace(stdin.text))
@@ -40,16 +37,20 @@ namespace _TERMINAL_
                         cmdM |= CmdM.Exec;
                     if (ctab)
                         cmdM |= CmdM.Tab;
+                    if (e.alt)
+                        cmdM |= CmdM.Alt;
 
-                    if (e.type == EventType.KeyDown && e.alt)
+                    if (e.type == EventType.KeyDown)
+                    {
                         if (e.keyCode == KeyCode.UpArrow)
-                            cmdM |= CmdM.AltN;
-                    if (e.keyCode == KeyCode.DownArrow)
-                        cmdM |= CmdM.AltS;
-                    if (e.keyCode == KeyCode.LeftArrow)
-                        cmdM |= CmdM.AltW;
-                    if (e.keyCode == KeyCode.RightArrow)
-                        cmdM |= CmdM.AltE;
+                            cmdM |= CmdM.North;
+                        if (e.keyCode == KeyCode.RightArrow)
+                            cmdM |= CmdM.East;
+                        if (e.keyCode == KeyCode.DownArrow)
+                            cmdM |= CmdM.South;
+                        if (e.keyCode == KeyCode.LeftArrow)
+                            cmdM |= CmdM.West;
+                    }
 
                     LineParser line = new(csubmit ? stdin.text : stdinOld, cmdM, stdinOld.Length);
 

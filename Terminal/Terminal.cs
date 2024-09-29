@@ -42,11 +42,6 @@ namespace _TERMINAL_
             ReadHistory();
         }
 
-        private void OnDisable()
-        {
-            hold_alt = false;
-        }
-
         //----------------------------------------------------------------------------------------------------------
 
         private void Start()
@@ -56,11 +51,6 @@ namespace _TERMINAL_
 
         //----------------------------------------------------------------------------------------------------------
         
-        private void Update()
-        {
-            UpdateInputs();
-        }
-
         protected virtual void OnApplicationFocus(bool focus)
         {
             if (focus)

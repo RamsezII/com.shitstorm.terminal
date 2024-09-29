@@ -58,7 +58,7 @@ namespace _TERMINAL_
             {
                 // completion
                 if (line.cmdM.HasFlag(CmdM.Cpl))
-                    if (line.cmdM.HasFlag(CmdM.AltW))
+                    if (line.cmdM.HasFlag(CmdM.AltWest))
                     {
                         apply = true;
                         if (empty || dir.Parent == null)
@@ -69,7 +69,7 @@ namespace _TERMINAL_
                         else
                             dir = dir.Parent;
                     }
-                    else if (line.cmdM.HasFlag(CmdM.AltE))
+                    else if (line.cmdM.HasFlag(CmdM.AltEast))
                     {
                         if (dir.Exists)
                         {
@@ -82,7 +82,7 @@ namespace _TERMINAL_
                             }
                         }
                     }
-                    else if ((line.cmdM & (CmdM.Alt | CmdM.AltN | CmdM.AltS)) != 0)
+                    else if ((line.cmdM & (CmdM.Alt | CmdM.AltNorth | CmdM.AltSouth)) != 0)
                     {
                         FileSystemInfo[] files = (
                             from info
@@ -96,9 +96,9 @@ namespace _TERMINAL_
                             tab_last = 0;
                         else
                         {
-                            if (line.cmdM.HasFlag(CmdM.Tab) || line.cmdM.HasFlag(CmdM.AltS))
+                            if (line.cmdM.HasFlag(CmdM.Tab) || line.cmdM.HasFlag(CmdM.AltSouth))
                                 ++tab_last;
-                            else if (line.cmdM.HasFlag(CmdM.AltN))
+                            else if (line.cmdM.HasFlag(CmdM.AltNorth))
                                 --tab_last;
                             while (tab_last < 0)
                                 tab_last += files.Length;

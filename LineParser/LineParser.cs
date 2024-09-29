@@ -10,10 +10,10 @@ namespace _TERMINAL_
         tab,
         man,
         alt,
-        altN,
-        altE,
-        altS,
-        altW,
+        north,
+        east,
+        south,
+        west,
         _select,
         _applyCpl,
     }
@@ -27,12 +27,15 @@ namespace _TERMINAL_
         Tab = 1 << CmdB.tab | Cpl,
         Man = 1 << CmdB.alt,
         Alt = 1 << CmdB.alt | Cpl,
-        AltN = 1 << CmdB.altN | Alt,
-        AltE = 1 << CmdB.altE | Alt,
-        AltS = 1 << CmdB.altS | Alt,
-        AltW = 1 << CmdB.altW | Alt,
-        AltNS = AltN | AltS,
-        AltAll = AltN | AltE | AltS | AltW,
+        North = 1 << CmdB.north,
+        East = 1 << CmdB.east,
+        South = 1 << CmdB.south,
+        West = 1 << CmdB.west,
+        AltNorth = Alt | North,
+        AltEast = Alt | East,
+        AltSouth = Alt | South,
+        AltWest = Alt | West,
+        AllDirs = North | East | South | West,
         _select = 1 << CmdB._select,
         _applyCpl = 1 << CmdB._applyCpl,
     }
@@ -47,10 +50,10 @@ namespace _TERMINAL_
         public string lastRead;
 
         public bool IsExec => cmdM.HasFlag(CmdM.Exec);
-        public bool IsCpl => cmdM.HasFlag(CmdM.Cpl);
+        public bool IsCpl => cmdM.HasFlag(CmdM.Tab) | cmdM.HasFlag(CmdM.Alt) & ((cmdM & CmdM.AllDirs) != 0);
         public bool IsMan => cmdM.HasFlag(CmdM.Man);
         public bool IsThisMan => cmdM.HasFlag(CmdM._select | CmdM.Man);
-        public bool IsCplThis => string.IsNullOrWhiteSpace(rawtext) || cmdM.HasFlag(CmdM.Cpl | CmdM._select);
+        public bool IsCplThis => string.IsNullOrWhiteSpace(rawtext) || cmdM.HasFlag(CmdM._select) && IsCpl;
 
         const char
             char_chainCmds = '&',
