@@ -8,6 +8,7 @@ namespace _TERMINAL_
         pipe,
         cpl,
         tab,
+        man,
         alt,
         altN,
         altE,
@@ -18,38 +19,38 @@ namespace _TERMINAL_
     }
 
     [Flags]
-    public enum CmdF : ushort
+    public enum CmdM : ushort
     {
-        exec = 1 << CmdB.exec,
-        pipe = 1 << CmdB.pipe,
-        cpl = 1 << CmdB.cpl,
-        tab = 1 << CmdB.tab | cpl,
-        alt = 1 << CmdB.alt | cpl,
-        altN = 1 << CmdB.altN | alt,
-        altE = 1 << CmdB.altE | alt,
-        altS = 1 << CmdB.altS | alt,
-        altW = 1 << CmdB.altW | alt,
-        altNS = altN | altS,
-        altAll = altN | altE | altS | altW,
+        Exec = 1 << CmdB.exec,
+        Pipe = 1 << CmdB.pipe,
+        Cpl = 1 << CmdB.cpl,
+        Tab = 1 << CmdB.tab | Cpl,
+        Man = 1 << CmdB.alt,
+        Alt = 1 << CmdB.alt | Cpl,
+        AltN = 1 << CmdB.altN | Alt,
+        AltE = 1 << CmdB.altE | Alt,
+        AltS = 1 << CmdB.altS | Alt,
+        AltW = 1 << CmdB.altW | Alt,
+        AltNS = AltN | AltS,
+        AltAll = AltN | AltE | AltS | AltW,
         _select = 1 << CmdB._select,
-        _cplThis = cpl | _select,
-        _tabThis = tab | _select,
-        _altThis = alt | _select,
         _applyCpl = 1 << CmdB._applyCpl,
     }
 
     [Serializable]
     public sealed partial class LineParser
     {
-        public CmdF cmdM;
+        public CmdM cmdM;
         public int ichar, ichar_a, ichar_b, sel_move;
         int sel_char;
         public string rawtext = string.Empty;
         public string lastRead;
 
-        public bool IsExec => cmdM.HasFlag(CmdF.exec);
-        public bool IsCpl => cmdM.HasFlag(CmdF.cpl);
-        public bool IsCplThis => string.IsNullOrWhiteSpace(rawtext) || cmdM.HasFlag(CmdF._cplThis);
+        public bool IsExec => cmdM.HasFlag(CmdM.Exec);
+        public bool IsCpl => cmdM.HasFlag(CmdM.Cpl);
+        public bool IsMan => cmdM.HasFlag(CmdM.Man);
+        public bool IsThisMan => cmdM.HasFlag(CmdM._select | CmdM.Man);
+        public bool IsCplThis => string.IsNullOrWhiteSpace(rawtext) || cmdM.HasFlag(CmdM.Cpl | CmdM._select);
 
         const char
             char_chainCmds = '&',
@@ -68,7 +69,7 @@ namespace _TERMINAL_
 
         //----------------------------------------------------------------------------------------------------------
 
-        public LineParser(in string rawtext, in CmdF cmdM, in int sel_char = 0)
+        public LineParser(in string rawtext, in CmdM cmdM, in int sel_char = 0)
         {
             this.rawtext = rawtext;
             this.cmdM = cmdM;

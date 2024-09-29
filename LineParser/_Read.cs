@@ -103,18 +103,18 @@
                 }
 
                 if (ichar_a <= sel_char && sel_char <= ichar_b)
-                    cmdM |= CmdF._select;
+                    cmdM |= CmdM._select;
                 else
-                    cmdM &= ~CmdF._select;
+                    cmdM &= ~CmdM._select;
                 return true;
             }
             else
             {
                 ichar_a = ichar_b = ichar;
                 if (ichar_a <= sel_char && sel_char <= ichar_b)
-                    cmdM |= CmdF._select;
+                    cmdM |= CmdM._select;
                 else
-                    cmdM &= ~CmdF._select;
+                    cmdM &= ~CmdM._select;
                 return false;
             }
         }

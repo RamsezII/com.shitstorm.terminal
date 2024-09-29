@@ -32,21 +32,21 @@ namespace _TERMINAL_
                 }
                 else
                 {
-                    CmdF cmdM = 0;
+                    CmdM cmdM = 0;
                     if (csubmit)
-                        cmdM |= CmdF.exec;
+                        cmdM |= CmdM.Exec;
                     if (ctab)
-                        cmdM |= CmdF.tab;
+                        cmdM |= CmdM.Tab;
 
                     if (e.type == EventType.KeyDown && e.alt)
                         if (e.keyCode == KeyCode.UpArrow)
-                            cmdM |= CmdF.altN;
+                            cmdM |= CmdM.AltN;
                     if (e.keyCode == KeyCode.DownArrow)
-                        cmdM |= CmdF.altS;
+                        cmdM |= CmdM.AltS;
                     if (e.keyCode == KeyCode.LeftArrow)
-                        cmdM |= CmdF.altW;
+                        cmdM |= CmdM.AltW;
                     if (e.keyCode == KeyCode.RightArrow)
-                        cmdM |= CmdF.altE;
+                        cmdM |= CmdM.AltE;
 
                     LineParser line = new(csubmit ? stdin.text : stdinOld, cmdM, stdinOld.Length);
 

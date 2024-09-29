@@ -57,8 +57,8 @@ namespace _TERMINAL_
             try
             {
                 // completion
-                if (line.cmdM.HasFlag(CmdF.cpl))
-                    if (line.cmdM.HasFlag(CmdF.altW))
+                if (line.cmdM.HasFlag(CmdM.Cpl))
+                    if (line.cmdM.HasFlag(CmdM.AltW))
                     {
                         apply = true;
                         if (empty || dir.Parent == null)
@@ -69,7 +69,7 @@ namespace _TERMINAL_
                         else
                             dir = dir.Parent;
                     }
-                    else if (line.cmdM.HasFlag(CmdF.altE))
+                    else if (line.cmdM.HasFlag(CmdM.AltE))
                     {
                         if (dir.Exists)
                         {
@@ -82,11 +82,11 @@ namespace _TERMINAL_
                             }
                         }
                     }
-                    else if ((line.cmdM & (CmdF.alt | CmdF.altN | CmdF.altS)) != 0)
+                    else if ((line.cmdM & (CmdM.Alt | CmdM.AltN | CmdM.AltS)) != 0)
                     {
                         FileSystemInfo[] files = (
                             from info
-                            in (endSlash ? dir : dir.Parent).EnumerateFileSystemInfos(line.cmdM.HasFlag(CmdF.tab) ? dir.Name + "*" : "*", SearchOption.TopDirectoryOnly)
+                            in (endSlash ? dir : dir.Parent).EnumerateFileSystemInfos(line.cmdM.HasFlag(CmdM.Tab) ? dir.Name + "*" : "*", SearchOption.TopDirectoryOnly)
                             orderby info.Name
                             orderby info.Attributes.HasFlag(FileAttributes.Directory) descending
                             select info
@@ -96,9 +96,9 @@ namespace _TERMINAL_
                             tab_last = 0;
                         else
                         {
-                            if (line.cmdM.HasFlag(CmdF.tab) || line.cmdM.HasFlag(CmdF.altS))
+                            if (line.cmdM.HasFlag(CmdM.Tab) || line.cmdM.HasFlag(CmdM.AltS))
                                 ++tab_last;
-                            else if (line.cmdM.HasFlag(CmdF.altN))
+                            else if (line.cmdM.HasFlag(CmdM.AltN))
                                 --tab_last;
                             while (tab_last < 0)
                                 tab_last += files.Length;
@@ -119,7 +119,7 @@ namespace _TERMINAL_
 
             end:
             if (apply)
-                line.cmdM |= CmdF._applyCpl;
+                line.cmdM |= CmdM._applyCpl;
 
             if (delims)
                 ++line.sel_move;

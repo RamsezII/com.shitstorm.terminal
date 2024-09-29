@@ -24,15 +24,17 @@ namespace _TERMINAL_
         public static readonly Shell instance = new();
         static readonly HashSet<IShell> users = new();
         static readonly Dictionary<string, IShell> commandOwners = new(StringComparer.OrdinalIgnoreCase);
-        static string[] commands;
+        public static string[] commands;
 
         //----------------------------------------------------------------------------------------------------------
 
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)]
-        static void Init()
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+        static void OnBeforeSceneLoad()
         {
             users.Clear();
         }
+
+        //----------------------------------------------------------------------------------------------------------
 
         public Shell()
         {
@@ -42,28 +44,42 @@ namespace _TERMINAL_
 
         //----------------------------------------------------------------------------------------------------------
 
-        static void RefreshCommands()
+        public static void RefreshCommands()
         {
-            commands = (
-                from cmd in commandOwners.Keys
-                orderby cmd
-                select cmd
-                ).ToArray();
+            commandOwners.Clear();
+
+            List<string> cmds = new();
+
+            foreach (IShell user in users)
+                foreach (string cmd in user.ECommands)
+                    switch (cmd)
+                    {
+                        case "_last_":
+                        case "_none_":
+                        case "_all_":
+                        case "_first_":
+                            break;
+                        default:
+                            cmds.Add(cmd);
+                            if (!commandOwners.TryAdd(cmd, user))
+                                Debug.LogWarning($"Conflict for command \"{cmd}\" between {commandOwners[cmd].GetType().FullName} and {user.GetType().FullName}");
+                            break;
+                    }
+
+            cmds.Sort();
+
+            commands = cmds.ToArray();
         }
 
         public static void AddUser(in IShell user)
         {
             users.Add(user);
-            foreach (string cmd in user.ECommands)
-                commandOwners[cmd] = user;
             RefreshCommands();
         }
 
         public static void RemoveUser(in IShell user)
         {
             users.Remove(user);
-            foreach (string cmd in user.ECommands)
-                commandOwners.Remove(cmd);
             RefreshCommands();
         }
 

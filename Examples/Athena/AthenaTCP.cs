@@ -59,7 +59,7 @@ namespace _ATHENA_
                 Util.SetFlags(ref flags, Flags.Status, false);
                 ToggleLock(false);
                 if (!string.IsNullOrWhiteSpace(input))
-                    OnCmdLine(new LineParser(input, CmdF.exec));
+                    OnCmdLine(new LineParser(input, CmdM.Exec));
             }
 
             //--------------------------------------------------------------------------------------------------------------

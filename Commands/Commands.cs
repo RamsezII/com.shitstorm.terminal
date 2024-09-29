@@ -12,7 +12,7 @@ namespace _TERMINAL_
         IEnumerable<string> IShell.ECommands => commands.Keys;
 
         //----------------------------------------------------------------------------------------------------------
-
+        
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         static void OnBeforeSceneLoad()
         {
@@ -25,16 +25,20 @@ namespace _TERMINAL_
             Shell.AddUser(instance);
         }
 
+        //----------------------------------------------------------------------------------------------------------
+
         public static void AddCommandKeys(in OnCommand onCommand, params string[] keys)
         {
             for (int i = 0; i < keys.Length; i++)
                 instance.commands.Add(keys[i], onCommand);
+            Shell.RefreshCommands();
         }
 
         public static void RemoveKeys(params string[] names)
         {
             foreach (string name in names)
                 instance.commands.Remove(name);
+            Shell.RefreshCommands();
         }
 
         public static void RemoveCommand(in OnCommand onCommand)
@@ -47,6 +51,8 @@ namespace _TERMINAL_
 
             foreach (string key in keys)
                 instance.commands.Remove(key);
+
+            Shell.RefreshCommands();
         }
 
         //----------------------------------------------------------------------------------------------------------
