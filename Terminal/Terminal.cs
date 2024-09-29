@@ -42,12 +42,24 @@ namespace _TERMINAL_
             ReadHistory();
         }
 
+        private void OnDisable()
+        {
+            hold_alt = false;
+        }
+
+        //----------------------------------------------------------------------------------------------------------
+
         private void Start()
         {
             ToggleWindow(false);
         }
 
         //----------------------------------------------------------------------------------------------------------
+        
+        private void Update()
+        {
+            UpdateInputs();
+        }
 
         protected virtual void OnApplicationFocus(bool focus)
         {

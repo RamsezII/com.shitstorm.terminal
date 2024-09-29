@@ -4,31 +4,46 @@ namespace _TERMINAL_
 {
     public partial class Terminal
     {
-        static (bool ctab, bool csubmit) CatchTabAndEnter(bool focus)
+        bool hold_alt;
+
+        //--------------------------------------------------------------------------------------------------------------
+        
+        void UpdateInputs()
         {
+            hold_alt = Input.GetKey(KeyCode.LeftAlt) || Input.GetKey(KeyCode.RightAlt);
+        }
+
+        //--------------------------------------------------------------------------------------------------------------
+
+        static void CatchTabAndEnter(in bool focus, out bool downTab, out bool downSubmit)
+        {
+            downTab = false;
+            downSubmit = false;
+
             Event e = Event.current;
-            if (e.type == EventType.KeyDown)
+
+            switch (e.type)
             {
-                bool ctab = e.character == '\t';
-                bool csubmit = e.character == '\n' || e.character == '\r';
+                case EventType.KeyDown:
+                    {
+                        downTab = e.character == '\t';
+                        downSubmit = e.character == '\n' || e.character == '\r';
 
-                if (focus)
-                {
-                    bool ktab = e.keyCode == KeyCode.Tab;
-                    bool ksubmit = e.keyCode == KeyCode.Return || e.keyCode == KeyCode.KeypadEnter;
+                        if (focus)
+                        {
+                            bool ktab = e.keyCode == KeyCode.Tab;
+                            bool ksubmit = e.keyCode == KeyCode.Return || e.keyCode == KeyCode.KeypadEnter;
 
-                    if (ktab || ksubmit || ctab || csubmit)
-                        e.Use();
+                            if (ktab || ksubmit || downTab || downSubmit)
+                                e.Use();
 
 #if PLATFORM_STANDALONE_LINUX
                     ctab |= ktab;
 #endif
-                }
-
-                return (ctab, csubmit);
+                        }
+                    }
+                    break;
             }
-            else
-                return default;
         }
     }
 }

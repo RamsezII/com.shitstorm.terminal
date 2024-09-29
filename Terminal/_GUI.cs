@@ -166,7 +166,7 @@ namespace _TERMINAL_
                 if (!Input.GetKey(KeyCode.LeftControl) && !Input.GetKey(KeyCode.RightControl) && !Input.GetKey(KeyCode.LeftAlt) && !Input.GetKey(KeyCode.RightAlt))
                     gui_yscroll = yscroll;
 
-            (bool ctab, bool csubmit) = CatchTabAndEnter(true);
+            CatchTabAndEnter(false, out bool downTab, out bool downSubmit);
 
             if (this == null)
                 Debug.LogWarning("this==null");
@@ -212,11 +212,11 @@ namespace _TERMINAL_
             command.OnGui();
 
             if (command.flags.HasFlag(Command.Flags.Stdin))
-                UpdateStdin(ctab, csubmit);
+                UpdateStdin(downTab, downSubmit);
 
             if (command.flags.HasFlag(Command.Flags.Stdin))
             {
-                stdin.text = ModifyText(ref stdin, ref text_h);
+                stdin.text = ModifyText(ref stdin, ref text_h).Replace("\n", string.Empty);
                 if (GUI.changed)
                 {
                     stdinOld = stdin.text;

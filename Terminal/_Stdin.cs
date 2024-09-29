@@ -8,13 +8,16 @@ namespace _TERMINAL_
         void UpdateStdin(in bool ctab, in bool csubmit)
         {
             Event e = Event.current;
-            bool uparrow = e.type == EventType.KeyDown && e.keyCode == KeyCode.UpArrow;
-            bool downarrow = e.type == EventType.KeyDown && e.keyCode == KeyCode.DownArrow;
+            bool upArrow = e.type == EventType.KeyDown && e.keyCode == KeyCode.UpArrow;
+            bool downArrow = e.type == EventType.KeyDown && e.keyCode == KeyCode.DownArrow;
 
-            if (uparrow || downarrow)
+            if (hold_alt)
+                Debug.Log($"{nameof(hold_alt)}: {hold_alt}");
+
+            if (!hold_alt && (upArrow || downArrow))
             {
                 if (commands.Count == 1)
-                    if (GetHistory(uparrow ? -1 : 1, out string line))
+                    if (GetHistory(upArrow ? -1 : 1, out string line))
                     {
                         stdin.text = line;
                         RequestCursorMove(line.Length, true);
