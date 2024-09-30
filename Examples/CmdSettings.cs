@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using UnityEngine;
 
@@ -9,6 +10,7 @@ namespace _TERMINAL_
     {
         enum Codes
         {
+            Edit,
             ToggleTerminalFullScreen,
             _last_,
         }
@@ -30,6 +32,10 @@ namespace _TERMINAL_
             if (Enum.TryParse(arg0, true, out Codes code) && code < Codes._last_)
                 switch (code)
                 {
+                    case Codes.Edit:
+                        OnCmdEdit(line);
+                        break;
+
                     case Codes.ToggleTerminalFullScreen:
                         if (line.IsExec)
                         {
@@ -41,6 +47,31 @@ namespace _TERMINAL_
                     default:
                         Debug.LogError($"Unknown command: \"{code}\"");
                         break;
+                }
+        }
+
+
+        void OnCmdEdit(in LineParser line)
+        {
+            string path = line.ReadAsPath();
+            if (line.IsExec)
+                try
+                {
+                    FileInfo file = new(path);
+                    if (!File.Exists(file.FullName))
+                    {
+                        string folderPath = Path.GetDirectoryName(file.FullName);
+                        if (!Directory.Exists(folderPath))
+                            Directory.CreateDirectory(folderPath);
+                        Debug.Log($"Creating file: \"{file.FullName}\"".ToSubLog());
+                        File.WriteAllText(file.FullName, string.Empty);
+                    }
+                    Debug.Log($"Opening file: \"{file.FullName}\"".ToSubLog());
+                    Application.OpenURL(file.FullName);
+                }
+                catch (Exception e)
+                {
+                    Debug.LogWarning(e.Message);
                 }
         }
     }
