@@ -82,19 +82,22 @@ namespace _TERMINAL_
                 if (!disposed._value)
                 {
                     Debug.LogWarning($"----- {cmdName} Killed -----");
-                    OnFailure();
-                    onFailure?.Invoke();
                     Dispose();
                 }
         }
 
         protected virtual void OnFailure()
         {
+            Debug.LogWarning($"----- {cmdName} Failure -----");
+            Dispose();
         }
 
         protected override void OnDispose()
         {
             base.OnDispose();
+
+            if (Terminal.instance != null)
+                Terminal.instance.commands.Remove(this);
 
             if (!string.IsNullOrWhiteSpace(output))
                 Debug.Log($"{cmdName} output{{ {output} }}");
