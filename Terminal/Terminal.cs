@@ -1,10 +1,11 @@
+using _ARK_;
 using _UTIL_;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace _TERMINAL_
 {
-    public partial class Terminal : MonoBehaviour, CursorManager.IUser
+    public partial class Terminal : MonoBehaviour, CursorManager.IUser, IInputsUser, IMouseUser
     {
         public static Terminal instance;
 
@@ -40,6 +41,20 @@ namespace _TERMINAL_
             InitGUI();
             commands.Add(Shell.instance);
             ReadHistory();
+        }
+
+        //----------------------------------------------------------------------------------------------------------
+
+        protected virtual void OnEnable()
+        {
+            NUCLEOR.inputsUsers.Add(this);
+            NUCLEOR.mouseUsers.Add(this);
+        }
+
+        protected virtual void OnDisable()
+        {
+            NUCLEOR.inputsUsers.Remove(this);
+            NUCLEOR.mouseUsers.Remove(this);
         }
 
         //----------------------------------------------------------------------------------------------------------

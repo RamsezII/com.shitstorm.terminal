@@ -2,7 +2,8 @@
     "name": "_TERMINAL_",
     "rootNamespace": "_TERMINAL_",
     "references": [
-        "GUID:ec96f6dc48fee4244bcebc247464e471"
+        "GUID:ec96f6dc48fee4244bcebc247464e471",
+        "GUID:2a84e452762c9634994f1da664544658"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
