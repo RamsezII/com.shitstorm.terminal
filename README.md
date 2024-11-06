@@ -11,8 +11,9 @@
 
 ## Installation
 
-1. Clone these repositories in your Unity project's "Assets" folder:
+1. Clone this repo and its dependancies somewhere in your Assets folder:
     ```sh
+    git clone git@github.com:RamsezII/_TERMINAL_.git
     git clone git@github.com:RamsezII/_UTIL_.git
     git clone git@github.com:RamsezII/_ARK_.git
     ```
