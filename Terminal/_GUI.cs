@@ -1,4 +1,5 @@
-﻿using System;
+﻿using _ARK_;
+using System;
 using UnityEngine;
 
 namespace _TERMINAL_
@@ -211,12 +212,11 @@ namespace _TERMINAL_
 
             command.OnGui();
 
-            if (command.flags.HasFlag(Command.Flags.Stdin))
-                UpdateStdin(downTab, downSubmit);
-
-            if (command.flags.HasFlag(Command.Flags.Stdin))
+            if (command.flags.HasFlag(Command.Flags.Stdin) && !NUCLEOR.instance.scheduler.IsBusy)
             {
+                UpdateStdin(downTab, downSubmit);
                 stdin.text = ModifyText(ref stdin, ref text_h).Replace("\n", string.Empty);
+
                 if (GUI.changed)
                 {
                     stdinOld = stdin.text;
