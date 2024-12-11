@@ -47,7 +47,7 @@ namespace _TERMINAL_
 
         void InitGUI()
         {
-            font_size = Mathf.Max(15, .02f * Screen.height);
+            font_size = Mathf.Max(15, .01f * Screen.height);
             stdout1.controlName = nameof(stdout1);
             stdout2.controlName = nameof(stdout2);
             stdin.controlName = nameof(stdin);
