@@ -1,6 +1,4 @@
-﻿using System.Globalization;
-
-namespace _TERMINAL_
+﻿namespace _TERMINAL_
 {
     public partial class LineParser
     {
