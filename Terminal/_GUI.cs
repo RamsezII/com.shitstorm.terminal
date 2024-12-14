@@ -136,9 +136,13 @@ namespace _TERMINAL_
             if (stdout1.enabled = command.flags.HasFlag(Command.Flags.Stdout))
                 GetSize(ref stdout1);
 
-            if (command.flags.HasFlag(Command.Flags.Status))
+            if (NUCLEOR.instance.scheduler.IsBusy || command.flags.HasFlag(Command.Flags.Status))
             {
-                stdout2.text = $"---- {command.status} ---- {Util_terminal.GetRotator()}";
+                if (NUCLEOR.instance.scheduler.IsBusy)
+                    stdout2.text = $"{typeof(NUCLEOR).FullName}({Util_terminal.GetRotator()})\n{((Schedulable)NUCLEOR.instance.scheduler.list[0]).description}".SetColor(Colors.cyan).Italic();
+                else
+                    stdout2.text = $"---- {command.status} ---- {Util_terminal.GetRotator()}";
+
                 stdout2.enabled = !string.IsNullOrWhiteSpace(stdout2.text);
                 if (stdout2.enabled)
                     GetSize(ref stdout2);
