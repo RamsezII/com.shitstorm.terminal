@@ -1,11 +1,11 @@
-﻿using _UTIL_;
+﻿using _ARK_;
 using System;
 using System.IO;
 using UnityEngine;
 
 namespace _TERMINAL_
 {
-    public abstract class Command : Disposable
+    public abstract class Command : Schedulable
     {
         enum Bools : byte
         {
