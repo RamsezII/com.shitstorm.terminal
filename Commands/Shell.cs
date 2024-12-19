@@ -1,6 +1,6 @@
-﻿using System;
+﻿using _UTIL_;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace _TERMINAL_
@@ -24,7 +24,7 @@ namespace _TERMINAL_
         public static readonly Shell instance = new();
         static readonly HashSet<IShell> users = new();
         static readonly Dictionary<string, IShell> commandOwners = new(StringComparer.OrdinalIgnoreCase);
-        public static string[] commands;
+        public static readonly OnValue<string[]> commands = new();
 
         //----------------------------------------------------------------------------------------------------------
 
@@ -68,7 +68,7 @@ namespace _TERMINAL_
 
             cmds.Sort();
 
-            commands = cmds.ToArray();
+            commands.Update(cmds.ToArray());
         }
 
         public static void AddUser(in IShell user)
@@ -86,7 +86,7 @@ namespace _TERMINAL_
         public override void OnCmdLine(in string arg0, in LineParser line)
         {
             if (line.IsCplThis)
-                line.OnCpls(arg0, commands);
+                line.OnCpls(arg0, commands._value);
             else if (commandOwners.TryGetValue(arg0, out IShell user))
                 user.OnCmdLine(arg0, line);
             else
