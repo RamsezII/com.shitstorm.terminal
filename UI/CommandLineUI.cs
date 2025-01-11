@@ -1,59 +1,19 @@
-using System.Collections.Generic;
-using System.Linq;
-using TMPro;
 using UnityEngine;
 
 namespace _TERMINAL_
 {
-    public partial class CommandLineUI : MonoBehaviour
+    public class CommandLineUI : MonoBehaviour
     {
-        public static CommandLineUI instance;
-
-        [SerializeField] TMP_Dropdown prefab_dropdown;
-
-        readonly List<TMP_Dropdown> dropdowns = new();
-
-        //------------------------------------------------------------------------------------------------------------
-
-        private void Awake()
+        // Start is called once before the first execution of Update after the MonoBehaviour is created
+        void Start()
         {
-            instance = this;
-            prefab_dropdown = transform.Find("Layout/Dropdown").GetComponent<TMP_Dropdown>();
+        
         }
 
-        //------------------------------------------------------------------------------------------------------------
-
-        private void Start()
+        // Update is called once per frame
+        void Update()
         {
-            prefab_dropdown.gameObject.SetActive(false);
-
-            TMP_Dropdown dropdown = Instantiate(prefab_dropdown, prefab_dropdown.transform.parent);
-            dropdown.gameObject.SetActive(true);
-
-            dropdowns.Add(dropdown);
-
-            Shell.commands.AddListener(value =>
-            {
-                dropdown.ClearOptions();
-                dropdown.AddOptions(value.ToList());
-            });
-
-            dropdown.onValueChanged.AddListener(OnDropDownValue);
-        }
-
-        //------------------------------------------------------------------------------------------------------------
-
-        void OnDropDownValue(int index)
-        {
-
-        }
-
-        //------------------------------------------------------------------------------------------------------------
-
-        private void OnDestroy()
-        {
-            if (this == instance)
-                instance = null;
+        
         }
     }
 }
