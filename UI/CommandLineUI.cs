@@ -105,9 +105,10 @@ namespace _TERMINAL_
             Button button = Instantiate(button_prefab, button_prefab.transform.parent);
             button.gameObject.SetActive(true);
             TextMeshProUGUI tmp = button.GetComponentInChildren<TextMeshProUGUI>();
+            float preferredWidth = tmp.GetPreferredValues(text, Mathf.Infinity, Mathf.Infinity).x;
             tmp.text = text;
             button.onClick.AddListener(() => OnClickButton(button));
-            return tmp.preferredWidth;
+            return preferredWidth;
         }
 
         public void OnClickButton(in Button button)
