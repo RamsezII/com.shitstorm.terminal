@@ -1,18 +1,30 @@
-﻿using UnityEngine;
+﻿using _ARK_;
+using UnityEngine;
 
 namespace _TERMINAL_
 {
     internal class TerminalToggle : MonoBehaviour
     {
-        private void Update()
+        private void OnEnable()
         {
-            if (Terminal.instance.enabled)
+            NUCLEOR.onInputs -= UpdateInputs;
+            NUCLEOR.onInputs += UpdateInputs;
+        }
+
+        private void OnDisable()
+        {
+            NUCLEOR.onInputs -= UpdateInputs;
+        }
+
+        void UpdateInputs()
+        {
+            if (!Terminal.instance.Enabled && !CommandLineUI.instance.Enabled)
             {
-                if (Input.GetKeyDown(KeyCode.F11) || Input.GetKeyUp(KeyCode.F11))
-                    Terminal.instance.fullscreen = !Terminal.instance.fullscreen;
+                if (Input.GetKeyDown(KeyCode.P) || Input.GetKeyUp(KeyCode.P))
+                    Terminal.instance.ToggleWindow(true);
+                else if (Input.GetKeyDown(KeyCode.O) || Input.GetKeyUp(KeyCode.O))
+                    CommandLineUI.instance.Toggle();
             }
-            else if (Input.GetKeyDown(KeyCode.P) || Input.GetKeyUp(KeyCode.P))
-                Terminal.instance.ToggleWindow(true);
         }
     }
 }

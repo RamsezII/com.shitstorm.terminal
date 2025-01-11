@@ -1,5 +1,4 @@
 using _ARK_;
-using _UTIL_;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -13,6 +12,12 @@ namespace _TERMINAL_
 
         float nextCplCheck;
         bool cplFlag, bottomFlag;
+
+        public bool Enabled
+        {
+            get => enabled;
+            set => ToggleWindow(value);
+        }
 
         //----------------------------------------------------------------------------------------------------------
 
@@ -65,7 +70,7 @@ namespace _TERMINAL_
         }
 
         //----------------------------------------------------------------------------------------------------------
-        
+
         protected virtual void OnApplicationFocus(bool focus)
         {
             if (focus)

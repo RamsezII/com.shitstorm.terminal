@@ -1,19 +1,127 @@
+using _ARK_;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace _TERMINAL_
 {
-    public class CommandLineUI : MonoBehaviour
+    public partial class CommandLineUI : MonoBehaviour, IInputsUser, IMouseUser
     {
-        // Start is called once before the first execution of Update after the MonoBehaviour is created
-        void Start()
+        public static CommandLineUI instance;
+
+        [SerializeField] TMP_InputField inputField;
+        [SerializeField] RectTransform viewport_rT, content_rT;
+        [SerializeField] VerticalLayoutGroup layout;
+        [SerializeField] Button button_prefab;
+
+        public void Toggle() => Enabled = !Enabled;
+        public bool Enabled
         {
-        
+            get => gameObject.activeSelf;
+            set => gameObject.SetActive(value);
         }
 
-        // Update is called once per frame
-        void Update()
+        //----------------------------------------------------------------------------------------------------------
+
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
+        static void OnAfterSceneLoad()
         {
-        
+            Util.InstantiateOrCreateIfAbsent<CommandLineUI>();
+        }
+
+        //----------------------------------------------------------------------------------------------------------
+
+        private void Awake()
+        {
+            instance = this;
+
+            inputField = transform.Find("rT/CommandLine_input").GetComponent<TMP_InputField>();
+            layout = transform.Find("rT/Scroll View/Viewport/Content/Layout").GetComponent<VerticalLayoutGroup>();
+            content_rT = (RectTransform)layout.transform.parent;
+            viewport_rT = (RectTransform)content_rT.parent;
+            button_prefab = transform.Find("rT/Scroll View/Viewport/Content/Layout/Line").GetComponent<Button>();
+
+            transform.Find("rT/Close").GetComponent<Button>().onClick.AddListener(Toggle);
+
+            ClearButtons();
+        }
+
+        //----------------------------------------------------------------------------------------------------------
+
+        protected virtual void OnEnable()
+        {
+            NUCLEOR.inputsUsers.Add(this);
+            NUCLEOR.mouseUsers.Add(this);
+        }
+
+        protected virtual void OnDisable()
+        {
+            NUCLEOR.inputsUsers.Remove(this);
+            NUCLEOR.mouseUsers.Remove(this);
+        }
+
+        //----------------------------------------------------------------------------------------------------------
+
+        private void Start()
+        {
+            button_prefab.gameObject.SetActive(false);
+
+            Shell.commands.AddListener(commands =>
+            {
+                if (button_prefab == null)
+                    return;
+
+                float width = 0;
+                ClearButtons();
+                for (int i = 0; i < commands.Length; i++)
+                    width = Mathf.Max(width, AddButton(commands[i]));
+                RefreshViewSize(width);
+            });
+
+            Enabled = false;
+        }
+
+        //----------------------------------------------------------------------------------------------------------
+
+        public void ClearButtons()
+        {
+            for (int i = 1; i < button_prefab.transform.parent.childCount; i++)
+            {
+                Transform child = button_prefab.transform.parent.GetChild(i);
+                if (child != null)
+                    Destroy(child.gameObject);
+            }
+        }
+
+        public void RefreshViewSize(in float preferredWidth)
+        {
+            LayoutRebuilder.ForceRebuildLayoutImmediate((RectTransform)layout.transform);
+            float viewportWidth = viewport_rT.rect.size.x;
+            content_rT.sizeDelta = new Vector2(Mathf.Max(preferredWidth, viewportWidth), layout.preferredHeight);
+        }
+
+        public float AddButton(in string text)
+        {
+            Button button = Instantiate(button_prefab, button_prefab.transform.parent);
+            button.gameObject.SetActive(true);
+            TextMeshProUGUI tmp = button.GetComponentInChildren<TextMeshProUGUI>();
+            tmp.text = text;
+            button.onClick.AddListener(() => OnClickButton(button));
+            return tmp.preferredWidth;
+        }
+
+        public void OnClickButton(in Button button)
+        {
+            TextMeshProUGUI tmp = button.GetComponentInChildren<TextMeshProUGUI>();
+            Debug.Log(tmp.text, button);
+        }
+
+        //----------------------------------------------------------------------------------------------------------
+
+        private void OnDestroy()
+        {
+            if (this == instance)
+                instance = null;
         }
     }
 }
