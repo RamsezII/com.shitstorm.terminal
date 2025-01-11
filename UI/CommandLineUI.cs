@@ -42,8 +42,6 @@ namespace _TERMINAL_
             button_prefab = transform.Find("rT/Scroll View/Viewport/Content/Layout/Line").GetComponent<Button>();
 
             transform.Find("rT/Close").GetComponent<Button>().onClick.AddListener(Toggle);
-
-            ClearButtons();
         }
 
         //----------------------------------------------------------------------------------------------------------
@@ -52,12 +50,14 @@ namespace _TERMINAL_
         {
             NUCLEOR.inputsUsers.Add(this);
             NUCLEOR.mouseUsers.Add(this);
+            Shell.commands.AddListener(OnCommands);
         }
 
         protected virtual void OnDisable()
         {
             NUCLEOR.inputsUsers.Remove(this);
             NUCLEOR.mouseUsers.Remove(this);
+            Shell.commands.RemoveListener(OnCommands);
         }
 
         //----------------------------------------------------------------------------------------------------------
@@ -65,23 +65,23 @@ namespace _TERMINAL_
         private void Start()
         {
             button_prefab.gameObject.SetActive(false);
-
-            Shell.commands.AddListener(commands =>
-            {
-                if (button_prefab == null)
-                    return;
-
-                float width = 0;
-                ClearButtons();
-                for (int i = 0; i < commands.Length; i++)
-                    width = Mathf.Max(width, AddButton(commands[i]));
-                RefreshViewSize(width);
-            });
-
             Enabled = false;
         }
 
         //----------------------------------------------------------------------------------------------------------
+
+        void OnCommands(string[] commands)
+        {
+            if (button_prefab == null)
+                return;
+
+            ClearButtons();
+            float width = 0;
+            if (commands != null)
+                for (int i = 0; i < commands.Length; i++)
+                    width = Mathf.Max(width, AddButton(commands[i]));
+            RefreshViewSize(width);
+        }
 
         public void ClearButtons()
         {
@@ -95,6 +95,8 @@ namespace _TERMINAL_
 
         public void RefreshViewSize(in float preferredWidth)
         {
+            Debug.Log(nameof(RefreshViewSize), this);
+            Canvas.ForceUpdateCanvases();
             LayoutRebuilder.ForceRebuildLayoutImmediate((RectTransform)layout.transform);
             float viewportWidth = viewport_rT.rect.size.x;
             content_rT.sizeDelta = new Vector2(Mathf.Max(preferredWidth, viewportWidth), layout.preferredHeight);

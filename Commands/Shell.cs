@@ -32,6 +32,7 @@ namespace _TERMINAL_
         static void OnBeforeSceneLoad()
         {
             users.Clear();
+            commands.Reset();
         }
 
         //----------------------------------------------------------------------------------------------------------
