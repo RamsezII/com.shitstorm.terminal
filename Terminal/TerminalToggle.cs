@@ -18,7 +18,7 @@ namespace _TERMINAL_
 
         void UpdateInputs()
         {
-            if (!Terminal.instance.Enabled && !CommandLineUI.instance.Enabled)
+            if (!Terminal.instance.Enabled && (CommandLineUI.instance == null || !CommandLineUI.instance.Enabled))
             {
                 if (Input.GetKeyDown(KeyCode.P) || Input.GetKeyUp(KeyCode.P))
                     Terminal.instance.ToggleWindow(true);

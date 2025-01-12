@@ -1,4 +1,5 @@
 using _ARK_;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -26,7 +27,8 @@ namespace _TERMINAL_
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         static void OnAfterSceneLoad()
         {
-            Util.InstantiateOrCreateIfAbsent<CommandLineUI>();
+            if (false)
+                Util.InstantiateOrCreateIfAbsent<CommandLineUI>();
         }
 
         //----------------------------------------------------------------------------------------------------------
@@ -42,6 +44,8 @@ namespace _TERMINAL_
             button_prefab = transform.Find("rT/Scroll View/Viewport/Content/Layout/Line").GetComponent<Button>();
 
             transform.Find("rT/Close").GetComponent<Button>().onClick.AddListener(Toggle);
+
+            DontDestroyOnLoad(gameObject);
         }
 
         //----------------------------------------------------------------------------------------------------------
@@ -80,7 +84,8 @@ namespace _TERMINAL_
             if (commands != null)
                 for (int i = 0; i < commands.Length; i++)
                     width = Mathf.Max(width, AddButton(commands[i]));
-            RefreshViewSize(width);
+            //RefreshViewSize(width);
+            NUCLEOR.instance.subScheduler.AddRoutine(ERefresh(width));
         }
 
         public void ClearButtons()
@@ -93,10 +98,17 @@ namespace _TERMINAL_
             }
         }
 
+        IEnumerator ERefresh(float preferredWidth)
+        {
+            //yield return null;
+            RefreshViewSize(preferredWidth);
+            yield return null;
+        }
+
         public void RefreshViewSize(in float preferredWidth)
         {
             Debug.Log(nameof(RefreshViewSize), this);
-            Canvas.ForceUpdateCanvases();
+            //Canvas.ForceUpdateCanvases();
             LayoutRebuilder.ForceRebuildLayoutImmediate((RectTransform)layout.transform);
             float viewportWidth = viewport_rT.rect.size.x;
             content_rT.sizeDelta = new Vector2(Mathf.Max(preferredWidth, viewportWidth), layout.preferredHeight);
