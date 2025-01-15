@@ -18,13 +18,10 @@ namespace _TERMINAL_
 
         void UpdateInputs()
         {
-            if (!Terminal.instance.Enabled && (CommandLineUI.instance == null || !CommandLineUI.instance.Enabled))
-            {
-                if (Input.GetKeyDown(KeyCode.P) || Input.GetKeyUp(KeyCode.P))
-                    Terminal.instance.ToggleWindow(true);
-                else if (Input.GetKeyDown(KeyCode.O) || Input.GetKeyUp(KeyCode.O))
-                    CommandLineUI.instance.Toggle();
-            }
+            if (!NUCLEOR.inputsUsers.isUsed._value)
+                if (!Terminal.instance.Enabled)
+                    if (Input.GetKeyDown(KeyCode.P) || Input.GetKeyUp(KeyCode.P))
+                        Terminal.instance.ToggleWindow(true);
         }
     }
 }
