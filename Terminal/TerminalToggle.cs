@@ -7,13 +7,13 @@ namespace _TERMINAL_
     {
         private void OnEnable()
         {
-            NUCLEOR.onInputs -= UpdateInputs;
-            NUCLEOR.onInputs += UpdateInputs;
+            NUCLEOR.delegates.onInputs -= UpdateInputs;
+            NUCLEOR.delegates.onInputs += UpdateInputs;
         }
 
         private void OnDisable()
         {
-            NUCLEOR.onInputs -= UpdateInputs;
+            NUCLEOR.delegates.onInputs -= UpdateInputs;
         }
 
         void UpdateInputs()
