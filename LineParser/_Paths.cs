@@ -40,7 +40,7 @@ namespace _TERMINAL_
 
             if (empty)
             {
-                dir = Util.app_path.GetDir(false);
+                dir = Util.app_path.ForceDir();
                 endSlash = true;
             }
             else
