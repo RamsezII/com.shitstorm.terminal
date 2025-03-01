@@ -29,7 +29,7 @@ namespace _TERMINAL_
             _all_ = (1 << Bools._last_) - 1,
         }
 
-        static readonly string leftPrefixe = Directory.GetCurrentDirectory();
+        static readonly string leftPrefixe = Util.app_path;
         public readonly string cmdName, cmdPrefixe;
 
         public string status, output;
