@@ -7,7 +7,7 @@ namespace _TERMINAL_
         public bool GetEveEnd(out IPEndPoint rdvEnd)
         {
             rdvEnd = Util_net.end_ARMA;
-            if (TryParseOptions(OptsF.netpoint, out OptsF optsM, out var optsD))
+            if (TryParseOptions_old(OptsF.netpoint, out OptsF optsM, out var optsD))
             {
                 if (optsM.HasFlag(OptsF.netpoint))
                     rdvEnd = (IPEndPoint)optsD[OptsF.netpoint];
