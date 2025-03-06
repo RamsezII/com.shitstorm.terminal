@@ -139,7 +139,10 @@ namespace _TERMINAL_
             if (NUCLEOR.instance.scheduler.IsBusy || command.flags.HasFlag(Command.Flags.Status))
             {
                 if (NUCLEOR.instance.scheduler.IsBusy)
-                    stdout2.text = $"{typeof(NUCLEOR).FullName}({Util_terminal.GetRotator()})\n{NUCLEOR.instance.scheduler.list[0].description}".SetColor(Colors.cyan).Italic();
+                {
+                    Schedulable schedulable = NUCLEOR.instance.scheduler.list[0];
+                    stdout2.text = $"{typeof(NUCLEOR).FullName}({Util_terminal.GetRotator()})\n{schedulable.description}\n{schedulable.progressBar}".SetColor(Colors.cyan);
+                }
                 else
                     stdout2.text = $"---- {command.status} ---- {Util_terminal.GetRotator()}";
 

@@ -1,5 +1,5 @@
 using _ARK_;
-using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -98,11 +98,11 @@ namespace _TERMINAL_
             }
         }
 
-        IEnumerator ERefresh(float preferredWidth)
+        IEnumerator<float> ERefresh(float preferredWidth)
         {
             //yield return null;
             RefreshViewSize(preferredWidth);
-            yield return null;
+            yield return 1;
         }
 
         public void RefreshViewSize(in float preferredWidth)
