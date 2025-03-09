@@ -30,7 +30,8 @@ namespace _TERMINAL_
         [Header("~ Body ~")]
         [SerializeField] int margin = 5;
         [SerializeField] float gui_yscroll;
-        [SerializeField] Text stdout1, stdout2, stdin;
+        [SerializeField] Text stdout1, stdout2;
+        public Text stdin;
 
         public bool tryFocus1;
         [SerializeField] bool tryFocus2;

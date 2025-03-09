@@ -41,6 +41,42 @@ namespace _TERMINAL_
             return true;
         }
 
+        public bool TryReadOption(in string option, out bool confirmed)
+        {
+            while (TryRead(out string split))
+                // args
+                if (!split.StartsWith('-'))
+                {
+                    ReadBack();
+                    break;
+                }
+                // option
+                else if (split.StartsWith("--") || split.Length == 1 && IsCplThis)
+                {
+                    // string
+                    string opt = split.TrimStart('-');
+                    if (IsCplThis)
+                    {
+                        OnCpls(opt, option);
+                        confirmed = true;
+                        return true;
+                    }
+                    else if (opt.Equals(option, StringComparison.OrdinalIgnoreCase))
+                    {
+                        confirmed = true;
+                        return true;
+                    }
+                    else
+                    {
+                        Debug.LogWarning($"wrong option \"{opt}\"");
+                        confirmed = false;
+                        return false;
+                    }
+                }
+            confirmed = false;
+            return true;
+        }
+
         public bool TryReadOptions(in Dictionary<string, Action<string>> options)
         {
             while (TryRead(out string split))

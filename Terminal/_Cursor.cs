@@ -9,7 +9,7 @@ namespace _TERMINAL_
 
         //----------------------------------------------------------------------------------------------------------
 
-        void RequestCursorMove(in int move, in bool absolute)
+        public void RequestCursorMove(in int move, in bool absolute)
         {
             if (absolute)
                 move_cursor = move;
