@@ -59,7 +59,7 @@ namespace _TERMINAL_
                         string temp = stdin.text;
                         if (csubmit)
                         {
-                            string log = command.cmdPrefixe + stdin.text;
+                            string log = cmd_prefixe + stdin.text;
                             if (this == instance)
                                 print(log);
                             else

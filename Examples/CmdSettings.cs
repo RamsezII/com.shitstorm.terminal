@@ -1,4 +1,5 @@
-﻿using System;
+﻿using _ARK_;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -12,6 +13,7 @@ namespace _TERMINAL_
         {
             Edit,
             ToggleTerminalFullScreen,
+            machine_name,
             _last_,
         }
 
@@ -41,6 +43,19 @@ namespace _TERMINAL_
                         {
                             Terminal.instance.fullscreen = !Terminal.instance.fullscreen;
                             Debug.Log($"{typeof(Terminal).FullName}.{nameof(Terminal.instance.fullscreen)}: {Terminal.instance.fullscreen}");
+                        }
+                        break;
+
+                    case Codes.machine_name:
+                        {
+                            string netName = line.Read();
+                            if (line.IsExec)
+                            {
+                                if (string.IsNullOrWhiteSpace(netName))
+                                    Debug.Log(MachineSettings.machine_name.Value);
+                                else
+                                    MachineSettings.machine_name.Update(netName);
+                            }
                         }
                         break;
 

@@ -29,8 +29,7 @@ namespace _TERMINAL_
             _all_ = (1 << Bools._last_) - 1,
         }
 
-        static readonly string leftPrefixe = Util.app_path;
-        public readonly string cmdName, cmdPrefixe;
+        public readonly string cmdName;
 
         public string status, output;
 
@@ -42,8 +41,7 @@ namespace _TERMINAL_
 
         public Command()
         {
-            cmdName = this is Shell ? "~" : GetType().FullName;
-            cmdPrefixe = Terminal.ColoredPrompt(leftPrefixe, cmdName);
+            cmdName = this is Shell ? Util.app_path : GetType().FullName;
             status = $"{cmdName}...";
         }
 

@@ -23,6 +23,6 @@ namespace _TERMINAL_
 
         //----------------------------------------------------------------------------------------------------------
 
-        public static string ColoredPrompt(in string left, in string right) => $"{left.SetColor(PrefixeLeftColor)}:{right.SetColor(PrefixeRightColor)}$ ";
+        public static string ColoredPrompt(in string user_name, in string command_name) => $"{user_name.SetColor(PrefixeLeftColor)}:{command_name.SetColor(PrefixeRightColor)}$ ";
     }
 }

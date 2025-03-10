@@ -43,6 +43,7 @@ namespace _TERMINAL_
         [SerializeField] Rect dims_r = new(.1f, .05f, .8f, .85f);
 
         public bool fullscreen;
+        [SerializeField] string cmd_prefixe;
 
         //----------------------------------------------------------------------------------------------------------
 
@@ -196,8 +197,9 @@ namespace _TERMINAL_
 
             if (command.flags.HasFlag(Command.Flags.Stdin))
             {
-                Vector2 prefixe_size = style_body.CalcSize(new(command.cmdPrefixe));
-                GUI.Label(new Rect(text_r.x, text_r.y + text_h, text_r.width, prefixe_size.y), command.cmdPrefixe, style_body);
+                cmd_prefixe = ColoredPrompt(MachineSettings.machine_name.Value, command.cmdName);
+                Vector2 prefixe_size = style_body.CalcSize(new(cmd_prefixe));
+                GUI.Label(new Rect(text_r.x, text_r.y + text_h, text_r.width, prefixe_size.y), cmd_prefixe, style_body);
                 text_r.x += prefixe_size.x;
                 text_r.width -= .5f * prefixe_size.x;
             }
