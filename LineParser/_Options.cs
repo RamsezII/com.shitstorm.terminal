@@ -57,7 +57,7 @@ namespace _TERMINAL_
                     string opt = split.TrimStart('-');
                     if (IsCplThis)
                     {
-                        OnCpls(opt, option);
+                        OnCpls(opt, "--" + option);
                         confirmed = true;
                         return true;
                     }

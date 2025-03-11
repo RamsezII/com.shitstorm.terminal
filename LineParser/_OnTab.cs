@@ -21,6 +21,7 @@ namespace _TERMINAL_
                 return false;
         }
 
+        public bool OnCpls(in string prefixe, params string[] cpls) => OnCpls(prefixe, (IEnumerable<string>)cpls);
         public bool OnCpls<T>(in string prefixe, IEnumerable<T> cpls)
         {
             if (!string.IsNullOrWhiteSpace(prefixe))
