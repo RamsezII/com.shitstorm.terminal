@@ -16,6 +16,7 @@ namespace _TERMINAL_
         west,
         _select,
         _applyCpl,
+        _telepathy,
     }
 
     [Flags]
@@ -38,6 +39,7 @@ namespace _TERMINAL_
         AllDirs = North | East | South | West,
         _select = 1 << CmdB._select,
         _applyCpl = 1 << CmdB._applyCpl,
+        _telepathy = 1 << CmdB._telepathy,
     }
 
     [Serializable]

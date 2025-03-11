@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace _TERMINAL_
 {
@@ -7,6 +8,7 @@ namespace _TERMINAL_
         public const int MAX_LINES = 150;
         static readonly Queue<string> lines = new();
         static bool lines_flag;
+        public static Action<string> onAddLine;
 
         //----------------------------------------------------------------------------------------------------------
 
@@ -18,6 +20,7 @@ namespace _TERMINAL_
                 lines.Enqueue(line);
                 while (lines.Count > MAX_LINES)
                     lines.Dequeue();
+                onAddLine?.Invoke(line);
             }
         }
 

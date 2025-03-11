@@ -29,13 +29,14 @@ namespace _TERMINAL_
             _all_ = (1 << Bools._last_) - 1,
         }
 
-        public readonly string cmdName;
+        public string cmdName;
 
         public string status, output;
 
         public Flags flags = Flags.Stdout | Flags.Status | Flags.Stdin | Flags.Closable;
 
         public Action onSuccess, onFailure;
+        bool logs;
 
         //----------------------------------------------------------------------------------------------------------
 
@@ -58,12 +59,14 @@ namespace _TERMINAL_
         {
         }
 
-        public void Succeed()
+        public void Succeed(in bool logs)
         {
+            this.logs = logs;
             lock (disposed)
                 if (!disposed._value)
                 {
-                    Debug.Log($"----- {cmdName} Success -----");
+                    if (this.logs)
+                        Debug.Log($"----- {cmdName} Success -----");
                     OnSuccess();
                     onSuccess?.Invoke();
                     Dispose();
@@ -100,7 +103,8 @@ namespace _TERMINAL_
             if (!string.IsNullOrWhiteSpace(output))
                 Debug.Log($"{cmdName} output{{ {output} }}");
 
-            Debug.Log($"----- {cmdName} Disposed -----".ToSubLog());
+            if (logs)
+                Debug.Log($"----- {cmdName} Disposed -----".ToSubLog());
             onDispose?.Invoke();
         }
     }
