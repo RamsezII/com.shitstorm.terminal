@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using _ARK_;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEngine;
@@ -10,7 +11,7 @@ namespace _TERMINAL_
         static readonly string
             history_file = typeof(Terminal).Name + ".history.json.txt";
 
-        private static string GetHistoryPath() => Path.Combine(Util.HOME_DIR.FullName, history_file);
+        private static string GetHistoryPath() => Path.Combine(NUCLEOR.home_path.ForceDir().FullName, history_file);
 
         [SerializeField] List<string> history;
         int history_index;

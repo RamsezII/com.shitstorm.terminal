@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using _ARK_;
+using System.IO;
 using System.Linq;
 using UnityEngine;
 
@@ -40,7 +41,7 @@ namespace _TERMINAL_
 
             if (empty)
             {
-                dir = Util.app_path.ForceDir();
+                dir = NUCLEOR.working_path.ForceDir();
                 endSlash = true;
             }
             else
@@ -49,7 +50,7 @@ namespace _TERMINAL_
                 if (rooted)
                     dir = new(currentPath);
                 else
-                    dir = new(Path.Combine(Util.app_path, currentPath));
+                    dir = new(Path.Combine(NUCLEOR.working_path, currentPath));
             }
 
             result = dir.FullName;
@@ -115,7 +116,7 @@ namespace _TERMINAL_
             if (rooted)
                 result = dir.FullName;
             else
-                result = Path.GetRelativePath(Util.app_path, dir.FullName);
+                result = Path.GetRelativePath(NUCLEOR.working_path, dir.FullName);
 
             end:
             if (apply)

@@ -42,7 +42,7 @@ namespace _TERMINAL_
 
         public Command()
         {
-            cmdName = this is Shell ? Util.app_path : GetType().FullName;
+            cmdName = this is Shell ? NUCLEOR.terminal_path : GetType().FullName;
             status = $"{cmdName}...";
         }
 
