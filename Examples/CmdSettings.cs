@@ -14,6 +14,7 @@ namespace _TERMINAL_
             Edit,
             ToggleTerminalFullScreen,
             machine_name,
+            Shutdown,
             _last_,
         }
 
@@ -57,6 +58,11 @@ namespace _TERMINAL_
                                     MachineSettings.machine_name.Update(netName);
                             }
                         }
+                        break;
+
+                    case Codes.Shutdown:
+                        if (line.IsExec)
+                            Application.Quit();
                         break;
 
                     default:
