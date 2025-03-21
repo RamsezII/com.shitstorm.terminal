@@ -8,10 +8,8 @@ namespace _TERMINAL_
 {
     public partial class Terminal
     {
-        static readonly string
-            history_file = typeof(Terminal).Name + ".history.json.txt";
-
-        private static string GetHistoryPath() => Path.Combine(NUCLEOR.home_path.ForceDir().FullName, history_file);
+        static readonly string HISTORY_FILE = typeof(Terminal).TypeToFileName() + ".history.txt";
+        private static string GetHistoryPath() => Path.Combine(NUCLEOR.home_path.ForceDirPath(), HISTORY_FILE);
 
         [SerializeField] List<string> history;
         int history_index;
