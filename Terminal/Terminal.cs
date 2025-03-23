@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace _TERMINAL_
 {
-    public partial class Terminal : MonoBehaviour, IInputsUser, IMouseUser
+    public partial class Terminal : MonoBehaviour
     {
         public static Terminal instance;
 
@@ -52,14 +52,15 @@ namespace _TERMINAL_
 
         protected virtual void OnEnable()
         {
-            NUCLEOR.inputsUsers.Add(this);
-            NUCLEOR.mouseUsers.Add(this);
+            NUCLEOR.users_trueMouse.AddElement(this);
+            NUCLEOR.users_keyboards.AddElement(this);
+            NUCLEOR.users_typing.AddElement(this);
+            NUCLEOR.users_blockPlayers.AddElement(this);
         }
 
         protected virtual void OnDisable()
         {
-            NUCLEOR.inputsUsers.Remove(this);
-            NUCLEOR.mouseUsers.Remove(this);
+            NUCLEOR.RemoveUser(this);
         }
 
         //----------------------------------------------------------------------------------------------------------

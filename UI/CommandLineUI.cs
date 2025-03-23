@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace _TERMINAL_
 {
-    public partial class CommandLineUI : MonoBehaviour, IInputsUser, IMouseUser
+    public partial class CommandLineUI : MonoBehaviour
     {
         public static CommandLineUI instance;
 
@@ -21,6 +21,8 @@ namespace _TERMINAL_
             get => gameObject.activeSelf;
             set => gameObject.SetActive(value);
         }
+
+        const NUCLEOR.Usages usage = NUCLEOR.Usages.TrueMouse | NUCLEOR.Usages.Keyboard | NUCLEOR.Usages.Typing | NUCLEOR.Usages.BlockPlayers;
 
         //----------------------------------------------------------------------------------------------------------
 
@@ -52,15 +54,13 @@ namespace _TERMINAL_
 
         protected virtual void OnEnable()
         {
-            NUCLEOR.inputsUsers.Add(this);
-            NUCLEOR.mouseUsers.Add(this);
+            NUCLEOR.ToggleUser(this, true, usage);
             Shell.commands.AddListener(OnCommands);
         }
 
         protected virtual void OnDisable()
         {
-            NUCLEOR.inputsUsers.Remove(this);
-            NUCLEOR.mouseUsers.Remove(this);
+            NUCLEOR.ToggleUser(this, false, usage);
             Shell.commands.RemoveListener(OnCommands);
         }
 
