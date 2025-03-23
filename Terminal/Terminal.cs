@@ -99,6 +99,7 @@ namespace _TERMINAL_
             if (value)
                 tryFocus1 = true;
             enabled = value;
+            NUCLEOR.ToggleUser(this, value, NUCLEOR.Usages.IMGUI);
         }
 
         //----------------------------------------------------------------------------------------------------------
