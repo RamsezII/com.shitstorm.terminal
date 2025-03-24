@@ -22,8 +22,6 @@ namespace _TERMINAL_
             set => gameObject.SetActive(value);
         }
 
-        const NUCLEOR.Usages usage = NUCLEOR.Usages.TrueMouse | NUCLEOR.Usages.Keyboard | NUCLEOR.Usages.Typing | NUCLEOR.Usages.BlockPlayers;
-
         //----------------------------------------------------------------------------------------------------------
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
@@ -54,13 +52,13 @@ namespace _TERMINAL_
 
         protected virtual void OnEnable()
         {
-            NUCLEOR.ToggleUser(this, true, usage);
+            USAGES.ToggleUser(this, true, UsageGroups.TrueMouse, UsageGroups.Keyboard, UsageGroups.Typing, UsageGroups.BlockPlayers);
             Shell.commands.AddListener(OnCommands);
         }
 
         protected virtual void OnDisable()
         {
-            NUCLEOR.ToggleUser(this, false, usage);
+            USAGES.RemoveUser(this);
             Shell.commands.RemoveListener(OnCommands);
         }
 

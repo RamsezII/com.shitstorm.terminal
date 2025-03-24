@@ -18,7 +18,7 @@ namespace _TERMINAL_
 
         void UpdateInputs()
         {
-            if (NUCLEOR.users_typing.IsEmpty)
+            if (USAGES.usages[(int)UsageGroups.Typing].IsEmpty)
                 if (!Terminal.instance.Enabled)
                     if (Input.GetKeyDown(KeyCode.P) || Input.GetKeyUp(KeyCode.P))
                         Terminal.instance.ToggleWindow(true);

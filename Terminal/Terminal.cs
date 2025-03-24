@@ -52,15 +52,12 @@ namespace _TERMINAL_
 
         protected virtual void OnEnable()
         {
-            NUCLEOR.users_trueMouse.AddElement(this);
-            NUCLEOR.users_keyboards.AddElement(this);
-            NUCLEOR.users_typing.AddElement(this);
-            NUCLEOR.users_blockPlayers.AddElement(this);
+            USAGES.ToggleUser(this, true, UsageGroups.TrueMouse, UsageGroups.Keyboard, UsageGroups.Typing, UsageGroups.BlockPlayers);
         }
 
         protected virtual void OnDisable()
         {
-            NUCLEOR.RemoveUser(this);
+            USAGES.RemoveUser(this);
         }
 
         //----------------------------------------------------------------------------------------------------------
@@ -99,7 +96,7 @@ namespace _TERMINAL_
             if (value)
                 tryFocus1 = true;
             enabled = value;
-            NUCLEOR.ToggleUser(this, value, NUCLEOR.Usages.IMGUI);
+            USAGES.ToggleUser(this, value, UsageGroups.IMGUI);
         }
 
         //----------------------------------------------------------------------------------------------------------
