@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Text;
+using UnityEngine;
 
 namespace _TERMINAL_
 {
@@ -14,12 +15,23 @@ namespace _TERMINAL_
 
         static void OnCommand(in string arg0, in LineParser line)
         {
-            if (line.IsExec)
+            if (line.TryRead(out _))
             {
-                line.cmdM |= CmdM.Man;
-                line.cmdM &= ~CmdM.Exec;
+                if (line.IsExec)
+                {
+                    line.cmdM |= CmdM.Man;
+                    line.cmdM &= ~CmdM.Exec;
+                }
+                line.ReadBack();
+                Terminal.instance.commands[^1].OnCmdLine(line);
             }
-            Terminal.instance.commands[^1].OnCmdLine(line);
+            else if (line.IsExec)
+            {
+                StringBuilder sb = new();
+                for (int i = 0; i < Shell.commands._value.Length; i++)
+                    sb.AppendLine($"  {i + ".",-5} {Shell.commands._value[i]}");
+                sb.Log();
+            }
         }
     }
 }

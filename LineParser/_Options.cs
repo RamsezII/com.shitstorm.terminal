@@ -88,7 +88,7 @@ namespace _TERMINAL_
                     string opt = split.Trim();
                     if (IsCplThis)
                     {
-                        OnCpls(opt, onOptions.Keys);
+                        OnCpls(opt, onOptions.Keys.Where(o => o.StartsWith("--", StringComparison.OrdinalIgnoreCase)));
                         return false;
                     }
                     else if (onOptions.TryGetValue(opt, out var onOption))
