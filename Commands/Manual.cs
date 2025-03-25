@@ -15,14 +15,12 @@ namespace _TERMINAL_
 
         static void OnCommand(in string arg0, in LineParser line)
         {
+            line.cmdM |= CmdM.Man;
             if (line.TryRead(out _))
             {
-                if (line.IsExec)
-                {
-                    line.cmdM |= CmdM.Man;
-                    line.cmdM &= ~CmdM.Exec;
-                }
                 line.ReadBack();
+                if (line.IsExec)
+                    line.cmdM &= ~CmdM.Exec;
                 Terminal.instance.commands[^1].OnCmdLine(line);
             }
             else if (line.IsExec)

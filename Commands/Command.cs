@@ -1,6 +1,5 @@
 ﻿using _ARK_;
 using System;
-using System.IO;
 using UnityEngine;
 
 namespace _TERMINAL_

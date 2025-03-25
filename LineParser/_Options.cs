@@ -41,7 +41,7 @@ namespace _TERMINAL_
             return true;
         }
 
-        public bool TryReadOption(in string option, out bool confirmed)
+        public bool TryReadOption(in string option, in bool wrongOptionThrowsError, out bool confirmed)
         {
             while (TryRead(out string split))
                 if (split.StartsWith('-'))
@@ -53,7 +53,7 @@ namespace _TERMINAL_
                         {
                             ReadBack();
                             confirmed = false;
-                            return false;
+                            return !wrongOptionThrowsError;
                         }
                         confirmed = true;
                         return true;
@@ -74,7 +74,7 @@ namespace _TERMINAL_
                 {
                     ReadBack();
                     confirmed = false;
-                    return false;
+                    return true;
                 }
             confirmed = false;
             return true;
@@ -89,7 +89,7 @@ namespace _TERMINAL_
                     if (IsCplThis)
                     {
                         OnCpls(opt, onOptions.Keys.Where(o => o.StartsWith("--", StringComparison.OrdinalIgnoreCase)));
-                        return false;
+                        break;
                     }
                     else if (onOptions.TryGetValue(opt, out var onOption))
                     {
