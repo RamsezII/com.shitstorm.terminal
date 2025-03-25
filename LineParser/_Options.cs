@@ -44,20 +44,17 @@ namespace _TERMINAL_
         public bool TryReadOption(in string option, out bool confirmed)
         {
             while (TryRead(out string split))
-                // args
-                if (!split.StartsWith('-'))
+                if (split.StartsWith('-'))
                 {
-                    ReadBack();
-                    break;
-                }
-                // option
-                else if (split.StartsWith("--") || split.Length == 1 && IsCplThis)
-                {
-                    // string
-                    string opt = split.TrimStart('-');
+                    string opt = split.Trim();
                     if (IsCplThis)
                     {
-                        OnCpls(opt, "--" + option);
+                        if (!OnCpls(opt, option))
+                        {
+                            ReadBack();
+                            confirmed = false;
+                            return false;
+                        }
                         confirmed = true;
                         return true;
                     }
@@ -68,45 +65,47 @@ namespace _TERMINAL_
                     }
                     else
                     {
-                        Debug.LogWarning($"wrong option \"{opt}\"");
+                        ReadBack();
                         confirmed = false;
-                        return false;
+                        return true;
                     }
+                }
+                else
+                {
+                    ReadBack();
+                    confirmed = false;
+                    return false;
                 }
             confirmed = false;
             return true;
         }
 
-        public bool TryReadOptions(in Dictionary<string, Action<string>> options)
+        public bool TryReadOptions(in Dictionary<string, Action<LineParser, string>> onOptions)
         {
             while (TryRead(out string split))
-                // args
-                if (!split.StartsWith('-'))
+                if (split.StartsWith('-'))
                 {
-                    ReadBack();
-                    break;
-                }
-                // option
-                else if (split.StartsWith("--") || split.Length == 1 && IsCplThis)
-                {
-                    // string
-                    string opt = split.TrimStart('-');
+                    string opt = split.Trim();
                     if (IsCplThis)
                     {
-                        OnCpls(opt, options.Keys);
+                        OnCpls(opt, onOptions.Keys);
                         return false;
                     }
-                    else if (options.TryGetValue(opt, out var action))
+                    else if (onOptions.TryGetValue(opt, out var onOption))
                     {
-                        if (IsExec)
-                            action(opt);
-                        options.Remove(opt);
+                        onOption(this, opt.TrimStart('-'));
+                        onOptions.Remove(opt);
                     }
                     else
                     {
                         Debug.LogWarning($"wrong option \"{opt}\"");
                         return false;
                     }
+                }
+                else
+                {
+                    ReadBack();
+                    break;
                 }
             return true;
         }
