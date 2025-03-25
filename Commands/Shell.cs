@@ -92,6 +92,7 @@ namespace _TERMINAL_
                 user.OnCmdLine(arg0, line);
             else
                 base.OnCmdLine(arg0, line);
+            line.cmdM |= CmdM._history;
         }
     }
 }

@@ -12,6 +12,8 @@ namespace _TERMINAL_
         enum Codes
         {
             Edit,
+            OpenTerminal,
+            CloseTerminal,
             ToggleTerminalFullScreen,
             machine_name,
             Shutdown,
@@ -37,6 +39,16 @@ namespace _TERMINAL_
                 {
                     case Codes.Edit:
                         OnCmdEdit(line);
+                        break;
+
+                    case Codes.OpenTerminal:
+                        if (line.IsExec)
+                            Terminal.instance.ToggleWindow(true);
+                        break;
+                        
+                    case Codes.CloseTerminal:
+                        if (line.IsExec)
+                            Terminal.instance.ToggleWindow(false);
                         break;
 
                     case Codes.ToggleTerminalFullScreen:

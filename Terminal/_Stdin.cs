@@ -69,7 +69,7 @@ namespace _TERMINAL_
 
                         command.OnCmdLine(line);
 
-                        if (csubmit && commands.Count == 1)
+                        if (csubmit && line.cmdM.HasFlag(CmdM._history))
                             AddToHistory(temp);
 
                         if (ctab || line.IsCpl)

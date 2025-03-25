@@ -91,7 +91,7 @@ namespace _TERMINAL_
             ToggleWindow(true);
         }
 
-        public void ToggleWindow(bool value)
+        public void ToggleWindow(in bool value)
         {
             if (value)
                 tryFocus1 = true;
