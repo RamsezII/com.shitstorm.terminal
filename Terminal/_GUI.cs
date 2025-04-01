@@ -138,11 +138,11 @@ namespace _TERMINAL_
             if (stdout1.enabled = command.flags.HasFlag(Command.Flags.Stdout))
                 GetSize(ref stdout1);
 
-            if (NUCLEOR.instance.scheduler.IsBusy || command.flags.HasFlag(Command.Flags.Status))
+            if (NUCLEOR.instance.scheduler.list.IsNotEmpty || command.flags.HasFlag(Command.Flags.Status))
             {
-                if (NUCLEOR.instance.scheduler.IsBusy)
+                if (NUCLEOR.instance.scheduler.list.IsNotEmpty)
                 {
-                    Schedulable schedulable = NUCLEOR.instance.scheduler.list[0];
+                    Schedulable schedulable = NUCLEOR.instance.scheduler.list._list[0];
                     stdout2.text = $"{typeof(NUCLEOR).FullName}({Util_terminal.GetRotator()})\n{schedulable.description}\n{schedulable.progressBar}".SetColor(Colors.cyan);
                 }
                 else
@@ -222,7 +222,7 @@ namespace _TERMINAL_
 
             command.OnGui();
 
-            if (command.flags.HasFlag(Command.Flags.Stdin) && !NUCLEOR.instance.scheduler.IsBusy)
+            if (command.flags.HasFlag(Command.Flags.Stdin) && NUCLEOR.instance.scheduler.list.IsEmpty)
             {
                 UpdateStdin(downTab, downSubmit);
                 stdin.text = ModifyText(ref stdin, ref text_h).Replace("\n", string.Empty);
