@@ -143,10 +143,10 @@ namespace _TERMINAL_
                 if (NUCLEOR.instance.scheduler.list.IsNotEmpty)
                 {
                     Schedulable schedulable = NUCLEOR.instance.scheduler.list._list[0];
-                    stdout2.text = $"{typeof(NUCLEOR).FullName}({Util_terminal.GetRotator()})\n{schedulable.description}\n{schedulable.progressBar}".SetColor(Colors.cyan);
+                    stdout2.text = $"{typeof(NUCLEOR).FullName}({Util_ark.GetRotator()})\n{schedulable.description}\n{schedulable.progressBar}".SetColor(Colors.cyan);
                 }
                 else
-                    stdout2.text = $"---- {command.status} ---- {Util_terminal.GetRotator()}";
+                    stdout2.text = $"---- {command.status} ---- {Util_ark.GetRotator()}";
 
                 stdout2.enabled = !string.IsNullOrWhiteSpace(stdout2.text);
                 if (stdout2.enabled)
