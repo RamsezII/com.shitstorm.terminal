@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 8663736009621951566}
   - component: {fileID: 283104577698166362}
-  - component: {fileID: -1453837088582369601}
   m_Layer: 0
   m_Name: _TERMINAL_.Terminal
   m_TagString: Untagged
@@ -89,6 +88,7 @@ MonoBehaviour:
     width: 0.8
     height: 0.85
   fullscreen: 1
+  cmd_prefixe: 
   history: []
   theme:
     backgroundColor: {r: 0, g: 0, b: 0, a: 0.6}
@@ -228,15 +228,3 @@ MonoBehaviour:
     m_FixedHeight: 0
     m_StretchWidth: 1
     m_StretchHeight: 0
---- !u!114 &-1453837088582369601
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3213254347755441423}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 21e04cbc2a43d174d93538866bf7bcd2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
