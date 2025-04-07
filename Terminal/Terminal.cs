@@ -46,21 +46,23 @@ namespace _TERMINAL_
             InitGUI();
             commands.Add(Shell.instance);
             ReadHistory();
+
+            IMGUI_global.instance.users_keydown.AddElement(OnOnGui_keydown, this);
         }
 
         //----------------------------------------------------------------------------------------------------------
 
         protected virtual void OnEnable()
         {
-            NUCLEOR.delegates.getInputs -= UpdateInputs;
             USAGES.ToggleUser(this, true, UsageGroups.TrueMouse, UsageGroups.Keyboard, UsageGroups.Typing, UsageGroups.BlockPlayers);
+            IMGUI_global.instance.users_ongui.RemoveElement(this);
+            IMGUI_global.instance.users_ongui.AddElement(OnOnGui, this);
         }
 
         protected virtual void OnDisable()
         {
-            NUCLEOR.delegates.getInputs -= UpdateInputs;
-            NUCLEOR.delegates.getInputs += UpdateInputs;
             USAGES.RemoveUser(this);
+            IMGUI_global.instance.users_ongui.RemoveElement(this);
         }
 
         //----------------------------------------------------------------------------------------------------------
@@ -81,14 +83,6 @@ namespace _TERMINAL_
         }
 
         private void OnApplicationQuit() => SaveHistory();
-
-        void UpdateInputs()
-        {
-            if (USAGES.usages[(int)UsageGroups.Typing].IsEmpty)
-                if (!Enabled)
-                    if (Input.GetKeyDown(KeyCode.P) || Input.GetKeyUp(KeyCode.P))
-                        ToggleWindow(true);
-        }
 
 #if UNITY_EDITOR
         [ContextMenu(nameof(_ToggleWindow))]
