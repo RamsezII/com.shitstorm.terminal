@@ -47,7 +47,7 @@ namespace _TERMINAL_
             commands.Add(Shell.instance);
             ReadHistory();
 
-            IMGUI_global.instance.users_keydown.AddElement(OnOnGui_keydown, this);
+            IMGUI_global.instance.users.AddElement(OnOnGui, this);
         }
 
         //----------------------------------------------------------------------------------------------------------
@@ -55,14 +55,11 @@ namespace _TERMINAL_
         protected virtual void OnEnable()
         {
             USAGES.ToggleUser(this, true, UsageGroups.TrueMouse, UsageGroups.Keyboard, UsageGroups.Typing, UsageGroups.BlockPlayers);
-            IMGUI_global.instance.users_ongui.RemoveElement(this);
-            IMGUI_global.instance.users_ongui.AddElement(OnOnGui, this);
         }
 
         protected virtual void OnDisable()
         {
             USAGES.RemoveUser(this);
-            IMGUI_global.instance.users_ongui.RemoveElement(this);
         }
 
         //----------------------------------------------------------------------------------------------------------
@@ -143,6 +140,8 @@ namespace _TERMINAL_
                     commands[i].Dispose();
                 commands.Clear();
             }
+
+            IMGUI_global.instance.users.RemoveElement(this);
         }
     }
 }

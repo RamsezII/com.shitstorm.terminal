@@ -57,7 +57,7 @@ namespace _TERMINAL_
 
         //----------------------------------------------------------------------------------------------------------
 
-        bool OnOnGui_keydown(Event e)
+        bool OnOnGui(Event e)
         {
             if (!Enabled)
             {
@@ -66,26 +66,18 @@ namespace _TERMINAL_
                     ToggleWindow(true);
                     return true;
                 }
+                return false;
             }
-            else if (Enabled)
-                if (e.keyCode == KeyCode.Return)
-                    if (string.IsNullOrWhiteSpace(stdin.text))
-                    {
-                        stdin.text = string.Empty;
-                        Command command = commands[^1];
 
-                        if (command.flags.HasFlag(Command.Flags.Closable))
-                            ToggleWindow(false);
+            if (e.keyCode == KeyCode.Return)
+                if (string.IsNullOrWhiteSpace(stdin.text))
+                {
+                    stdin.text = string.Empty;
+                    if (commands[^1].flags.HasFlag(Command.Flags.Closable))
+                        ToggleWindow(false);
+                    return true;
+                }
 
-                        return true;
-                    }
-
-            return false;
-        }
-
-        void OnOnGui()
-        {
-            Event e = Event.current;
             Command command;
 
             try
@@ -94,7 +86,7 @@ namespace _TERMINAL_
             }
             catch
             {
-                return;
+                return false;
             }
 
             CheckCursorMoveRequest();
@@ -283,6 +275,8 @@ namespace _TERMINAL_
             bool focused = stdin.controlName.Equals(nameOfFocusedControl, StringComparison.OrdinalIgnoreCase);
 
             GUI.EndScrollView();
+
+            return false;
 
             void GetSize(ref Text text)
             {
