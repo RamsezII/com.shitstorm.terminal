@@ -47,7 +47,7 @@ namespace _TERMINAL_
             commands.Add(Shell.instance);
             ReadHistory();
 
-            IMGUI_global.instance.users.AddElement(OnOnGui, this);
+            IMGUI_global.instance.users_ongui.AddElement(OnOnGui, this);
         }
 
         //----------------------------------------------------------------------------------------------------------
@@ -141,7 +141,7 @@ namespace _TERMINAL_
                 commands.Clear();
             }
 
-            IMGUI_global.instance.users.RemoveElement(this);
+            IMGUI_global.instance.users_ongui.RemoveElement(this);
         }
     }
 }
