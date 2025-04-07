@@ -61,23 +61,24 @@ namespace _TERMINAL_
         {
             if (!Enabled)
             {
-                if (e.alt && e.keyCode == KeyCode.P || e.keyCode == KeyCode.O && USAGES.AreEmpty(UsageGroups.Typing))
+                if (e.alt && e.keyCode == KeyCode.P || e.keyCode == KeyCode.P && USAGES.AreEmpty(UsageGroups.Typing))
                 {
                     ToggleWindow(true);
                     return true;
                 }
             }
-            else if (e.keyCode == KeyCode.Return)
-                if (string.IsNullOrWhiteSpace(stdin.text))
-                {
-                    stdin.text = string.Empty;
-                    Command command = commands[^1];
+            else if (Enabled)
+                if (e.keyCode == KeyCode.Return)
+                    if (string.IsNullOrWhiteSpace(stdin.text))
+                    {
+                        stdin.text = string.Empty;
+                        Command command = commands[^1];
 
-                    if (command.flags.HasFlag(Command.Flags.Closable))
-                        ToggleWindow(false);
+                        if (command.flags.HasFlag(Command.Flags.Closable))
+                            ToggleWindow(false);
 
-                    return true;
-                }
+                        return true;
+                    }
 
             return false;
         }
