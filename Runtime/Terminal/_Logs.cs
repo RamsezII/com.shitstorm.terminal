@@ -6,6 +6,9 @@ namespace _TERMINAL_
     {
         static void OnLogMessageReceived(string message, string stackTrace, LogType type)
         {
+            if (type == LogType.Warning && message.StartsWith("The character with Unicode value "))
+                return;
+
             message = message.TrimEnd('\n', '\r');
             switch (type)
             {
