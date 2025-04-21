@@ -6,7 +6,7 @@
         public bool TryReadFloat(out float value)
         {
             value = 0;
-            return TryRead(out string read) && read.TryToFloat(out value);
+            return TryRead(out string read) && read.TryParse(out value);
         }
     }
 }
