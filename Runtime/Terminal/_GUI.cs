@@ -59,24 +59,29 @@ namespace _TERMINAL_
 
         bool OnOnGui(Event e)
         {
-            if (!Enabled)
+            if (e.type == EventType.KeyDown)
             {
-                if (e.alt && e.keyCode == KeyCode.P || e.keyCode == KeyCode.P && USAGES.AreEmpty(UsageGroups.Typing))
-                {
-                    ToggleWindow(true);
-                    return true;
-                }
-                return false;
+                if (Enabled)
+                    if (e.keyCode == KeyCode.Return)
+                        if (string.IsNullOrWhiteSpace(stdin.text))
+                        {
+                            stdin.text = string.Empty;
+                            if (commands[^1].flags.HasFlag(Command.Flags.Closable))
+                                ToggleWindow(false);
+                            return true;
+                        }
+
+                if (!Enabled)
+                    if (e.keyCode == KeyCode.P)
+                        if (e.alt || USAGES.AreEmpty(UsageGroups.Typing))
+                        {
+                            ToggleWindow(true);
+                            return true;
+                        }
             }
 
-            if (e.keyCode == KeyCode.Return)
-                if (string.IsNullOrWhiteSpace(stdin.text))
-                {
-                    stdin.text = string.Empty;
-                    if (commands[^1].flags.HasFlag(Command.Flags.Closable))
-                        ToggleWindow(false);
-                    return true;
-                }
+            if (!Enabled)
+                return false;
 
             Command command;
 
@@ -91,11 +96,12 @@ namespace _TERMINAL_
 
             CheckCursorMoveRequest();
 
-            if (e.type == EventType.ScrollWheel && e.control)
-            {
-                font_size = Mathf.Clamp(font_size - e.delta.y, 5, byte.MaxValue);
-                e.Use();
-            }
+            if (e.type == EventType.ScrollWheel)
+                if (e.control)
+                {
+                    font_size = Mathf.Clamp(font_size - e.delta.y, 5, byte.MaxValue);
+                    e.Use();
+                }
 
             style_body.fontSize = (int)(font_size * Screen.height * .001f);
 
@@ -222,21 +228,23 @@ namespace _TERMINAL_
                 text_r.width -= .5f * prefixe_size.x;
             }
 
-            if (e.control && e.type == EventType.KeyDown && e.keyCode == KeyCode.C)
-            {
-                if (command.flags.HasFlag(Command.Flags.Status))
-                    Debug.Log($"---- {command.status} ----");
+            if (e.type == EventType.KeyDown)
+                if (e.control)
+                    if (e.keyCode == KeyCode.C)
+                    {
+                        if (command.flags.HasFlag(Command.Flags.Status))
+                            Debug.Log($"---- {command.status} ----");
 
-                Debug.Log("^C");
+                        Debug.Log("^C");
 
-                if (command.flags.HasFlag(Command.Flags.Killable))
-                {
-                    command.Kill();
-                    Event.current.Use();
-                }
-                else
-                    Debug.LogWarning($"can not abort \"{command.GetType()}\"");
-            }
+                        if (command.flags.HasFlag(Command.Flags.Killable))
+                        {
+                            command.Kill();
+                            Event.current.Use();
+                        }
+                        else
+                            Debug.LogWarning($"can not abort \"{command.GetType()}\"");
+                    }
 
             command.OnGui();
 
