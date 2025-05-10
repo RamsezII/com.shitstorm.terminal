@@ -65,9 +65,9 @@ namespace _TERMINAL_
                             if (line.IsExec)
                             {
                                 if (string.IsNullOrWhiteSpace(netName))
-                                    Debug.Log(MachineSettings.machine_name.Value);
+                                    Debug.Log(MachineSettings.user_name.Value);
                                 else
-                                    MachineSettings.machine_name.Update(netName);
+                                    MachineSettings.user_name.Update(netName);
                             }
                         }
                         break;
