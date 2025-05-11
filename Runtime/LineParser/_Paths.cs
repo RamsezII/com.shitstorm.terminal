@@ -41,7 +41,7 @@ namespace _TERMINAL_
 
             if (empty)
             {
-                dir = NUCLEOR.working_path.ForceDir();
+                dir = NUCLEOR.working_path.GetDir(false);
                 endSlash = true;
             }
             else

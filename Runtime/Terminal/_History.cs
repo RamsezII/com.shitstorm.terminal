@@ -9,7 +9,7 @@ namespace _TERMINAL_
     public partial class Terminal
     {
         static readonly string HISTORY_FILE = typeof(Terminal).TypeToFileName() + ".history.txt";
-        private static string GetHistoryPath() => Path.Combine(NUCLEOR.home_path.ForceDirPath(), HISTORY_FILE);
+        private static string GetHistoryPath() => Path.Combine(NUCLEOR.home_path.GetDir(true).FullName, HISTORY_FILE);
 
         [SerializeField] List<string> history;
         int history_index;
