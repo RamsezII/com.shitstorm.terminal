@@ -73,7 +73,7 @@ namespace _TERMINAL_
 
                 if (!Enabled)
                     if (e.keyCode == KeyCode.P)
-                        if (e.alt || USAGES.AreEmpty(UsageGroups.Typing))
+                        if (e.alt || UsageManager.AreEmpty(UsageGroups.Typing))
                         {
                             ToggleWindow(true);
                             return true;

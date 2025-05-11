@@ -54,12 +54,12 @@ namespace _TERMINAL_
 
         protected virtual void OnEnable()
         {
-            USAGES.ToggleUser(this, true, UsageGroups.TrueMouse, UsageGroups.Keyboard, UsageGroups.Typing, UsageGroups.BlockPlayers);
+            UsageManager.ToggleUser(this, true, UsageGroups.TrueMouse, UsageGroups.Keyboard, UsageGroups.Typing, UsageGroups.BlockPlayers);
         }
 
         protected virtual void OnDisable()
         {
-            USAGES.RemoveUser(this);
+            UsageManager.RemoveUser(this);
         }
 
         //----------------------------------------------------------------------------------------------------------
@@ -98,7 +98,7 @@ namespace _TERMINAL_
             if (value)
                 tryFocus1 = true;
             enabled = value;
-            USAGES.ToggleUser(this, value, UsageGroups.IMGUI);
+            UsageManager.ToggleUser(this, value, UsageGroups.IMGUI);
         }
 
         //----------------------------------------------------------------------------------------------------------

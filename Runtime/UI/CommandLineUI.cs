@@ -52,13 +52,13 @@ namespace _TERMINAL_
 
         protected virtual void OnEnable()
         {
-            USAGES.ToggleUser(this, true, UsageGroups.TrueMouse, UsageGroups.Keyboard, UsageGroups.Typing, UsageGroups.BlockPlayers);
+            UsageManager.ToggleUser(this, true, UsageGroups.TrueMouse, UsageGroups.Keyboard, UsageGroups.Typing, UsageGroups.BlockPlayers);
             Shell.commands.AddListener(OnCommands);
         }
 
         protected virtual void OnDisable()
         {
-            USAGES.RemoveUser(this);
+            UsageManager.RemoveUser(this);
             Shell.commands.RemoveListener(OnCommands);
         }
 
