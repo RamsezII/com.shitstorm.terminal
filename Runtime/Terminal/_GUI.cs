@@ -45,6 +45,8 @@ namespace _TERMINAL_
         public bool fullscreen;
         [SerializeField] string cmd_prefixe;
 
+        static readonly bool block_when_nucleor = false;
+
         //----------------------------------------------------------------------------------------------------------
 
         void InitGUI()
@@ -248,7 +250,7 @@ namespace _TERMINAL_
 
             command.OnGui();
 
-            if (command.flags.HasFlag(Command.Flags.Stdin) && NUCLEOR.instance.scheduler.list.IsEmpty)
+            if (command.flags.HasFlag(Command.Flags.Stdin) && !block_when_nucleor || NUCLEOR.instance.scheduler.list.IsEmpty)
             {
                 UpdateStdin(downTab, downSubmit);
                 stdin.text = ModifyText(ref stdin, ref text_h).Replace("\n", string.Empty);
