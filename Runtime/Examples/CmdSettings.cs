@@ -45,7 +45,7 @@ namespace _TERMINAL_
                         if (line.IsExec)
                             Terminal.instance.ToggleWindow(true);
                         break;
-                        
+
                     case Codes.CloseTerminal:
                         if (line.IsExec)
                             Terminal.instance.ToggleWindow(false);
@@ -65,9 +65,9 @@ namespace _TERMINAL_
                             if (line.IsExec)
                             {
                                 if (string.IsNullOrWhiteSpace(netName))
-                                    Debug.Log(MachineSettings.user_name.Value);
+                                    Debug.Log(ArkMachine.user_name.Value);
                                 else
-                                    MachineSettings.user_name.Update(netName);
+                                    ArkMachine.user_name.Update(netName);
                             }
                         }
                         break;
