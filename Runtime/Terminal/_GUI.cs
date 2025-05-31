@@ -59,7 +59,7 @@ namespace _TERMINAL_
 
         //----------------------------------------------------------------------------------------------------------
 
-        bool OnOnGui(Event e)
+        bool OnOnGuiInputs(Event e)
         {
             if (e.type == EventType.KeyDown)
             {
@@ -81,10 +81,11 @@ namespace _TERMINAL_
                             return true;
                         }
             }
+            return false;
+        }
 
-            if (!Enabled)
-                return false;
-
+        bool OnOnGui(Event e)
+        {
             Command command;
 
             try
@@ -168,7 +169,7 @@ namespace _TERMINAL_
             {
                 if (NUCLEOR.instance.scheduler.list.IsNotEmpty)
                 {
-                    Schedulable schedulable = NUCLEOR.instance.scheduler.list._list[0];
+                    Schedulable schedulable = NUCLEOR.instance.scheduler.list._collection[0];
                     stdout2.text = $"{typeof(NUCLEOR).FullName}({Util_ark.GetRotator()})\n{schedulable.description}\n{schedulable.progressBar}".SetColor(Colors.cyan);
                 }
                 else

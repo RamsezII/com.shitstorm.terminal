@@ -46,8 +46,6 @@ namespace _TERMINAL_
             InitGUI();
             commands.Add(Shell.instance);
             ReadHistory();
-
-            IMGUI_global.instance.users_ongui.AddElement(OnOnGui, this);
         }
 
         //----------------------------------------------------------------------------------------------------------
@@ -55,11 +53,13 @@ namespace _TERMINAL_
         protected virtual void OnEnable()
         {
             UsageManager.ToggleUser(this, true, UsageGroups.TrueMouse, UsageGroups.Keyboard, UsageGroups.Typing, UsageGroups.BlockPlayers);
+            IMGUI_global.instance.users_ongui.Modify(dict => dict.Add(OnOnGui, this));
         }
 
         protected virtual void OnDisable()
         {
             UsageManager.RemoveUser(this);
+            IMGUI_global.instance.users_ongui.RemoveKeysByValue(this);
         }
 
         //----------------------------------------------------------------------------------------------------------
@@ -67,6 +67,7 @@ namespace _TERMINAL_
         private void Start()
         {
             ToggleWindow(false);
+            IMGUI_global.instance.users_inputs.AddElement(OnOnGuiInputs, this);
         }
 
         //----------------------------------------------------------------------------------------------------------
@@ -98,7 +99,6 @@ namespace _TERMINAL_
             if (value)
                 tryFocus1 = true;
             enabled = value;
-            UsageManager.ToggleUser(this, value, UsageGroups.IMGUI);
         }
 
         //----------------------------------------------------------------------------------------------------------
@@ -141,7 +141,8 @@ namespace _TERMINAL_
                 commands.Clear();
             }
 
-            IMGUI_global.instance.users_ongui.RemoveElement(this);
+            IMGUI_global.instance.users_inputs.RemoveKeysByValue(this);
+            IMGUI_global.instance.users_ongui.RemoveKeysByValue(this);
         }
     }
 }
