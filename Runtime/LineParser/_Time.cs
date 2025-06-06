@@ -57,7 +57,7 @@ namespace _TERMINAL_
 
         public static float ParseTime(in string read)
         {
-            if (read.TryParse(out float time))
+            if (read.TryParseFloat(out float time))
                 return time;
             else
             {
