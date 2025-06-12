@@ -2,7 +2,7 @@
 {
     public partial class LineParser
     {
-        public float ReadFloat() => Read().ToFloat();
+        public float ReadFloat() => Read().ParseFloat();
         public bool TryReadFloat(out float value)
         {
             value = 0;

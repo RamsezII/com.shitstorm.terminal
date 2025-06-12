@@ -64,7 +64,7 @@ namespace _TERMINAL_
                 int b = read.IndexOf('m'), a = b;
                 if (b != -1)
                 {
-                    time += 60 * read[..b].ToFloat();
+                    time += 60 * read[..b].ParseFloat();
                     a = b + 1;
                 }
                 else
@@ -75,7 +75,7 @@ namespace _TERMINAL_
                     b = read.Length;
 
                 if (a != b)
-                    time += read[a..b].ToFloat();
+                    time += read[a..b].ParseFloat();
 
                 return time;
             }
