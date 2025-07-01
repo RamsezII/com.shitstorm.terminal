@@ -61,8 +61,8 @@ namespace _TERMINAL_
         public void Succeed(in bool logs)
         {
             this.logs = logs;
-            lock (disposed)
-                if (!disposed._value)
+            lock (this)
+                if (!_disposed)
                 {
                     if (this.logs)
                         Debug.Log($"----- {cmdName} Success -----");
@@ -78,8 +78,8 @@ namespace _TERMINAL_
 
         public void Kill()
         {
-            lock (disposed)
-                if (!disposed._value)
+            lock (this)
+                if (!_disposed)
                 {
                     Debug.LogWarning($"----- {cmdName} Killed -----");
                     Dispose();

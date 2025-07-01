@@ -112,12 +112,13 @@ namespace _TERMINAL_
                     OnAddLine();
                 }
 
-            if (commands[^1].disposed.Value)
-            {
-                if (commands.Count == 1)
-                    Debug.LogError("Main command disposed ???");
-                commands.RemoveAt(commands.Count - 1);
-            }
+            lock (commands)
+                if (commands[^1].Disposed)
+                {
+                    if (commands.Count == 1)
+                        Debug.LogError("Main command disposed ???");
+                    commands.RemoveAt(commands.Count - 1);
+                }
 
             if (cplFlag)
                 if (Time.unscaledTime > nextCplCheck)
