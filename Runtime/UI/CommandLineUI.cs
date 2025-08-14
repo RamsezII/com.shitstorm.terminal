@@ -83,7 +83,7 @@ namespace _TERMINAL_
                 for (int i = 0; i < commands.Length; i++)
                     width = Mathf.Max(width, AddButton(commands[i]));
             //RefreshViewSize(width);
-            NUCLEOR.instance.subScheduler.AddRoutine(ERefresh(width));
+            NUCLEOR.instance.subSequencer.AddRoutine(ERefresh(width));
         }
 
         public void ClearButtons()
