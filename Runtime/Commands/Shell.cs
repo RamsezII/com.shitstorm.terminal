@@ -66,6 +66,7 @@ namespace _TERMINAL_
 
         public static void AddUser(in IShell user)
         {
+            users.Remove(user);
             users.Add(user);
             RefreshCommands();
         }
