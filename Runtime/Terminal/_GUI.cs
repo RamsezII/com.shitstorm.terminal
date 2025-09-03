@@ -308,8 +308,25 @@ namespace _TERMINAL_
             string ModifyText(ref Text text, ref float text_h)
             {
                 GUI.SetNextControlName(text.controlName);
-                string output = GUI.TextArea(new Rect(text_r.x, text_r.y + text_h, text_r.width, text.height + line_height), text.text, style_body);
+
+                Rect rect = new(
+                    text_r.x, text_r.y + text_h,
+                    text_r.width, text.height + line_height
+                    );
+
+                string output = text.text;
+
+                try
+                {
+                    output = GUI.TextArea(rect, text.text, style_body);
+                }
+                catch (Exception ex)
+                {
+                    Debug.LogWarning($"terminal weird shit.. ({ex.TrimmedExceptionMessage()})");
+                }
+
                 text_h += text.height;
+
                 return output;
             }
         }
