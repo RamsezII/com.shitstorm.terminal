@@ -8,6 +8,7 @@ namespace _TERMINAL_
     public interface IShell
     {
         public IEnumerable<string> ECommands { get; }
+        public void OnCmdLine(in LineParser line) => OnCmdLine(line.Read(), line);
         public void OnCmdLine(in string arg0, in LineParser line);
     }
 
