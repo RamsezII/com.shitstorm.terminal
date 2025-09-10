@@ -17,7 +17,8 @@ namespace _TERMINAL_
             ToggleTerminalFullScreen,
             machine_name,
             Shutdown,
-            OpenLogs,
+            OpenApplicationPersistentDataPath,
+            OpenPlayerLogs,
             _last_,
         }
 
@@ -78,9 +79,26 @@ namespace _TERMINAL_
                             Application.Quit();
                         break;
 
-                    case Codes.OpenLogs:
+                    case Codes.OpenPlayerLogs:
                         if (line.IsExec)
-                            Util.OpenPlayerLog();
+                        {
+                            string logPath = Path.Combine(Application.persistentDataPath, "Player.log");
+                            if (File.Exists(logPath))
+                                Application.OpenURL(logPath);
+                            else
+                                Debug.LogWarning($"Player.log not found at: {logPath}");
+                        }
+                        break;
+
+                    case Codes.OpenApplicationPersistentDataPath:
+                        if (line.IsExec)
+                        {
+                            string persistentDataPath = Application.persistentDataPath;
+                            if (Directory.Exists(persistentDataPath))
+                                Application.OpenURL(persistentDataPath);
+                            else
+                                Debug.LogWarning($"Path not found: {persistentDataPath}");
+                        }
                         break;
 
                     default:
