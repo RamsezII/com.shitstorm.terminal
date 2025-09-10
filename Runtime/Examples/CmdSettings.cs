@@ -17,6 +17,7 @@ namespace _TERMINAL_
             ToggleTerminalFullScreen,
             machine_name,
             Shutdown,
+            OpenLogs,
             _last_,
         }
 
@@ -75,6 +76,11 @@ namespace _TERMINAL_
                     case Codes.Shutdown:
                         if (line.IsExec)
                             Application.Quit();
+                        break;
+
+                    case Codes.OpenLogs:
+                        if (line.IsExec)
+                            Util.OpenPlayerLog();
                         break;
 
                     default:
