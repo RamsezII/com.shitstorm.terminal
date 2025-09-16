@@ -9,19 +9,19 @@ namespace _TERMINAL_
         public readonly struct CommandInfos
         {
             public readonly object owner;
-            public readonly object key;
+            public readonly string key;
             internal readonly Action onCmd_exe;
             internal readonly Action<LineParser> onCmd_line;
             internal readonly Action<bool> onCmd_bool;
-            internal readonly Action<object, LineParser> onCmd_key_line;
+            internal readonly Action<string, LineParser> onCmd_key_line;
 
             //----------------------------------------------------------------------------------------------------------
 
-            public CommandInfos(in object owner, in object key,
+            public CommandInfos(in object owner, in string key,
                 in Action onCmd_exe = null,
                 in Action<bool> onCmd_bool = null,
                 in Action<LineParser> onCmd_line = null,
-                in Action<object, LineParser> onCmd_key_line = null)
+                in Action<string, LineParser> onCmd_key_line = null)
             {
                 this.owner = owner;
                 this.key = key;
@@ -56,9 +56,9 @@ namespace _TERMINAL_
 
         public static void AddCommand(in CommandInfos infos, params object[] aliases)
         {
-            _commands[infos.key] = infos;
+            _commands.Add(infos.key, infos);
             for (int i = 0; i < aliases.Length; i++)
-                _commands[aliases[i]] = infos;
+                _commands.Add(aliases[i], infos);
         }
 
         public static void RemoveUser(in object owner)
