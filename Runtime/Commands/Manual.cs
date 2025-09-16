@@ -8,28 +8,25 @@ namespace _TERMINAL_
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         static void OnAfterSceneLoad()
         {
-            Commands.AddCommandKeys(OnCommand, "man", "Manual", "Help");
-        }
-
-        //----------------------------------------------------------------------------------------------------------
-
-        static void OnCommand(in string arg0, in LineParser line)
-        {
-            line.cmdM |= CmdM.Man;
-            if (line.TryRead(out _))
+            Shell.AddCommand(new(null, "Manual", onCmd_line: line =>
             {
-                line.ReadBack();
-                if (line.IsExec)
-                    line.cmdM &= ~CmdM.Exec;
-                Terminal.instance.commands[^1].OnCmdLine(line);
-            }
-            else if (line.IsExec)
-            {
-                StringBuilder sb = new();
-                for (int i = 0; i < Shell.commands._value.Length; i++)
-                    sb.AppendLine($"  {i + ".",-5} {Shell.commands._value[i]}");
-                sb.Log();
-            }
+                line.cmdM |= CmdM.Man;
+                if (line.TryRead(out _))
+                {
+                    line.ReadBack();
+                    if (line.IsExec)
+                        line.cmdM &= ~CmdM.Exec;
+                    Terminal.instance.commands[^1].OnCmdLine(line);
+                }
+                else if (line.IsExec)
+                {
+                    StringBuilder sb = new();
+                    foreach (var pair in Shell._commands)
+                        sb.AppendLine($"  {pair.Key}");
+                    sb.Log();
+                }
+            }),
+            "man", "Help");
         }
     }
 }

@@ -26,7 +26,7 @@ namespace _TERMINAL_
 
         //----------------------------------------------------------------------------------------------------------
 
-        public static void OnCmdOpts(in LineParser line)
+        public static void OnCmdOpts(LineParser line)
         {
             if (line.TryParseOptions_old(OptsF._all_, out OptsF optsM, out var optsD))
                 if (line.IsExec)

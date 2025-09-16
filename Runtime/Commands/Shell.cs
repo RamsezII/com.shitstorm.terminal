@@ -1,31 +1,47 @@
-﻿using _UTIL_;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace _TERMINAL_
 {
-    public interface IShell
+    public sealed partial class Shell : Command
     {
-        public IEnumerable<string> ECommands { get; }
-        public void OnCmdLine(in LineParser line) => OnCmdLine(line.Read(), line);
-        public void OnCmdLine(in string arg0, in LineParser line);
-    }
+        public readonly struct CommandInfos
+        {
+            public readonly object owner;
+            public readonly object key;
+            internal readonly Action onCmd_exe;
+            internal readonly Action<LineParser> onCmd_line;
+            internal readonly Action<bool> onCmd_bool;
+            internal readonly Action<object, LineParser> onCmd_key_line;
 
-    public sealed class Shell : Command
-    {
+            //----------------------------------------------------------------------------------------------------------
+
+            public CommandInfos(in object owner, in object key,
+                in Action onCmd_exe = null,
+                in Action<bool> onCmd_bool = null,
+                in Action<LineParser> onCmd_line = null,
+                in Action<object, LineParser> onCmd_key_line = null)
+            {
+                this.owner = owner;
+                this.key = key;
+                this.onCmd_exe = onCmd_exe;
+                this.onCmd_bool = onCmd_bool;
+                this.onCmd_line = onCmd_line;
+                this.onCmd_key_line = onCmd_key_line;
+            }
+        }
+
+        public static readonly Dictionary<object, CommandInfos> _commands = new();
+
         public static readonly Shell instance = new();
-        static readonly HashSet<IShell> users = new();
-        static readonly Dictionary<string, IShell> commandOwners = new(StringComparer.OrdinalIgnoreCase);
-        public static readonly OnValue<string[]> commands = new();
 
         //----------------------------------------------------------------------------------------------------------
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         static void OnBeforeSceneLoad()
         {
-            users.Clear();
-            commands.Reset();
+            _commands.Clear();
         }
 
         //----------------------------------------------------------------------------------------------------------
@@ -38,52 +54,56 @@ namespace _TERMINAL_
 
         //----------------------------------------------------------------------------------------------------------
 
-        public static void RefreshCommands()
+        public static void AddCommand(in CommandInfos infos, params object[] aliases)
         {
-            commandOwners.Clear();
-
-            List<string> cmds = new();
-
-            foreach (IShell user in users)
-                foreach (string cmd in user.ECommands)
-                    switch (cmd)
-                    {
-                        case "_last_":
-                        case "_none_":
-                        case "_all_":
-                        case "_first_":
-                            break;
-                        default:
-                            cmds.Add(cmd);
-                            if (!commandOwners.TryAdd(cmd, user))
-                                Debug.LogWarning($"Conflict for command \"{cmd}\" between {commandOwners[cmd].GetType().FullName} and {user.GetType().FullName}");
-                            break;
-                    }
-
-            cmds.Sort();
-
-            commands.Update(cmds.ToArray());
+            _commands[infos.key] = infos;
+            for (int i = 0; i < aliases.Length; i++)
+                _commands[aliases[i]] = infos;
         }
 
-        public static void AddUser(in IShell user)
+        public static void RemoveUser(in object owner)
         {
-            users.Remove(user);
-            users.Add(user);
-            RefreshCommands();
-        }
+            if (owner == null)
+            {
+                Debug.LogError($"{typeof(Shell)}.{nameof(RemoveUser)} null {nameof(owner)})");
+                return;
+            }
 
-        public static void RemoveUser(in IShell user)
-        {
-            users.Remove(user);
-            RefreshCommands();
+            Dictionary<object, CommandInfos> copy = new(_commands);
+            _commands.Clear();
+
+            foreach (var pair in copy)
+                if (owner != pair.Value.owner)
+                    _commands.Add(pair.Key, pair.Value);
         }
 
         public override void OnCmdLine(in string arg0, in LineParser line)
         {
             if (line.IsCplThis)
-                line.OnCpls(arg0, commands._value);
-            else if (commandOwners.TryGetValue(arg0, out IShell user))
-                user.OnCmdLine(arg0, line);
+                line.OnCpls(arg0, _commands.Keys);
+            else if (_commands.TryGetValue(arg0, out var info))
+            {
+                if (line.IsExec)
+                    info.onCmd_exe?.Invoke();
+
+                info.onCmd_line?.Invoke(line);
+                info.onCmd_key_line?.Invoke(arg0, line);
+
+                if (info.onCmd_bool != null)
+                {
+                    bool notEmpty = line.TryRead(out string arg1);
+                    if (line.IsCplThis)
+                        line.OnCpls(arg1, "TRUE", "FALSE");
+                    else if (line.IsExec)
+                        if (notEmpty)
+                            if (bool.TryParse(arg1, out bool toggle))
+                                info.onCmd_bool(toggle);
+                            else
+                                Debug.LogWarning($"{this} in command \"{arg0}\": could not parse boolean \"{arg1}\"");
+                        else
+                            Debug.LogWarning($"{this} in command \"{arg0}\": expected boolean");
+                }
+            }
             else
                 base.OnCmdLine(arg0, line);
             line.cmdM |= CmdM._history;
