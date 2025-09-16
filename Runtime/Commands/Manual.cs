@@ -8,7 +8,7 @@ namespace _TERMINAL_
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         static void OnAfterSceneLoad()
         {
-            Shell.AddCommand(new(null, "Manual", onCmd_line: line =>
+            Shell.root_commands.AddCommand(new(null, "Manual", onCmd_line: line =>
             {
                 line.cmdM |= CmdM.Man;
                 if (line.TryRead(out _))
@@ -21,7 +21,7 @@ namespace _TERMINAL_
                 else if (line.IsExec)
                 {
                     StringBuilder sb = new();
-                    foreach (var pair in Shell._commands)
+                    foreach (var pair in Shell.root_commands._commands)
                         sb.AppendLine($"  {pair.Key}");
                     sb.Log();
                 }

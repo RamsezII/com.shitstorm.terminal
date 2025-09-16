@@ -8,7 +8,7 @@ namespace _TERMINAL_
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         static void OnAfterSceneLoad()
         {
-            Shell.AddCommand(new(null, typeof(Sequencer) + "Status", onCmd_exe: () =>
+            Shell.root_commands.AddCommand(new(null, typeof(Sequencer) + "Status", onCmd_exe: () =>
             {
                 NUCLEOR.instance.sequencer.LogStatus();
                 NUCLEOR.instance.sequencer_parallel.LogStatus();

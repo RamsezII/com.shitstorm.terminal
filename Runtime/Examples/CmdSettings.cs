@@ -10,19 +10,19 @@ namespace _TERMINAL_
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         static void OnAfterSceneLoad()
         {
-            Shell.AddCommand(new(null, "OpenTerminal", onCmd_exe: () => Terminal.instance.ToggleWindow(true)));
+            Shell.root_commands.AddCommand(new(null, "OpenTerminal", onCmd_exe: () => Terminal.instance.ToggleWindow(true)));
 
-            Shell.AddCommand(new(null, "CloseTerminal", onCmd_exe: () => Terminal.instance.ToggleWindow(false)));
+            Shell.root_commands.AddCommand(new(null, "CloseTerminal", onCmd_exe: () => Terminal.instance.ToggleWindow(false)));
 
-            Shell.AddCommand(new(null, "Shutdown", onCmd_exe: () => Application.Quit()));
+            Shell.root_commands.AddCommand(new(null, "Shutdown", onCmd_exe: () => Application.Quit()));
 
-            Shell.AddCommand(new(null, "ToggleTerminalFullScreen", onCmd_exe: () =>
+            Shell.root_commands.AddCommand(new(null, "ToggleTerminalFullScreen", onCmd_exe: () =>
             {
                 Terminal.instance.fullscreen = !Terminal.instance.fullscreen;
                 Debug.Log($"{typeof(Terminal).FullName}.{nameof(Terminal.instance.fullscreen)}: {Terminal.instance.fullscreen}");
             }));
 
-            Shell.AddCommand(new(null, "Edit", onCmd_line: line =>
+            Shell.root_commands.AddCommand(new(null, "Edit", onCmd_line: line =>
             {
                 string path = line.ReadAsPath();
                 if (line.IsExec)
@@ -46,7 +46,7 @@ namespace _TERMINAL_
                     }
             }));
 
-            Shell.AddCommand(new(null, "machine_name", onCmd_line: line =>
+            Shell.root_commands.AddCommand(new(null, "machine_name", onCmd_line: line =>
             {
                 string netName = line.Read();
                 if (line.IsExec)
@@ -58,7 +58,7 @@ namespace _TERMINAL_
                 }
             }));
 
-            Shell.AddCommand(new(null, "OpenPlayerLogs", onCmd_exe: () =>
+            Shell.root_commands.AddCommand(new(null, "OpenPlayerLogs", onCmd_exe: () =>
             {
                 string logPath = Path.Combine(Application.persistentDataPath, "Player.log");
                 if (File.Exists(logPath))
@@ -67,7 +67,7 @@ namespace _TERMINAL_
                     Debug.LogWarning($"Player.log not found at: {logPath}");
             }));
 
-            Shell.AddCommand(new(null, "OpenApplicationPersistentDataPath", onCmd_exe: () =>
+            Shell.root_commands.AddCommand(new(null, "OpenApplicationPersistentDataPath", onCmd_exe: () =>
             {
                 string persistentDataPath = Application.persistentDataPath;
                 if (Directory.Exists(persistentDataPath))
