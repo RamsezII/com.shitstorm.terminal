@@ -54,7 +54,7 @@ namespace _TERMINAL_
                     if (string.IsNullOrWhiteSpace(netName))
                         Debug.Log(ArkMachine.user_name.Value);
                     else
-                        ArkMachine.user_name.Update(netName);
+                        ArkMachine.user_name.Value = netName;
                 }
             }));
 
