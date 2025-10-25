@@ -52,7 +52,7 @@ namespace _TERMINAL_
 
         protected virtual void OnEnable()
         {
-            UsageManager.ToggleUser(this, true, UsageGroups.TrueMouse, UsageGroups.Keyboard, UsageGroups.Typing, UsageGroups.BlockPlayers);
+            UsageManager.ToggleUser(this, true, UsageGroups.TrueMouse, UsageGroups.Keyboard, UsageGroups.Typing, UsageGroups.BlockPlayer);
             IMGUI_global.instance.users_ongui.Modify(dict => dict.Add(OnOnGui, this));
         }
 
