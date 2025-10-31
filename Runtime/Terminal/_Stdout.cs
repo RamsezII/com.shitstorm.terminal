@@ -9,7 +9,7 @@ namespace _TERMINAL_
         public const int MAX_LINES = 150;
         static readonly Queue<string> lines = new();
         static bool lines_flag;
-        public static readonly OnValue<Action<string>> onAddLine = new();
+        public static readonly ValueHandler<Action<string>> onAddLine = new();
 
         //----------------------------------------------------------------------------------------------------------
 
