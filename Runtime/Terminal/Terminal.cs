@@ -19,6 +19,8 @@ namespace _TERMINAL_
             set => ToggleWindow(value);
         }
 
+        public string workdir;
+
         //----------------------------------------------------------------------------------------------------------
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
@@ -42,6 +44,8 @@ namespace _TERMINAL_
             instance = this;
 
             DontDestroyOnLoad(gameObject);
+
+            workdir = ArkPaths.instance.Value.dpath_home;
 
             InitGUI();
             commands.Add(Shell.instance);

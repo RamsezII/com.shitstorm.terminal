@@ -75,11 +75,14 @@ namespace _TERMINAL_
 
         public static int tab_last;
 
+        public string workdir;
+
         //----------------------------------------------------------------------------------------------------------
 
-        public LineParser(in string rawtext, in CmdM cmdM, in int sel_char = 0)
+        public LineParser(in string rawtext, in string workdir, in CmdM cmdM, in int sel_char = 0)
         {
             this.rawtext = rawtext;
+            this.workdir = workdir;
             this.cmdM = cmdM;
             ichar = ichar_a = ichar_b = sel_move = 0;
             this.sel_char = sel_char;

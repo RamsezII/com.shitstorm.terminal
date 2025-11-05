@@ -6,6 +6,7 @@ namespace _TERMINAL_
     {
         public void WriteBytes(in BinaryWriter writer)
         {
+            writer.Write(workdir);
             writer.Write(rawtext);
             writer.Write((byte)cmdM);
             writer.Write(ichar);
@@ -19,6 +20,7 @@ namespace _TERMINAL_
 
         public static LineParser ReadBytes(in BinaryReader reader)
         {
+            string workdir = reader.ReadString();
             string rawtext = reader.ReadString();
             CmdM cmdM = (CmdM)reader.ReadByte();
             int ichar = reader.ReadInt32();
@@ -27,7 +29,7 @@ namespace _TERMINAL_
             int sel_move = reader.ReadInt32();
             int sel_char = reader.ReadInt32();
 
-            LineParser line = new(rawtext, cmdM, sel_char)
+            LineParser line = new(rawtext, workdir, cmdM, sel_char)
             {
                 ichar = ichar,
                 ichar_a = ichar_a,

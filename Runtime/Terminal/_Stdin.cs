@@ -45,7 +45,7 @@ namespace _TERMINAL_
                         cmdM |= CmdM.West;
                 }
 
-                LineParser line = new(csubmit ? stdin.text : stdinOld, cmdM, stdinOld.Length);
+                LineParser line = new(csubmit ? stdin.text : stdinOld, workdir, cmdM, stdinOld.Length);
 
                 try
                 {

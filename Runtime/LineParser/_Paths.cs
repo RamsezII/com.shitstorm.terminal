@@ -41,7 +41,7 @@ namespace _TERMINAL_
 
             if (empty)
             {
-                dir = ArkPaths.instance.Value.dpath_workdir.GetDir(false);
+                dir = workdir.GetDir(false);
                 endSlash = true;
             }
             else
@@ -50,7 +50,7 @@ namespace _TERMINAL_
                 if (rooted)
                     dir = new(currentPath);
                 else
-                    dir = new(Path.Combine(ArkPaths.instance.Value.dpath_workdir, currentPath));
+                    dir = new(Path.Combine(workdir, currentPath));
             }
 
             result = dir.FullName;
@@ -116,7 +116,7 @@ namespace _TERMINAL_
             if (rooted)
                 result = dir.FullName;
             else
-                result = Path.GetRelativePath(ArkPaths.instance.Value.dpath_workdir, dir.FullName);
+                result = Path.GetRelativePath(workdir, dir.FullName);
 
             end:
             if (apply)
