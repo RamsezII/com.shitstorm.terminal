@@ -41,7 +41,7 @@ namespace _TERMINAL_
 
             if (empty)
             {
-                dir = NUCLEOR.working_path.GetDir(false);
+                dir = ArkPaths.instance.Value.dpath_workdir.GetDir(false);
                 endSlash = true;
             }
             else
@@ -50,7 +50,7 @@ namespace _TERMINAL_
                 if (rooted)
                     dir = new(currentPath);
                 else
-                    dir = new(Path.Combine(NUCLEOR.working_path, currentPath));
+                    dir = new(Path.Combine(ArkPaths.instance.Value.dpath_workdir, currentPath));
             }
 
             result = dir.FullName;
@@ -116,7 +116,7 @@ namespace _TERMINAL_
             if (rooted)
                 result = dir.FullName;
             else
-                result = Path.GetRelativePath(NUCLEOR.working_path, dir.FullName);
+                result = Path.GetRelativePath(ArkPaths.instance.Value.dpath_workdir, dir.FullName);
 
             end:
             if (apply)
@@ -126,7 +126,7 @@ namespace _TERMINAL_
                 ++line.sel_move;
             else if (result.Contains(' '))
             {
-                if (!result.Contains2(LineParser.str_delimiters))
+                if (!result.Contains2(str_delimiters))
                     result = $"\"{result}\"";
             }
 
