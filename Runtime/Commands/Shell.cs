@@ -65,7 +65,13 @@ namespace _TERMINAL_
                 if (line.IsCplThis)
                     line.OnCpls(arg0, _commands.Keys);
                 else if (_commands.TryGetValue(arg0, out ICommand icmd))
+                {
                     icmd.OnCmdLine(line);
+                    if (line.IsExec)
+                        line.cmdM &= ~CmdM._history;
+                }
+                else if (line.IsExec)
+                    Debug.LogWarning($"no command named \"{arg0}\"");
             }
         }
 
@@ -140,7 +146,6 @@ namespace _TERMINAL_
         public override void OnCmdLine(in LineParser line)
         {
             root_commands.OnCmdLine(line);
-            line.cmdM |= CmdM._history;
         }
     }
 }
