@@ -68,7 +68,7 @@ namespace _TERMINAL_
                 {
                     icmd.OnCmdLine(line);
                     if (line.IsExec)
-                        line.cmdM &= ~CmdM._history;
+                        line.cmdM |= CmdM._history;
                 }
                 else if (line.IsExec)
                     Debug.LogWarning($"no command named \"{arg0}\"");
