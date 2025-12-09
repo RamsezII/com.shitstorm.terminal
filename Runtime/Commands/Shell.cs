@@ -28,7 +28,7 @@ namespace _TERMINAL_
 
             public void AddCommand(in CommandInfos infos, params string[] aliases)
             {
-                _commands.Add(infos.key, infos);
+                _commands.Add(infos.name, infos);
                 for (int i = 0; i < aliases.Length; i++)
                     _commands.Add(aliases[i], infos);
             }
@@ -78,20 +78,22 @@ namespace _TERMINAL_
         public readonly struct CommandInfos : ICommand
         {
             public readonly object owner;
-            public readonly string key;
+            public readonly string name;
             internal readonly Action onCmd_exe;
             internal readonly Action<LineParser> onCmd_line;
             internal readonly Action<bool> onCmd_bool;
 
             //----------------------------------------------------------------------------------------------------------
 
-            public CommandInfos(in object owner, in string key,
+            public CommandInfos(
+                in object owner,
+                in string name,
                 in Action onCmd_exe = null,
                 in Action<bool> onCmd_bool = null,
                 in Action<LineParser> onCmd_line = null)
             {
                 this.owner = owner;
-                this.key = key;
+                this.name = name;
                 this.onCmd_exe = onCmd_exe;
                 this.onCmd_bool = onCmd_bool;
                 this.onCmd_line = onCmd_line;
