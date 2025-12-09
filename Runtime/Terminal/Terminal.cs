@@ -57,21 +57,21 @@ namespace _TERMINAL_
         protected virtual void OnEnable()
         {
             UsageManager.ToggleUser(this, true, UsageGroups.IMGUI, UsageGroups.TrueMouse, UsageGroups.Keyboard, UsageGroups.Typing, UsageGroups.BlockPlayer);
-            IMGUI_global.instance.users_ongui.Modify(dict => dict.Add(OnOnGui, this));
+            IMGUI_global.instance.gui_users.AddElement(OnOnGui);
         }
 
         protected virtual void OnDisable()
         {
             UsageManager.RemoveUser(this);
-            IMGUI_global.instance.users_ongui.RemoveKeysByValue(this);
+            IMGUI_global.instance.gui_users.RemoveElement(OnOnGui);
         }
 
         //----------------------------------------------------------------------------------------------------------
 
         private void Start()
         {
+            IMGUI_global.instance.inputs_users.AddElement(OnOnGuiInputs);
             ToggleWindow(false);
-            IMGUI_global.instance.users_inputs.AddElement(OnOnGuiInputs, this);
         }
 
         //----------------------------------------------------------------------------------------------------------
@@ -146,8 +146,8 @@ namespace _TERMINAL_
                 commands.Clear();
             }
 
-            IMGUI_global.instance.users_inputs.RemoveKeysByValue(this);
-            IMGUI_global.instance.users_ongui.RemoveKeysByValue(this);
+            IMGUI_global.instance.inputs_users.RemoveElement(OnOnGuiInputs);
+            IMGUI_global.instance.gui_users.RemoveElement(OnOnGui);
         }
     }
 }
