@@ -14,7 +14,7 @@ namespace _TERMINAL_
 
             Shell.root_commands.AddCommand(new(null, "CloseTerminal", onCmd_exe: () => Terminal.instance.ToggleWindow(false)));
 
-            Shell.root_commands.AddCommand(new(null, "Shutdown" + Application.productName, onCmd_exe: () => ArkMachine.ShutdownApplication(true)));
+            Shell.root_commands.AddCommand(new(null, "ForceShutdown", onCmd_exe: () => ArkMachine.ShutdownApplication(true)));
 
             Shell.root_commands.AddCommand(new(null, "ToggleTerminalFullScreen", onCmd_exe: () =>
             {
