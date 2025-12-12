@@ -35,6 +35,19 @@ namespace _TERMINAL_
         static void OnAfterLoad()
         {
             Util.InstantiateOrCreateIfAbsent<Terminal>();
+
+            ArkShortcuts.AddShortcut(
+                shortcutName: "Terminal",
+                nameof_button: "p",
+                action: () => instance.ToggleWindow(true)
+            );
+
+            ArkShortcuts.AddShortcut(
+                shortcutName: "alt-Terminal",
+                nameof_button: "p",
+                action: () => instance.ToggleWindow(true),
+                alt: true
+            );
         }
 
         //----------------------------------------------------------------------------------------------------------

@@ -72,14 +72,6 @@ namespace _TERMINAL_
                                 ToggleWindow(false);
                             return true;
                         }
-
-                if (!Enabled)
-                    if (e.keyCode == KeyCode.P)
-                        if (e.alt || UsageManager.AllAreEmpty(UsageGroups.Typing))
-                        {
-                            ToggleWindow(true);
-                            return true;
-                        }
             }
             return false;
         }
