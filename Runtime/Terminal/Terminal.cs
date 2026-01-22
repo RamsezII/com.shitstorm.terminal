@@ -38,15 +38,15 @@ namespace _TERMINAL_
 
             ArkShortcuts.AddShortcut(
                 shortcutName: "Terminal",
-                nameof_button: "p",
-                action: () => instance.ToggleWindow(true)
+                action: () => instance.ToggleWindow(true),
+                bindings: "p"
             );
 
             ArkShortcuts.AddShortcut(
                 shortcutName: "alt-Terminal",
-                nameof_button: "p",
                 action: () => instance.ToggleWindow(true),
-                alt: true
+                alt: true,
+                bindings: "p"
             );
         }
 
