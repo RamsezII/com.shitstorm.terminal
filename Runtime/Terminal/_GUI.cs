@@ -157,11 +157,11 @@ namespace _TERMINAL_
             if (stdout1.enabled = command.flags.HasFlag(Command.Flags.Stdout))
                 GetSize(ref stdout1);
 
-            if (NUCLEOR.instance.sequencer.schedulables.IsNotEmpty || command.flags.HasFlag(Command.Flags.Status))
+            if (NUCLEOR.instance.scheduler_sequential.schedulables.IsNotEmpty || command.flags.HasFlag(Command.Flags.Status))
             {
-                if (NUCLEOR.instance.sequencer.schedulables.IsNotEmpty)
+                if (NUCLEOR.instance.scheduler_sequential.schedulables.IsNotEmpty)
                 {
-                    Schedulable schedulable = NUCLEOR.instance.sequencer.schedulables._collection[0];
+                    Schedulable schedulable = NUCLEOR.instance.scheduler_sequential.schedulables._collection[0];
                     stdout2.text = $"{typeof(NUCLEOR).FullName}({Util_ark.GetRotator()})\n{schedulable.description}\n{schedulable.progressBar}".SetColor(Colors.cyan);
                 }
                 else
@@ -243,7 +243,7 @@ namespace _TERMINAL_
 
             command.OnGui();
 
-            if (command.flags.HasFlag(Command.Flags.Stdin) && !block_when_nucleor || NUCLEOR.instance.sequencer.schedulables.IsEmpty)
+            if (command.flags.HasFlag(Command.Flags.Stdin) && !block_when_nucleor || NUCLEOR.instance.scheduler_sequential.schedulables.IsEmpty)
             {
                 UpdateStdin(downTab, downSubmit);
                 stdin.text = ModifyText(ref stdin, ref text_h).Replace("\n", string.Empty);
