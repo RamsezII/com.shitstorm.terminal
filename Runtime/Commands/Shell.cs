@@ -33,7 +33,7 @@ namespace _TERMINAL_
                     _commands.Add(aliases[i], infos);
             }
 
-            public void RemoveByKey(in object deleteKey)
+            public void RemoveByDeleteKey(in object deleteKey)
             {
                 if (deleteKey == null)
                     throw new ArgumentNullException(nameof(deleteKey));
@@ -47,7 +47,7 @@ namespace _TERMINAL_
                         case Namespace n:
                             if (deleteKey != n.deleteKey)
                             {
-                                n.RemoveByKey(deleteKey);
+                                n.RemoveByDeleteKey(deleteKey);
                                 _commands.Add(pair.Key, n);
                             }
                             break;
