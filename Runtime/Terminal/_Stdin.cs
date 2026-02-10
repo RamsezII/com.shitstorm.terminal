@@ -5,6 +5,13 @@ namespace _TERMINAL_
 {
     public partial class Terminal
     {
+        public void SubmitCmdline(in string cmdline) => commands[^1].OnCmdLine(new LineParser(
+            rawtext: cmdline,
+            workdir: workdir,
+            cmdM: CmdM.Exec,
+            sel_char: cmdline.Length
+        ));
+
         void UpdateStdin(in bool ctab, in bool csubmit)
         {
             Event e = Event.current;

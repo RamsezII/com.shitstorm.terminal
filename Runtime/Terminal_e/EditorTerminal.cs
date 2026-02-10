@@ -18,7 +18,7 @@ namespace _TERMINAL_.editor
         [SerializeField] int inputControlID;
         [SerializeField] int desiredCursorPos;
 
-        public static readonly Shell.Namespace editor_commands = new(owner: null, comparer: StringComparer.OrdinalIgnoreCase);
+        public static readonly Shell.Namespace editor_commands = new(deleteKey: null, comparer: StringComparer.OrdinalIgnoreCase);
 
         //--------------------------------------------------------------------------------------------------------------
 
@@ -31,7 +31,7 @@ namespace _TERMINAL_.editor
         static void OnAfterSceneLoad()
         {
             editor_commands.AddCommand(new(
-                owner: null,
+                deleteKey: null,
                 name: "Test",
                 onCmd_exe: static () =>
                 {

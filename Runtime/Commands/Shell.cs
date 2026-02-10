@@ -13,14 +13,14 @@ namespace _TERMINAL_
 
         public readonly struct Namespace : ICommand
         {
-            public readonly object owner;
+            public readonly object deleteKey;
             public readonly Dictionary<string, ICommand> _commands;
 
             //----------------------------------------------------------------------------------------------------------
 
-            public Namespace(in object owner, in StringComparer comparer = null)
+            public Namespace(in object deleteKey, in StringComparer comparer = null)
             {
-                this.owner = owner;
+                this.deleteKey = deleteKey;
                 _commands = new(comparer ?? StringComparer.OrdinalIgnoreCase);
             }
 
@@ -33,10 +33,10 @@ namespace _TERMINAL_
                     _commands.Add(aliases[i], infos);
             }
 
-            public void RemoveByOwner(in object owner)
+            public void RemoveByKey(in object deleteKey)
             {
-                if (owner == null)
-                    throw new ArgumentNullException(nameof(owner));
+                if (deleteKey == null)
+                    throw new ArgumentNullException(nameof(deleteKey));
 
                 Dictionary<string, ICommand> copy = new(_commands);
                 _commands.Clear();
@@ -45,15 +45,15 @@ namespace _TERMINAL_
                     switch (pair.Value)
                     {
                         case Namespace n:
-                            if (owner != n.owner)
+                            if (deleteKey != n.deleteKey)
                             {
-                                n.RemoveByOwner(owner);
+                                n.RemoveByKey(deleteKey);
                                 _commands.Add(pair.Key, n);
                             }
                             break;
 
                         case CommandInfos c:
-                            if (owner != c.owner)
+                            if (deleteKey != c.deleteKey)
                                 _commands.Add(pair.Key, c);
                             break;
                     }
@@ -77,7 +77,7 @@ namespace _TERMINAL_
 
         public readonly struct CommandInfos : ICommand
         {
-            public readonly object owner;
+            public readonly object deleteKey;
             public readonly string name;
             internal readonly Action onCmd_exe;
             internal readonly Action<LineParser> onCmd_line;
@@ -86,13 +86,13 @@ namespace _TERMINAL_
             //----------------------------------------------------------------------------------------------------------
 
             public CommandInfos(
-                in object owner,
+                in object deleteKey,
                 in string name,
                 in Action onCmd_exe = null,
                 in Action<bool> onCmd_bool = null,
                 in Action<LineParser> onCmd_line = null)
             {
-                this.owner = owner;
+                this.deleteKey = deleteKey;
                 this.name = name;
                 this.onCmd_exe = onCmd_exe;
                 this.onCmd_bool = onCmd_bool;
@@ -123,7 +123,7 @@ namespace _TERMINAL_
             }
         }
 
-        public static readonly Namespace root_commands = new(owner: null, comparer: StringComparer.OrdinalIgnoreCase);
+        public static readonly Namespace root_commands = new(deleteKey: null, comparer: StringComparer.OrdinalIgnoreCase);
 
         public static readonly Shell instance = new();
 
