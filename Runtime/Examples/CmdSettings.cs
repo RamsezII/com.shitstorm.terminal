@@ -14,7 +14,7 @@ namespace _TERMINAL_
 
             Shell.root_commands.AddCommand(new(null, "CloseTerminal", onCmd_exe: () => Terminal.instance.ToggleWindow(false)));
 
-            Shell.root_commands.AddCommand(new(null, "ForceShutdown", onCmd_exe: () => ArkMachine.ShutdownApplication(true)));
+            Shell.root_commands.AddCommand(new(null, "Shutdown", onCmd_exe: () => ArkMachine.ShutdownApplication()));
 
             Shell.root_commands.AddCommand(new(null, "ToggleTerminalFullScreen", onCmd_exe: () =>
             {
@@ -46,16 +46,14 @@ namespace _TERMINAL_
                     }
             }));
 
-            Shell.root_commands.AddCommand(new(null, "machine_name", onCmd_line: line =>
+            Shell.root_commands.AddCommand(new(null, "user_name", onCmd_line: line =>
             {
-                string netName = line.Read();
+                string user_name = line.Read();
                 if (line.IsExec)
-                {
-                    if (string.IsNullOrWhiteSpace(netName))
-                        Debug.Log(ArkMachine.user_name.Value);
+                    if (string.IsNullOrWhiteSpace(user_name))
+                        Debug.Log(ArkMachine.CurrentUserName);
                     else
-                        ArkMachine.user_name.Value = netName;
-                }
+                        ArkMachine.SetUserName(user_name);
             }));
 
             Shell.root_commands.AddCommand(new(null, "OpenPlayerLogs", onCmd_exe: () =>

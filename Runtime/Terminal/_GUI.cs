@@ -216,7 +216,7 @@ namespace _TERMINAL_
 
             if (command.flags.HasFlag(Command.Flags.Stdin))
             {
-                cmd_prefixe = ColoredPrompt(ArkMachine.user_name.Value, command.cmdName);
+                cmd_prefixe = ColoredPrompt(ArkMachine.CurrentUserName, command.cmdName);
                 Vector2 prefixe_size = style_body.CalcSize(new(cmd_prefixe));
                 GUI.Label(new Rect(text_r.x, text_r.y + text_h, text_r.width, prefixe_size.y), cmd_prefixe, style_body);
                 text_r.x += prefixe_size.x;
