@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace _TERMINAL_
 {
-    public abstract class Command : Schedulable
+    public abstract class Command : Sequencable
     {
         enum Bools : byte
         {
