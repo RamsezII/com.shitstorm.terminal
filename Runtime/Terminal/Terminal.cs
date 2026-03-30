@@ -23,8 +23,8 @@ namespace _TERMINAL_
 
         //----------------------------------------------------------------------------------------------------------
 
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-        static void OnBeforeSceneLoad()
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        static void ResetStatics()
         {
             lines.Clear();
             Application.logMessageReceivedThreaded -= OnLogMessageReceived;
