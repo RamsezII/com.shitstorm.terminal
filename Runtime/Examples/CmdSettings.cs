@@ -46,6 +46,28 @@ namespace _TERMINAL_
                     }
             }));
 
+            Shell.root_commands.AddCommand(new(null, "TryLoadResourceTextByName", onCmd_line: line =>
+            {
+                string resource_name = line.Read();
+                if (line.IsExec)
+                    try
+                    {
+                        var tasset = Resources.Load<TextAsset>(resource_name);
+                        if (tasset == null)
+                            Debug.LogWarning($"Resource not found: \"{resource_name}\"");
+                        else
+                        {
+                            string spath = Path.Combine(ArkPaths.instance.Value.dpath_temp, resource_name + ".txt");
+                            File.WriteAllText(spath, tasset.text);
+                            Application.OpenURL(spath);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.LogWarning(e.Message);
+                    }
+            }));
+
             Shell.root_commands.AddCommand(new(null, "user_name", onCmd_line: line =>
             {
                 string user_name = line.Read();

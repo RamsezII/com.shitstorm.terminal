@@ -6,7 +6,7 @@ namespace _TERMINAL_
 {
     public partial class Terminal
     {
-        public const int MAX_LINES = 150;
+        public const int MAX_LINES = 500;
         static readonly Queue<string> lines = new();
         static bool lines_flag;
         public static readonly ValueHandler<Action<string>> onAddLine = new();
