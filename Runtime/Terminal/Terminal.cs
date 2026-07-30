@@ -58,7 +58,7 @@ namespace _TERMINAL_
 
             DontDestroyOnLoad(gameObject);
 
-            workdir = ArkPaths.instance.Value.dpath_home;
+            workdir = ArkMachine.DFHome.FullName;
 
             InitGUI();
             commands.Add(Shell.instance);

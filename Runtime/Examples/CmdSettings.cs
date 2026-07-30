@@ -57,7 +57,7 @@ namespace _TERMINAL_
                             Debug.LogWarning($"Resource not found: \"{resource_name}\"");
                         else
                         {
-                            string spath = Path.Combine(ArkPaths.instance.Value.dpath_temp, resource_name + ".txt");
+                            string spath = Path.Combine(ArkMachine.DFTemp.FullName, resource_name + ".txt");
                             File.WriteAllText(spath, tasset.text);
                             Application.OpenURL(spath);
                         }
