@@ -4,19 +4,6 @@ namespace _TERMINAL_
 {
     public partial class LineParser
     {
-        public bool GetEveEnd(out IPEndPoint rdvEnd)
-        {
-            rdvEnd = Util_net.end_ARMA;
-            if (TryParseOptions_old(OptsF.netpoint, out OptsF optsM, out var optsD))
-            {
-                if (optsM.HasFlag(OptsF.netpoint))
-                    rdvEnd = (IPEndPoint)optsD[OptsF.netpoint];
-                return true;
-            }
-            else
-                return false;
-        }
-
         public IPEndPoint ReadIpEnd()
         {
             TryReadNetEnd(out IPEndPoint ipEnd);
