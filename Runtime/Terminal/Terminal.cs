@@ -1,6 +1,7 @@
 using _ARK_;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace _TERMINAL_
 {
@@ -20,6 +21,8 @@ namespace _TERMINAL_
         }
 
         public string workdir;
+
+        [SerializeField] GameObject memorizedSelection;
 
         //----------------------------------------------------------------------------------------------------------
 
@@ -71,12 +74,21 @@ namespace _TERMINAL_
         {
             UsageManager.ToggleUser(this, true, UsageGroups.IMGUI, UsageGroups.TrueMouse, UsageGroups.Keyboard, UsageGroups.Typing, UsageGroups.BlockPlayer);
             IMGUI_global.instance.gui_users.AddElement(OnOnGui);
+
+            memorizedSelection = EventSystem.current.currentSelectedGameObject;
+            EventSystem.current.SetSelectedGameObject(null);
         }
 
         protected virtual void OnDisable()
         {
             UsageManager.RemoveUser(this);
             IMGUI_global.instance.gui_users.RemoveElement(OnOnGui);
+
+            NUCLEOR.delegates.Update_OnStartOfFrame_once += () =>
+            {
+                EventSystem.current.SetSelectedGameObject(memorizedSelection);
+                memorizedSelection = null;
+            };
         }
 
         //----------------------------------------------------------------------------------------------------------
