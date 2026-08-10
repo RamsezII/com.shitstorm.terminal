@@ -85,17 +85,11 @@ namespace _TERMINAL_
         {
             IMGUI_global.instance.inputs_users.AddElement(OnOnGuiInputs);
             ToggleWindow(false);
+            NUCLEOR.delegates.OnApplicationFocus += ReadHistory;
+            NUCLEOR.delegates.OnApplicationUnfocus += SaveHistory;
         }
 
         //----------------------------------------------------------------------------------------------------------
-
-        protected virtual void OnApplicationFocus(bool focus)
-        {
-            if (focus)
-                ReadHistory();
-            else
-                SaveHistory();
-        }
 
         private void OnApplicationQuit() => SaveHistory();
 
