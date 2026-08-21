@@ -31,7 +31,7 @@ namespace _TERMINAL_.editor
         static void OnAfterSceneLoad()
         {
             editor_commands.AddCommand(new(
-                deleteKey: null,
+                owner: null,
                 name: "Test",
                 onCmd_exe: static () =>
                 {
