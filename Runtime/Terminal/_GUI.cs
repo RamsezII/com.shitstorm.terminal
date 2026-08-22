@@ -52,6 +52,7 @@ namespace _TERMINAL_
 
         static readonly bool block_when_nucleor = false;
         static readonly Regex richTextTag = new("</?(?:b|i|color|size|material|quad|mark|s|u|sup|sub|link|font|sprite|align|alpha|br)(?:=[^>]*)?\\s*/?>", RegexOptions.IgnoreCase);
+        bool stdoutSelectionMode;
 
         //----------------------------------------------------------------------------------------------------------
 
@@ -61,6 +62,7 @@ namespace _TERMINAL_
             stdout1.controlName = nameof(stdout1);
             stdout2.controlName = nameof(stdout2);
             stdin.controlName = nameof(stdin);
+            stdoutSelectionMode = false;
         }
 
         //----------------------------------------------------------------------------------------------------------
@@ -207,7 +209,7 @@ namespace _TERMINAL_
 
             CatchTabAndEnter(stdinFocused, out bool downTab, out bool downSubmit);
 
-            if (stdoutFocused)
+            if (stdoutSelectionMode && stdoutFocused)
                 CopySelectedStdout(stdout1.text);
 
             if (this == null)
@@ -322,8 +324,23 @@ namespace _TERMINAL_
                 Rect rect = new(text_r.x, text_r.y + text_h, text_r.width, text.height);
                 if (selectable)
                 {
-                    GUI.SetNextControlName(text.controlName);
-                    GUI.TextArea(rect, text.text, style_body);
+                    if (e.type == EventType.MouseDown)
+                    {
+                        stdoutSelectionMode = rect.Contains(e.mousePosition);
+                        if (stdoutSelectionMode)
+                        {
+                            tryFocus1 = false;
+                            tryFocus2 = false;
+                        }
+                    }
+
+                    if (stdoutSelectionMode)
+                    {
+                        GUI.SetNextControlName(text.controlName);
+                        GUI.TextArea(rect, text.text, style_body);
+                    }
+                    else
+                        GUI.Label(rect, text.text, style_body);
                 }
                 else
                     GUI.Label(rect, text.text, style_body);
@@ -377,6 +394,8 @@ namespace _TERMINAL_
                     return;
 
                 GUIUtility.systemCopyBuffer = richTextTag.Replace(text[a..b], string.Empty);
+                stdoutSelectionMode = false;
+                tryFocus2 = true;
                 e.Use();
             }
         }

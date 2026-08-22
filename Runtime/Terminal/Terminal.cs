@@ -141,6 +141,9 @@ namespace _TERMINAL_
         {
             if (value)
                 tryFocus1 = true;
+            else
+                stdoutSelectionMode = false;
+
             enabled = value;
         }
 
