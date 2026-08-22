@@ -34,7 +34,7 @@ namespace _TERMINAL_
                 rooted = false,
                 apply = false,
                 empty = string.IsNullOrWhiteSpace(currentPath),
-                delims = str_delimiters.Contains(line.rawtext[line.ichar_a - 1]),
+                delims = line.ichar_a > 0 && line.ichar_a <= line.rawtext.Length && str_delimiters.Contains(line.rawtext[line.ichar_a - 1]),
                 endSlash = !empty && currentPath.EndsWith(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
 
             DirectoryInfo dir;
@@ -74,7 +74,7 @@ namespace _TERMINAL_
                     {
                         if (dir.Exists)
                         {
-                            tab_last = 0;
+                            ResetCompletion();
                             foreach (var info in dir.EnumerateFileSystemInfos("*", SearchOption.TopDirectoryOnly))
                             {
                                 dir = new(info.FullName);
@@ -94,7 +94,7 @@ namespace _TERMINAL_
                             ).ToArray();
 
                         if (files.Length == 0)
-                            tab_last = 0;
+                            ResetCompletion();
                         else
                         {
                             if (line.cmdM.HasFlag(CmdM.Tab) || line.cmdM.HasFlag(CmdM.AltSouth))

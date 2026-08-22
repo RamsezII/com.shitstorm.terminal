@@ -2,6 +2,9 @@
 {
     public static string Quotes(this string str, in bool force)
     {
+        if (string.IsNullOrEmpty(str))
+            return force ? "\"\"" : string.Empty;
+
         if (force || str.Contains(' '))
         {
             bool a = str[0] != '\"';

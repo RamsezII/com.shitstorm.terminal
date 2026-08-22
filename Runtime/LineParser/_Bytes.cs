@@ -8,7 +8,7 @@ namespace _TERMINAL_
         {
             writer.Write(workdir);
             writer.Write(rawtext);
-            writer.Write((byte)cmdM);
+            writer.Write((ushort)cmdM);
             writer.Write(ichar);
             writer.Write(ichar_a);
             writer.Write(ichar_b);
@@ -22,7 +22,7 @@ namespace _TERMINAL_
         {
             string workdir = reader.ReadString();
             string rawtext = reader.ReadString();
-            CmdM cmdM = (CmdM)reader.ReadByte();
+            CmdM cmdM = (CmdM)reader.ReadUInt16();
             int ichar = reader.ReadInt32();
             int ichar_a = reader.ReadInt32();
             int ichar_b = reader.ReadInt32();

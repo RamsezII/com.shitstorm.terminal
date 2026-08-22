@@ -1,5 +1,6 @@
 ﻿using _ARK_;
 using System;
+using System.Text.RegularExpressions;
 using UnityEngine;
 
 namespace _TERMINAL_
@@ -13,6 +14,10 @@ namespace _TERMINAL_
             public string controlName;
             [TextArea(minLines: 0, maxLines: 5)] public string text;
             public float height;
+
+            [NonSerialized] public string measuredText;
+            [NonSerialized] public float measuredWidth, measuredHeight;
+            [NonSerialized] public int measuredFontSize;
         }
 
         [Header("~@ GUI @~")]
@@ -46,6 +51,7 @@ namespace _TERMINAL_
         [SerializeField] string cmd_prefixe;
 
         static readonly bool block_when_nucleor = false;
+        static readonly Regex richTextTag = new("</?(?:b|i|color|size|material|quad|mark|s|u|sup|sub|link|font|sprite|align|alpha|br)(?:=[^>]*)?\\s*/?>", RegexOptions.IgnoreCase);
 
         //----------------------------------------------------------------------------------------------------------
 
@@ -195,7 +201,14 @@ namespace _TERMINAL_
                 if (!Input.GetKey(KeyCode.LeftControl) && !Input.GetKey(KeyCode.RightControl) && !Input.GetKey(KeyCode.LeftAlt) && !Input.GetKey(KeyCode.RightAlt))
                     gui_yscroll = yscroll;
 
-            CatchTabAndEnter(false, out bool downTab, out bool downSubmit);
+            string focusedControl = GUI.GetNameOfFocusedControl();
+            bool stdinFocused = stdin.controlName.Equals(focusedControl, StringComparison.OrdinalIgnoreCase);
+            bool stdoutFocused = stdout1.controlName.Equals(focusedControl, StringComparison.OrdinalIgnoreCase);
+
+            CatchTabAndEnter(stdinFocused, out bool downTab, out bool downSubmit);
+
+            if (stdoutFocused)
+                CopySelectedStdout(stdout1.text);
 
             if (this == null)
                 Debug.LogWarning("this==null");
@@ -203,10 +216,10 @@ namespace _TERMINAL_
             float text_h = 0;
 
             if (stdout1.enabled && stdout1.height > 0)
-                DrawText(ref stdout1, ref text_h);
+                DrawText(ref stdout1, ref text_h, selectable: true);
 
             if (stdout2.enabled && stdout2.height > 0)
-                DrawText(ref stdout2, ref text_h);
+                DrawText(ref stdout2, ref text_h, selectable: false);
 
             if (bottomFlag)
             {
@@ -224,7 +237,7 @@ namespace _TERMINAL_
             }
 
             if (e.type == EventType.KeyDown)
-                if (e.control)
+                if (stdinFocused && e.control)
                     if (e.keyCode == KeyCode.C)
                     {
                         if (command.flags.HasFlag(Command.Flags.Status))
@@ -243,13 +256,18 @@ namespace _TERMINAL_
 
             command.OnGui();
 
-            if (command.flags.HasFlag(Command.Flags.Stdin) && !block_when_nucleor || NUCLEOR.instance.sequencer_mono.sequencables.IsEmpty)
+            if (command.flags.HasFlag(Command.Flags.Stdin) &&
+                (!block_when_nucleor || NUCLEOR.instance.sequencer_mono.sequencables.IsEmpty))
             {
-                UpdateStdin(downTab, downSubmit);
+                if (stdinFocused)
+                    UpdateStdin(downTab, downSubmit, GetCursorIndex(stdin.text.Length));
+
+                string previousStdin = stdin.text;
                 stdin.text = ModifyText(ref stdin, ref text_h).Replace("\n", string.Empty);
 
-                if (GUI.changed)
+                if (!string.Equals(previousStdin, stdin.text, StringComparison.Ordinal))
                 {
+                    LineParser.ResetCompletion();
                     stdinOld = stdin.text;
                     bottomFlag = true;
                 }
@@ -274,9 +292,6 @@ namespace _TERMINAL_
                 tryFocus2 = true;
             }
 
-            string nameOfFocusedControl = GUI.GetNameOfFocusedControl();
-            bool focused = stdin.controlName.Equals(nameOfFocusedControl, StringComparison.OrdinalIgnoreCase);
-
             GUI.EndScrollView();
 
             return false;
@@ -285,15 +300,34 @@ namespace _TERMINAL_
             {
                 if (string.IsNullOrWhiteSpace(text.text))
                     text.height = 0;
+                else if (
+                    string.Equals(text.measuredText, text.text, StringComparison.Ordinal) &&
+                    Mathf.Approximately(text.measuredWidth, text_r.width) &&
+                    text.measuredFontSize == style_body.fontSize)
+                    text.height = text.measuredHeight;
                 else
+                {
                     text.height = style_body.CalcHeight(new(text.text), text_r.width);
+                    text.measuredText = text.text;
+                    text.measuredWidth = text_r.width;
+                    text.measuredHeight = text.height;
+                    text.measuredFontSize = style_body.fontSize;
+                }
+
                 text.enabled = text.height > 0;
             }
 
-            void DrawText(ref Text text, ref float text_h)
+            void DrawText(ref Text text, ref float text_h, in bool selectable)
             {
-                //GUI.SetNextControlName(text.controlName);
-                GUI.Label(new Rect(text_r.x, text_r.y + text_h, text_r.width, text.height), text.text, style_body);
+                Rect rect = new(text_r.x, text_r.y + text_h, text_r.width, text.height);
+                if (selectable)
+                {
+                    GUI.SetNextControlName(text.controlName);
+                    GUI.TextArea(rect, text.text, style_body);
+                }
+                else
+                    GUI.Label(rect, text.text, style_body);
+
                 text_h += text.height;
             }
 
@@ -320,6 +354,30 @@ namespace _TERMINAL_
                 text_h += text.height;
 
                 return output;
+            }
+
+            int GetCursorIndex(in int fallback)
+            {
+                if (GUIUtility.keyboardControl == 0)
+                    return fallback;
+
+                TextEditor editor = (TextEditor)GUIUtility.GetStateObject(typeof(TextEditor), GUIUtility.keyboardControl);
+                return Mathf.Clamp(editor.cursorIndex, 0, stdin.text.Length);
+            }
+
+            void CopySelectedStdout(in string text)
+            {
+                if (e.type != EventType.KeyDown || !e.control || e.keyCode != KeyCode.C || GUIUtility.keyboardControl == 0)
+                    return;
+
+                TextEditor editor = (TextEditor)GUIUtility.GetStateObject(typeof(TextEditor), GUIUtility.keyboardControl);
+                int a = Mathf.Clamp(Mathf.Min(editor.cursorIndex, editor.selectIndex), 0, text.Length);
+                int b = Mathf.Clamp(Mathf.Max(editor.cursorIndex, editor.selectIndex), 0, text.Length);
+                if (a == b)
+                    return;
+
+                GUIUtility.systemCopyBuffer = richTextTag.Replace(text[a..b], string.Empty);
+                e.Use();
             }
         }
     }

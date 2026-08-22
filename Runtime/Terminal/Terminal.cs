@@ -29,7 +29,10 @@ namespace _TERMINAL_
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         static void ResetStatics()
         {
-            lines.Clear();
+            instance = null;
+            ResetOutput();
+            onAddLine.Reset();
+            LineParser.ResetCompletion();
             Application.logMessageReceivedThreaded -= OnLogMessageReceived;
             Application.logMessageReceivedThreaded += OnLogMessageReceived;
         }
@@ -75,18 +78,35 @@ namespace _TERMINAL_
             UsageManager.ToggleUser(this, true, UsageGroups.IMGUI, UsageGroups.TrueMouse, UsageGroups.Keyboard, UsageGroups.Typing, UsageGroups.BlockPlayer);
             IMGUI_global.instance.gui_users.AddElement(OnOnGui);
 
-            memorizedSelection = EventSystem.current.currentSelectedGameObject;
-            EventSystem.current.SetSelectedGameObject(null);
+            if (EventSystem.current != null)
+            {
+                memorizedSelection = EventSystem.current.currentSelectedGameObject;
+                EventSystem.current.SetSelectedGameObject(null);
+            }
         }
 
         protected virtual void OnDisable()
         {
-            UsageManager.RemoveUser(this);
-            IMGUI_global.instance.gui_users.RemoveElement(OnOnGui);
-
-            NUCLEOR.delegates.Update_OnStartOfFrame_once += () =>
+            try
             {
-                EventSystem.current.SetSelectedGameObject(memorizedSelection);
+                UsageManager.RemoveUser(this);
+            }
+            catch (MissingReferenceException) when (
+                ArkUI.instance == null ||
+                ArkUI.instance.ui2D.canvasGroup == null ||
+                ArkUI.instance.ui3D.canvasGroup == null)
+            {
+                // Unity may destroy ArkUI's child canvases before this persistent terminal.
+            }
+
+            if (IMGUI_global.instance != null)
+                IMGUI_global.instance.gui_users.RemoveElement(OnOnGui);
+
+            if (memorizedSelection != null)
+                NUCLEOR.delegates.Update_OnStartOfFrame_once += () =>
+            {
+                if (EventSystem.current != null)
+                    EventSystem.current.SetSelectedGameObject(memorizedSelection);
                 memorizedSelection = null;
             };
         }
@@ -128,15 +148,10 @@ namespace _TERMINAL_
 
         private void LateUpdate()
         {
-            lock (lines)
-                if (lines_flag)
-                {
-                    lines_flag = false;
-                    OnAddLine();
-                }
+            DrainPendingLines();
 
             lock (commands)
-                if (commands[^1].Disposed)
+                if (commands.Count > 0 && commands[^1].Disposed)
                 {
                     if (commands.Count == 1)
                         Debug.LogError("Main command disposed ???");
@@ -165,8 +180,14 @@ namespace _TERMINAL_
                 commands.Clear();
             }
 
-            IMGUI_global.instance.inputs_users.RemoveElement(OnOnGuiInputs);
-            IMGUI_global.instance.gui_users.RemoveElement(OnOnGui);
+            NUCLEOR.delegates.OnApplicationFocus -= ReadHistory;
+            NUCLEOR.delegates.OnApplicationUnfocus -= SaveHistory;
+
+            if (IMGUI_global.instance != null)
+            {
+                IMGUI_global.instance.inputs_users.RemoveElement(OnOnGuiInputs);
+                IMGUI_global.instance.gui_users.RemoveElement(OnOnGui);
+            }
         }
     }
 }

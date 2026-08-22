@@ -11,7 +11,7 @@ namespace _TERMINAL_
 
         public bool OnCpl_solo(in string prefixe, in string cpl)
         {
-            tab_last = 0;
+            ResetCompletion();
             if (string.IsNullOrWhiteSpace(prefixe) || Util.IsMatchChars(prefixe, cpl))
             {
                 ReplaceSplit(cpl);
@@ -24,19 +24,13 @@ namespace _TERMINAL_
         public bool OnCpls(in string prefixe, params string[] cpls) => OnCpls(prefixe, (IEnumerable<string>)cpls);
         public bool OnCpls<T>(in string prefixe, IEnumerable<T> cpls)
         {
-#if UNITY_EDITOR
-            {
-                var _cpls = cpls.ToArray();
-            }
-#endif
-
             if (!string.IsNullOrWhiteSpace(prefixe))
                 cpls = Util.EMatchChars(prefixe, cpls);
             string[] arr = (from cpl in cpls select cpl.ToString().Quotes(false)).ToArray();
 
             if (arr.Length == 0)
             {
-                tab_last = 0;
+                ResetCompletion();
                 return false;
             }
             else

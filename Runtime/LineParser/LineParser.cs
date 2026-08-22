@@ -28,7 +28,7 @@ namespace _TERMINAL_
         Pipe = 1 << CmdB.pipe,
         Cpl = 1 << CmdB.cpl,
         Tab = 1 << CmdB.tab | Cpl,
-        Man = 1 << CmdB.alt,
+        Man = 1 << CmdB.man,
         Alt = 1 << CmdB.alt | Cpl,
         North = 1 << CmdB.north,
         East = 1 << CmdB.east,
@@ -73,7 +73,9 @@ namespace _TERMINAL_
         static readonly string
             str_stopMask = "" + char_chainCmds + char_pipe2muon + char_pipe2file;
 
-        public static int tab_last;
+        public static int tab_last = -1;
+
+        public static void ResetCompletion() => tab_last = -1;
 
         public string workdir;
 

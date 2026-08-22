@@ -12,7 +12,7 @@ namespace _TERMINAL_
             sel_char: cmdline.Length
         ));
 
-        void UpdateStdin(in bool ctab, in bool csubmit)
+        void UpdateStdin(in bool ctab, in bool csubmit, in int cursorIndex)
         {
             Event e = Event.current;
             bool upArrow = e.type == EventType.KeyDown && e.keyCode == KeyCode.UpArrow;
@@ -23,6 +23,7 @@ namespace _TERMINAL_
                 if (commands.Count == 1)
                     if (GetHistory(upArrow ? -1 : 1, out string line))
                     {
+                        LineParser.ResetCompletion();
                         stdin.text = line;
                         RequestCursorMove(line.Length, true);
                     }
@@ -52,13 +53,15 @@ namespace _TERMINAL_
                         cmdM |= CmdM.West;
                 }
 
-                LineParser line = new(csubmit ? stdin.text : stdinOld, workdir, cmdM, stdinOld.Length);
+                string lineText = csubmit ? stdin.text : stdinOld;
+                LineParser line = new(lineText, workdir, cmdM, Mathf.Clamp(cursorIndex, 0, lineText.Length));
 
                 try
                 {
                     string temp = stdin.text;
                     if (csubmit)
                     {
+                        LineParser.ResetCompletion();
                         string log = cmd_prefixe + stdin.text;
                         if (this == instance)
                             print(log);
