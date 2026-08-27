@@ -58,7 +58,7 @@ namespace _TERMINAL_
         public bool IsCpl => cmdM.HasFlag(CmdM.Tab) | cmdM.HasFlag(CmdM.Alt) & ((cmdM & CmdM.AllDirs) != 0);
         public bool IsMan => cmdM.HasFlag(CmdM.Man);
         public bool IsThisMan => cmdM.HasFlag(CmdM._select | CmdM.Man);
-        public bool IsCplThis => string.IsNullOrWhiteSpace(rawtext) || cmdM.HasFlag(CmdM._select) && IsCpl;
+        public bool IsCplThis => (string.IsNullOrWhiteSpace(rawtext) || cmdM.HasFlag(CmdM._select)) && IsCpl;
 
         const char
             char_chainCmds = '&',
