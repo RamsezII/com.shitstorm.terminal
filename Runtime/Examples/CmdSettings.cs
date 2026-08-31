@@ -73,7 +73,7 @@ namespace _TERMINAL_
                 string user_name = line.Read();
                 if (line.IsExec)
                     if (string.IsNullOrWhiteSpace(user_name))
-                        Debug.Log(ArkMachine.CurrentUserName);
+                        Debug.Log(ArkMachine.user_name._value);
                     else
                         ArkMachine.SetUserName(user_name);
             }));
