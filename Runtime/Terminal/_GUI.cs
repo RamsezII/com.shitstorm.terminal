@@ -77,7 +77,7 @@ namespace _TERMINAL_
                         {
                             stdin.text = string.Empty;
                             if (commands[^1].flags.HasFlag(Command.Flags.Closable))
-                                ToggleWindow(false);
+                                CloseAtEndOfFrame();
                             return true;
                         }
             }

@@ -125,18 +125,8 @@ namespace _TERMINAL_
 
         private void OnApplicationQuit() => SaveHistory();
 
-#if UNITY_EDITOR
-        [ContextMenu(nameof(_ToggleWindow))]
-        void _ToggleWindow() => ToggleWindow(!enabled);
-#endif
-
-        public void ToggleWindow(in string stdin)
-        {
-            this.stdin.text = stdin;
-            RequestCursorMove(stdin.Length, true);
-            ToggleWindow(true);
-        }
-
+        public void CloseAtEndOfFrame() => Util.AddActionOnce(ref NUCLEOR.delegates.LateUpdate_onEndOfFrame_once, ToggleWindowOff);
+        public void ToggleWindowOff() => ToggleWindow(false);
         public void ToggleWindow(in bool value)
         {
             if (value)
