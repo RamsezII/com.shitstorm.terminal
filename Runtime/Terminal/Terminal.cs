@@ -87,28 +87,18 @@ namespace _TERMINAL_
 
         protected virtual void OnDisable()
         {
-            try
-            {
-                UsageManager.RemoveUser(this);
-            }
-            catch (MissingReferenceException) when (
-                ArkUI.instance == null ||
-                ArkUI.instance.ui2D.canvasGroup == null ||
-                ArkUI.instance.ui3D.canvasGroup == null)
-            {
-                // Unity may destroy ArkUI's child canvases before this persistent terminal.
-            }
+            UsageManager.RemoveUser(this);
 
             if (IMGUI_global.instance != null)
                 IMGUI_global.instance.gui_users.RemoveElement(OnOnGui);
 
             if (memorizedSelection != null)
                 NUCLEOR.delegates.Update_OnStartOfFrame_once += () =>
-            {
-                if (EventSystem.current != null)
-                    EventSystem.current.SetSelectedGameObject(memorizedSelection);
-                memorizedSelection = null;
-            };
+                {
+                    if (EventSystem.current != null)
+                        EventSystem.current.SetSelectedGameObject(memorizedSelection);
+                    memorizedSelection = null;
+                };
         }
 
         //----------------------------------------------------------------------------------------------------------
