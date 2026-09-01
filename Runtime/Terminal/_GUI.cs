@@ -165,11 +165,11 @@ namespace _TERMINAL_
             if (stdout1.enabled = command.flags.HasFlag(Command.Flags.Stdout))
                 GetSize(ref stdout1);
 
-            if (NUCLEOR.instance.sequencer_mono.sequencables.IsNotEmpty || command.flags.HasFlag(Command.Flags.Status))
+            if (NUCLEOR.instance.monolith.sequencables.IsNotEmpty || command.flags.HasFlag(Command.Flags.Status))
             {
-                if (NUCLEOR.instance.sequencer_mono.sequencables.IsNotEmpty)
+                if (NUCLEOR.instance.monolith.sequencables.IsNotEmpty)
                 {
-                    Sequencable schedulable = NUCLEOR.instance.sequencer_mono.sequencables._collection[0];
+                    Sequencable schedulable = NUCLEOR.instance.monolith.sequencables._collection[0];
                     stdout2.text = $"{typeof(NUCLEOR).FullName}({Util_ark.GetRotator()})\n{schedulable.description}\n{schedulable.progressBar}".SetColor(Colors.cyan);
                 }
                 else
@@ -259,7 +259,7 @@ namespace _TERMINAL_
             command.OnGui();
 
             if (command.flags.HasFlag(Command.Flags.Stdin) &&
-                (!block_when_nucleor || NUCLEOR.instance.sequencer_mono.sequencables.IsEmpty))
+                (!block_when_nucleor || NUCLEOR.instance.monolith.sequencables.IsEmpty))
             {
                 if (stdinFocused)
                     UpdateStdin(downTab, downSubmit, GetCursorIndex(stdin.text.Length));

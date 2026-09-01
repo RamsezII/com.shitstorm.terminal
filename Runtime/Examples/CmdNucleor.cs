@@ -10,8 +10,8 @@ namespace _TERMINAL_
         {
             Shell.root_commands.AddCommand(new(null, typeof(Sequencer) + "Status", onCmd_exe: () =>
             {
-                NUCLEOR.instance.sequencer_mono.LogStatus();
-                NUCLEOR.instance.sequencer_multi.LogStatus();
+                NUCLEOR.instance.monolith.LogStatus();
+                NUCLEOR.instance.routinizer.LogStatus();
             }));
         }
     }
