@@ -41,7 +41,7 @@ namespace _TERMINAL_
 
         public Command()
         {
-            cmdName = this is Shell ? ArkMachine.dpath_terminal : GetType().FullName;
+            cmdName = this is Shell ? NUCLEOR.dpath_terminal : GetType().FullName;
             status = $"{cmdName}...";
         }
 

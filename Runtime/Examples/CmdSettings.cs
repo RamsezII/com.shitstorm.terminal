@@ -14,7 +14,7 @@ namespace _TERMINAL_
 
             Shell.root_commands.AddCommand(new(null, "CloseTerminal", onCmd_exe: () => Terminal.instance.ToggleWindow(false)));
 
-            Shell.root_commands.AddCommand(new(null, "Shutdown", onCmd_exe: () => ArkMachine.ShutdownApplication()));
+            Shell.root_commands.AddCommand(new(null, "Shutdown", onCmd_exe: () => NUCLEOR.ShutdownApplication()));
 
             Shell.root_commands.AddCommand(new(null, "ToggleTerminalFullScreen", onCmd_exe: () =>
             {
@@ -57,7 +57,7 @@ namespace _TERMINAL_
                             Debug.LogWarning($"Resource not found: \"{resource_name}\"");
                         else
                         {
-                            string spath = Path.Combine(ArkMachine.DFTemp.FullName, resource_name + ".txt");
+                            string spath = Path.Combine(NUCLEOR.DFTemp.FullName, resource_name + ".txt");
                             File.WriteAllText(spath, tasset.text);
                             Application.OpenURL(spath);
                         }
@@ -73,9 +73,9 @@ namespace _TERMINAL_
                 string user_name = line.Read();
                 if (line.IsExec)
                     if (string.IsNullOrWhiteSpace(user_name))
-                        Debug.Log(ArkMachine.user_name._value);
+                        Debug.Log(NUCLEOR.user_name._value);
                     else
-                        ArkMachine.SetUserName(user_name);
+                        NUCLEOR.SetUserName(user_name);
             }));
 
             Shell.root_commands.AddCommand(new(null, "OpenPlayerLogs", onCmd_exe: () =>

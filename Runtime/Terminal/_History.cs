@@ -12,7 +12,7 @@ namespace _TERMINAL_
         static readonly string HISTORY_FILE = typeof(Terminal).FullName + ".history.txt";
         const int MAX_HISTORY = 500;
 
-        private static string GetHistoryPath() => Path.Combine(ArkMachine.DFHome.FullName, HISTORY_FILE);
+        private static string GetHistoryPath() => Path.Combine(NUCLEOR.DFHome.FullName, HISTORY_FILE);
 
         readonly object historyLock = new();
         [SerializeField] List<string> history = new();

@@ -64,7 +64,7 @@ namespace _TERMINAL_
 
             DontDestroyOnLoad(gameObject);
 
-            workdir = ArkMachine.DFHome.FullName;
+            workdir = NUCLEOR.DFHome.FullName;
 
             InitGUI();
             commands.Add(Shell.instance);
