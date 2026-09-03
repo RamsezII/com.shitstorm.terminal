@@ -73,9 +73,9 @@ namespace _TERMINAL_
                 string user_name = line.Read();
                 if (line.IsExec)
                     if (string.IsNullOrWhiteSpace(user_name))
-                        Debug.Log(NUCLEOR.user_name._value);
+                        Debug.Log(NUCLEOR.instance.user_name._value);
                     else
-                        NUCLEOR.SetUserName(user_name);
+                        NUCLEOR.instance.SetUserName(user_name);
             }));
 
             Shell.root_commands.AddCommand(new(null, "OpenPlayerLogs", onCmd_exe: () =>
