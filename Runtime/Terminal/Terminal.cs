@@ -42,18 +42,13 @@ namespace _TERMINAL_
         {
             Util.InstantiateOrCreateIfAbsent<Terminal>();
 
-            ArkShortcuts.AddShortcut(
+#if ENABLE_INPUT_SYSTEM
+            ArkShortcuts.AddShortcut_keyboard(
                 shortcutName: "Terminal",
                 action: () => instance.ToggleWindow(true),
-                bindings: "p"
+                bindings: UnityEngine.InputSystem.Key.P
             );
-
-            ArkShortcuts.AddShortcut(
-                shortcutName: "alt-Terminal",
-                action: () => instance.ToggleWindow(true),
-                alt: true,
-                bindings: "p"
-            );
+#endif
         }
 
         //----------------------------------------------------------------------------------------------------------
