@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 
 namespace _TERMINAL_
 {
-    public partial class Terminal : MonoBehaviour
+    public partial class Terminal : ArkComponent2
     {
         public static Terminal instance;
 
@@ -53,23 +53,25 @@ namespace _TERMINAL_
 
         //----------------------------------------------------------------------------------------------------------
 
-        protected virtual void Awake()
+        protected override void Awake()
         {
             instance = this;
-
             DontDestroyOnLoad(gameObject);
+
+            base.Awake();
 
             workdir = NUCLEOR.DFHome.FullName;
 
             InitGUI();
             commands.Add(Shell.instance);
-            ReadHistory();
         }
 
         //----------------------------------------------------------------------------------------------------------
 
-        protected virtual void OnEnable()
+        protected override void OnEnable()
         {
+            base.OnEnable();
+
             UsageManager.ToggleUser(this, true, UsageGroups.IMGUI, UsageGroups.TrueMouse, UsageGroups.Keyboard, UsageGroups.Typing, UsageGroups.BlockPlayer);
             IMGUI_global.instance.gui_users.AddElement(OnOnGui);
 
@@ -80,8 +82,10 @@ namespace _TERMINAL_
             }
         }
 
-        protected virtual void OnDisable()
+        protected override void OnDisable()
         {
+            base.OnDisable();
+
             UsageManager.RemoveUser(this);
 
             if (IMGUI_global.instance != null)
@@ -98,17 +102,15 @@ namespace _TERMINAL_
 
         //----------------------------------------------------------------------------------------------------------
 
-        private void Start()
+        protected override void Start()
         {
+            base.Start();
+
             IMGUI_global.instance.inputs_users.AddElement(OnOnGuiInputs);
             ToggleWindow(false);
-            NUCLEOR.delegates.OnApplicationFocus += ReadHistory;
-            NUCLEOR.delegates.OnApplicationUnfocus += SaveHistory;
         }
 
         //----------------------------------------------------------------------------------------------------------
-
-        private void OnApplicationQuit() => SaveHistory();
 
         public void CloseAtEndOfFrame() => Util.AddActionOnce(ref NUCLEOR.delegates.LateUpdate_onEndOfFrame_once, ToggleWindowOff);
         public void ToggleWindowOff() => ToggleWindow(false);
@@ -146,10 +148,9 @@ namespace _TERMINAL_
 
         //----------------------------------------------------------------------------------------------------------
 
-        protected virtual void OnDestroy()
+        protected override void OnDestroy()
         {
-            if (this == instance)
-                instance = null;
+            base.OnDestroy();
 
             lock (commands)
             {
@@ -158,14 +159,14 @@ namespace _TERMINAL_
                 commands.Clear();
             }
 
-            NUCLEOR.delegates.OnApplicationFocus -= ReadHistory;
-            NUCLEOR.delegates.OnApplicationUnfocus -= SaveHistory;
-
             if (IMGUI_global.instance != null)
             {
                 IMGUI_global.instance.inputs_users.RemoveElement(OnOnGuiInputs);
                 IMGUI_global.instance.gui_users.RemoveElement(OnOnGui);
             }
+
+            if (this == instance)
+                instance = null;
         }
     }
 }
