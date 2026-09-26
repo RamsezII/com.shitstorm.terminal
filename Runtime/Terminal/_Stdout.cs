@@ -3,6 +3,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
+using Unity.Scripting.LifecycleManagement;
 
 namespace _TERMINAL_
 {
@@ -11,11 +12,11 @@ namespace _TERMINAL_
         public const int MAX_LINES = 256;
         const int MAX_PENDING_LINES = 4096;
 
-        static readonly Queue<string> lines = new();
-        static readonly ConcurrentQueue<string> pendingLines = new();
-        static int pendingLineCount;
+        [AutoStaticsCleanup] static readonly Queue<string> lines = new();
+        [AutoStaticsCleanup] static readonly ConcurrentQueue<string> pendingLines = new();
+        [AutoStaticsCleanup] static int pendingLineCount;
 
-        public static readonly ValueNotifier<Action<string>> onAddLine = new();
+        [AutoStaticsCleanup] public static readonly ValueNotifier<Action<string>> onAddLine = new();
 
         //----------------------------------------------------------------------------------------------------------
 
@@ -75,14 +76,7 @@ namespace _TERMINAL_
 
         static void ResetOutput()
         {
-            while (pendingLines.TryDequeue(out _))
-            {
-            }
-
             Interlocked.Exchange(ref pendingLineCount, 0);
-
-            lock (lines)
-                lines.Clear();
         }
     }
 }

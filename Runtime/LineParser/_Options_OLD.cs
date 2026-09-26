@@ -9,8 +9,7 @@ namespace _TERMINAL_
     public partial class LineParser
     {
         public const OptsF opts_readM = OptsF.path | OptsF.pattern | OptsF.regex | OptsF.message | OptsF.nid | OptsF.mid | OptsF.netpoint | OptsF.ip | OptsF.port | OptsF.lifeTime;
-        public static readonly IEnumerable<OptsB> eOptsB = from i in Enumerable.Range(0, (int)OptsB._last_) select (OptsB)i;
-
+        
         //----------------------------------------------------------------------------------------------------------
 
 #if UNITY_EDITOR

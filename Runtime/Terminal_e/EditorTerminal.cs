@@ -1,12 +1,12 @@
 ﻿#if UNITY_EDITOR
 using System;
+using Unity.Scripting.LifecycleManagement;
 using UnityEditor;
 using UnityEditor.Callbacks;
 using UnityEngine;
 
 namespace _TERMINAL_.editor
 {
-    [InitializeOnLoad]
     public sealed partial class EditorTerminalWindow : EditorWindow
     {
         const string
@@ -18,14 +18,9 @@ namespace _TERMINAL_.editor
         [SerializeField] int inputControlID;
         [SerializeField] int desiredCursorPos;
 
-        public static readonly Shell.Namespace editor_commands = new(deleteKey: null, comparer: StringComparer.OrdinalIgnoreCase);
+        [AutoStaticsCleanup] public static readonly Shell.Namespace editor_commands = new(deleteKey: null, comparer: StringComparer.OrdinalIgnoreCase);
 
         //--------------------------------------------------------------------------------------------------------------
-
-        static EditorTerminalWindow()
-        {
-            editor_commands._commands.Clear();
-        }
 
         [DidReloadScripts]
         static void OnAfterSceneLoad()

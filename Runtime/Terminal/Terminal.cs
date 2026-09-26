@@ -1,5 +1,6 @@
 using _ARK_;
 using System.Collections.Generic;
+using Unity.Scripting.LifecycleManagement;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -7,7 +8,7 @@ namespace _TERMINAL_
 {
     public partial class Terminal : ArkComponent2
     {
-        public static Terminal instance;
+        [AutoStaticsCleanup] public static Terminal instance;
 
         public readonly List<Command> commands = new();
 
@@ -29,9 +30,7 @@ namespace _TERMINAL_
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         static void ResetStatics()
         {
-            instance = null;
             ResetOutput();
-            onAddLine.Reset();
             LineParser.ResetCompletion();
             Application.logMessageReceivedThreaded -= OnLogMessageReceived;
             Application.logMessageReceivedThreaded += OnLogMessageReceived;
