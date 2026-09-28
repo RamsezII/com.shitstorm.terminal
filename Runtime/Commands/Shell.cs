@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Unity.Scripting.LifecycleManagement;
 using UnityEngine;
 
 namespace _TERMINAL_
@@ -73,6 +74,13 @@ namespace _TERMINAL_
                 else if (line.IsExec)
                     Debug.LogWarning($"no command named \"{arg0}\"");
             }
+
+            //----------------------------------------------------------------------------------------------------------
+
+            public void Clear()
+            {
+                _commands.Clear();
+            }
         }
 
         public readonly struct CommandInfos : ICommand
@@ -99,6 +107,8 @@ namespace _TERMINAL_
                 this.onCmd_line = onCmd_line;
             }
 
+            //----------------------------------------------------------------------------------------------------------
+
             void ICommand.OnCmdLine(LineParser line)
             {
                 if (line.IsExec)
@@ -123,9 +133,9 @@ namespace _TERMINAL_
             }
         }
 
-        public static readonly Namespace root_commands = new(deleteKey: null, comparer: StringComparer.OrdinalIgnoreCase);
+        [AutoStaticsCleanup] public static readonly Namespace root_commands = new(deleteKey: null, comparer: StringComparer.OrdinalIgnoreCase);
 
-        public static readonly Shell instance = new();
+        [AutoStaticsCleanup] public static readonly Shell instance = new();
 
         //----------------------------------------------------------------------------------------------------------
 
@@ -148,6 +158,13 @@ namespace _TERMINAL_
         public override void OnCmdLine(in LineParser line)
         {
             root_commands.OnCmdLine(line);
+        }
+
+        //----------------------------------------------------------------------------------------------------------
+
+        public void Clear()
+        {
+            root_commands.Clear();
         }
     }
 }
